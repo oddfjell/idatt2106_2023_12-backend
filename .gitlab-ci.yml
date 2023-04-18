@@ -1,4 +1,4 @@
-image: maven:3-jdk-17
+image: maven:3-jdk-11
 
 # This template will build and test your project
 # * It caches downloaded dependencies and plugins between invocation.
@@ -30,7 +30,7 @@ cache:
 
 
 # This where the magic happens
-test:jdk17:
+test:jdk11:
   stage: test
   script:
     - mvn clean test
