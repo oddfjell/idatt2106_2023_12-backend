@@ -33,7 +33,7 @@ cache:
 test:jdk11:
   stage: test
   script:
-    - mvn clean test
+    - mvn -f smartmat/pom.xml clean test
   artifacts:
     when: always
     paths:
