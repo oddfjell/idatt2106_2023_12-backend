@@ -6,7 +6,7 @@ stages:
 test:jdk11:
   stage: test
   script: 
-    cd smartmat  
+    - cd smartmat  
     - mvn clean test
   artifacts:
     when: always
