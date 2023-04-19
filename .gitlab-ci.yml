@@ -1,7 +1,7 @@
 image: maven:3-jdk-11
 
 stages:
-  - "test"
+  - test
 
 test:jdk11:
   stage: test
