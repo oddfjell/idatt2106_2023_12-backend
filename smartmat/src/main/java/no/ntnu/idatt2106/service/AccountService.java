@@ -6,6 +6,7 @@ import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,11 @@ public class AccountService {
         this.accountRepository = accountRepository;
         this.jwtService = jwtService;
         this.encryptionService = encryptionService;
+    }
+
+
+    public List<AccountEntity> getAllUsers(){
+        return accountRepository.findAll();
     }
 
     public void addUser(AccountEntity account) throws UserAlreadyExistsException {
