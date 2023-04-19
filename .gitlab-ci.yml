@@ -9,9 +9,10 @@ stages:
   - "test"
 
 
-test:jdk17:
+test:jdk11:
   stage: test
-  script:    
+  script:   
+    - cd "/smartmat/" 
     - mvn clean test
   artifacts:
     when: always
