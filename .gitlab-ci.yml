@@ -1,23 +1,12 @@
-image: maven:3-jdk-11
+image: maven:3.8.3-openjdk-17
 
 stages:
-  - "test"
-
-cache:
-  paths:
-    - .m2/repository/smartmat
-
+  - test
 
 test:jdk11:
   stage: test
-  script:   
-    - cd smartmat 
+  script: 
+    - cd smartmat  
     - mvn clean test
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
-  when: always
+  
 
