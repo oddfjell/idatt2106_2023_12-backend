@@ -1,18 +1,12 @@
 image: maven:3-jdk-11
 
-cache:
-  paths:
-    - /smartmat/
-
 stages:
-  - "build"
   - "test"
-
 
 test:jdk11:
   stage: test
   script:   
-    - cd "/smartmat/" 
+    - cd smartmat 
     - mvn clean test
   artifacts:
     when: always
