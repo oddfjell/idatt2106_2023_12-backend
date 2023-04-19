@@ -35,10 +35,7 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
-    // TODO MAKE USERS TO ACCOUNT
-    //  DO NOT USE THESE UNTIL THEN
-    //  On povons peut-etre utiliser an outre controller??
-    @PostMapping("/registerUser")
+    @PostMapping("/registeruser")
     public ResponseEntity<?> registerUser(@RequestBody AccountEntity account){
         try{
             accountService.addUser(account);
