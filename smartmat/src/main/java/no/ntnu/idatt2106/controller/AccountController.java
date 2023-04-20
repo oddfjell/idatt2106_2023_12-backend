@@ -41,6 +41,15 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
+    @PostMapping("/registerAccount")
+    public ResponseEntity<?> registerAccount(@RequestBody AccountEntity account){
+        boolean madeNewAccount = accountService.registerAccount(account);
+        if(!madeNewAccount){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
 
     // TODO MAKE USERS TO AN ACCOUNT
     @PostMapping("/registerUser")
