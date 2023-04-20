@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.service;
 
 
+import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class AccountService {
 
     private AccountRepository accountRepository;
@@ -33,7 +35,7 @@ public class AccountService {
     }
 
     public void updatePassword(String password, Long id){
-        accountRepository.updatePassword(password,id);
+        accountRepository.updatePassword(encryptionService.encryptPassword(password),id);
     }
 
 

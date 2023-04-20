@@ -32,8 +32,17 @@ public class AccountController {
     }
 
     @PostMapping("/editAccount")
-    public ResponseEntity<?> editAccount(){
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+    public ResponseEntity<?> editAccount(@AuthenticationPrincipal AccountEntity account, @RequestParam("username") String username,
+        @RequestParam("password") String password){
+
+        if(!username.isEmpty()){
+            accountService.updateUsername(username,account.getId());
+        }
+
+        if(!password.isEmpty()){
+            accountService.updatePassword(password, account.getId());
+        }
+        return ResponseEntity.ok("Account updated");
     }
 
     @DeleteMapping("/remove")
