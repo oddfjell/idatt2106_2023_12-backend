@@ -28,6 +28,15 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    public void updateUsername(String username, Long id){
+        accountRepository.updateUsername(username,id);
+    }
+
+    public void updatePassword(String password, Long id){
+        accountRepository.updatePassword(password,id);
+    }
+
+
     public void addUser(AccountEntity account) throws UserAlreadyExistsException {
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isPresent()){
             throw new UserAlreadyExistsException();

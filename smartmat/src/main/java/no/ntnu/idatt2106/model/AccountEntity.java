@@ -31,6 +31,10 @@ public class AccountEntity {
         this.password = password;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getUsername() {
         return username;
     }
