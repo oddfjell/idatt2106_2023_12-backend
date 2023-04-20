@@ -7,6 +7,7 @@ import no.ntnu.idatt2106.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/auth/account")
@@ -21,8 +22,13 @@ public class AccountController {
 
     @CrossOrigin
     @GetMapping("/")
-    public Iterable<AccountEntity> getAllAccounts() {
-        return accountService.getAllUsers();
+    public ResponseEntity<Iterable<AccountEntity>> getAllAccounts(@AuthenticationPrincipal AccountEntity account) {
+        if(account.getUsername().equals("daniel")){
+            return ResponseEntity.ok(accountService.getAllUsers());
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
     }
 
     @PostMapping("/editAccount")
