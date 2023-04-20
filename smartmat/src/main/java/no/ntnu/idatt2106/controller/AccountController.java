@@ -1,7 +1,9 @@
 package no.ntnu.idatt2106.controller;
 
+import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
+import no.ntnu.idatt2106.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,16 +13,19 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AccountController {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @CrossOrigin
     @GetMapping("/")
     public Iterable<AccountEntity> getAllAccounts() {
-        return accountRepository.findAll();
+        return accountService.getAllUsers();
     }
 
-    //TODO passord og brukernavn i ett?? Trenger da kanskje tall ellerno for å symbolisere det
+    //TODO Trenger tall ellerno for å skille hva
     @PutMapping("/editAccount")
     public ResponseEntity<?> editAccount(){
         //get account from accountRepository
@@ -37,12 +42,25 @@ public class AccountController {
     }
 
 
-
-
-
-    // TODO MAKE USERS TO ACCOUNT DO NOT USE THESE UNTIL THEN
+    // TODO MAKE USERS TO AN ACCOUNT
     @PostMapping("/registerUser")
-    public ResponseEntity<?> registerUser(){
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+    public ResponseEntity<?> registerUser(@RequestBody AccountEntity account){
+        try{
+            accountService.addUser(account);
+            return ResponseEntity.ok().body("User added");
+        }catch (UserAlreadyExistsException userAlreadyExistsException){
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody AccountEntity account){
+        String loginResponse = accountService.loginUser(account);
+        if(loginResponse == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else {
+            return ResponseEntity.ok(loginResponse);
+        }
+    }
+
 }
