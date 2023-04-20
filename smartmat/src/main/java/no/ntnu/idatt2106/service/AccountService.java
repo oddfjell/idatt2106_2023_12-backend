@@ -30,12 +30,16 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public void updateUsername(String username, Long id){
-        accountRepository.updateUsername(username,id);
+    public void updateUsername(String username, AccountEntity account){
+        accountRepository.updateUsername(username, account.getId());
     }
 
-    public void updatePassword(String password, Long id){
-        accountRepository.updatePassword(encryptionService.encryptPassword(password),id);
+    public void updatePassword(String password, AccountEntity account){
+        accountRepository.updatePassword(encryptionService.encryptPassword(password), account.getId());
+    }
+
+    public void removeAccount(AccountEntity account){
+        accountRepository.removeAccountEntityById(account.getId());
     }
 
 

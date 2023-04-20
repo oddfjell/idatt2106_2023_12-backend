@@ -11,6 +11,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
     Optional<AccountEntity> findByUsernameIgnoreCase(String username);
 
+    void removeAccountEntityById(Long id);
+
 
     @Modifying
     @Query("update AccountEntity a set a.username=?1 where a.id=?2")

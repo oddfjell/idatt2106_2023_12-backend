@@ -36,18 +36,19 @@ public class AccountController {
         @RequestParam("password") String password){
 
         if(!username.isEmpty()){
-            accountService.updateUsername(username,account.getId());
+            accountService.updateUsername(username,account);
         }
 
         if(!password.isEmpty()){
-            accountService.updatePassword(password, account.getId());
+            accountService.updatePassword(password, account);
         }
         return ResponseEntity.ok("Account updated");
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<?> removeAccount(){
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+    public ResponseEntity<?> removeAccount(@AuthenticationPrincipal AccountEntity account){
+        accountService.removeAccount(account);
+        return ResponseEntity.ok("Account removed");
     }
 
     @PostMapping("/registeruser")
