@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/idatt2106_2023_12-backend.iml" filepath="$PROJECT_DIR$/.idea/idatt2106_2023_12-backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/smartmat/smartmat.iml" filepath="$PROJECT_DIR$/smartmat/smartmat.iml" />
-    </modules>
-  </component>
-</project>

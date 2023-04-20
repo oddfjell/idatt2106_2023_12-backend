@@ -1,6 +1,5 @@
 package no.ntnu.idatt2106.service;
 
-
 import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
