@@ -48,5 +48,14 @@ public class AccountService {
         return null;
     }
 
+    public boolean registerAccount(AccountEntity account){
+        Optional<AccountEntity> user = accountRepository.findByUsernameIgnoreCase(account.getUsername());
+        if(!user.isPresent()){
+            accountRepository.save(account);
+            return true;
+        }
+        return false;
+    }
+
 
 }
