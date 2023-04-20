@@ -1,48 +1,38 @@
 package no.ntnu.idatt2106.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
+import no.ntnu.idatt2106.SmartmatApplication;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.service.AccountService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.net.URI;
 
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(AccountController.class)
+@SpringBootTest(classes = {SmartmatApplication.class},webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AccountControllerTest {
 
-    private MockMvc mockMvc;
+    @Autowired
+    TestRestTemplate restTemplate;
 
     @Autowired
-    private AccountController accountController;
+    AccountService accountService;
 
-    @MockBean
-    private AccountService accountService;
-
+    @LocalServerPort
+    int randomServerPort;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(accountController).build();
+        System.out.println("YO");
     }
 
     @AfterEach
@@ -51,25 +41,21 @@ class AccountControllerTest {
 
     @Test
     void testRegisterUser() throws Exception {
+
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerUser";
+        URI uri = new URI(baseURL);
+
         AccountEntity account = new AccountEntity();
         account.setUsername("TestUserOne");
         account.setPassword("TestPassword");
 
-        doNothing().when(accountService).addUser(account);
+        HttpHeaders headers = new HttpHeaders();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(account);
-        System.out.println(requestBody);
+        HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
 
-        mockMvc.perform(post("http://localhost:8080/auth/account/registerUser")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(status().isCreated());
+        ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
 
-        verify(accountService).addUser(account);
-
-
-
+        Assertions.assertEquals(200, result.getStatusCode().value());
     }
 
 

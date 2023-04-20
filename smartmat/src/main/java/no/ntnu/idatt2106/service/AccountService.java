@@ -6,6 +6,7 @@ import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,17 +15,12 @@ import java.util.Optional;
 @Service
 @Transactional
 public class AccountService {
-
+    @Autowired
     private AccountRepository accountRepository;
+    @Autowired
     private JWTService jwtService;
+    @Autowired
     private EncryptionService encryptionService;
-
-
-    public AccountService(AccountRepository accountRepository, JWTService jwtService, EncryptionService encryptionService) {
-        this.accountRepository = accountRepository;
-        this.jwtService = jwtService;
-        this.encryptionService = encryptionService;
-    }
 
 
     public List<AccountEntity> getAllUsers(){
