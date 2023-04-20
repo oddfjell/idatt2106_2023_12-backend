@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.service;
 
 
+import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class AccountService {
 
     private AccountRepository accountRepository;
@@ -27,6 +29,19 @@ public class AccountService {
     public List<AccountEntity> getAllUsers(){
         return accountRepository.findAll();
     }
+
+    public void updateUsername(String username, AccountEntity account){
+        accountRepository.updateUsername(username, account.getId());
+    }
+
+    public void updatePassword(String password, AccountEntity account){
+        accountRepository.updatePassword(encryptionService.encryptPassword(password), account.getId());
+    }
+
+    public void removeAccount(AccountEntity account){
+        accountRepository.removeAccountEntityById(account.getId());
+    }
+
 
     public void addUser(AccountEntity account) throws UserAlreadyExistsException {
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isPresent()){

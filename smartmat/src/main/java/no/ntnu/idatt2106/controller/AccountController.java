@@ -7,6 +7,7 @@ import no.ntnu.idatt2106.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/auth/account")
@@ -21,24 +22,33 @@ public class AccountController {
 
     @CrossOrigin
     @GetMapping("/")
-    public Iterable<AccountEntity> getAllAccounts() {
-        return accountService.getAllUsers();
+    public ResponseEntity<Iterable<AccountEntity>> getAllAccounts(@AuthenticationPrincipal AccountEntity account) {
+        if(account.getUsername().equals("daniel")){
+            return ResponseEntity.ok(accountService.getAllUsers());
+        }else{
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
     }
 
-    //TODO Trenger tall ellerno for å skille hva
-    @PutMapping("/editAccount")
-    public ResponseEntity<?> editAccount(){
-        //get account from accountRepository
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+    @PostMapping("/editAccount")
+    public ResponseEntity<?> editAccount(@AuthenticationPrincipal AccountEntity account, @RequestParam("username") String username,
+        @RequestParam("password") String password){
+
+        if(!username.isEmpty()){
+            accountService.updateUsername(username,account);
+        }
+
+        if(!password.isEmpty()){
+            accountService.updatePassword(password, account);
+        }
+        return ResponseEntity.ok("Account updated");
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<?> removeAccount(){
-        /*
-        %accountRepository.delete(account)%
-        SKJEKK FOR Å ANGI STATUS
-        */
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+    public ResponseEntity<?> removeAccount(@AuthenticationPrincipal AccountEntity account){
+        accountService.removeAccount(account);
+        return ResponseEntity.ok("Account removed");
     }
 
     @PostMapping("/registerAccount")
