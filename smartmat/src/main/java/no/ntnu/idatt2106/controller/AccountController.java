@@ -28,7 +28,6 @@ public class AccountController {
         }else{
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
     }
 
     @PostMapping("/editAccount")
