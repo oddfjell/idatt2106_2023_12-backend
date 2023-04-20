@@ -8,12 +8,14 @@ public class Recipe {
    private int value;
    private String[] ingredients;
    private String title;
+   private int servings;
 
    public Recipe(String url, String title, String[] ingredients) {
       this.url = url;
       this.value = 0;
       this.ingredients = ingredients;
       this.title = title;
+      this.servings = 4;
    }
 
    public String getUrl() {

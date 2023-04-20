@@ -67,7 +67,7 @@ public class RecipeSuggestionService {
     }
 
     public void runScraper() throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder("python3", SCRIPT_PATH);
+        ProcessBuilder processBuilder = new ProcessBuilder("python", SCRIPT_PATH);
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();

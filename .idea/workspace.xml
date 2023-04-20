@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3951e7fd-059c-40e9-b869-8f834da0a1b1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/smartmat/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/model/Recipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/model/Recipe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/service/RecipeSuggestionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/service/RecipeSuggestionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,8 +25,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="2Odn0zeoljPCEkejzbZrqsXDfBj" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -41,12 +51,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/smartmat/src/test/resources" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.repository.indices" />
     <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/smartmat/src/test/resources" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.RecipeSuggestionService">
     <configuration name="RecipeSuggestionService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -84,7 +100,10 @@
       <option name="presentableId" value="Default" />
       <updated>1681899107972</updated>
       <workItem from="1681899116671" duration="2639000" />
-      <workItem from="1681902237536" duration="10189000" />
+      <workItem from="1681902237536" duration="11671000" />
+      <workItem from="1681985784350" duration="500000" />
+      <workItem from="1681986537521" duration="484000" />
+      <workItem from="1681987294010" duration="3894000" />
     </task>
     <servers />
   </component>
