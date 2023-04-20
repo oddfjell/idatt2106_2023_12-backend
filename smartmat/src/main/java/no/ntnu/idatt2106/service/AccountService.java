@@ -4,6 +4,7 @@ package no.ntnu.idatt2106.service;
 import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -52,12 +53,15 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public String loginUser(AccountEntity account) {
+    public LoginResponseBody loginUser(AccountEntity account) {
         Optional<AccountEntity> user = accountRepository.findByUsernameIgnoreCase(account.getUsername());
         if(user.isPresent()){
             AccountEntity userEntity = user.get();
             if(encryptionService.verifyPassword(account.getPassword(),userEntity.getPassword())){
-                return jwtService.generateJWT(account);
+                LoginResponseBody loginResponseBody = new LoginResponseBody();
+                loginResponseBody.setUsername(userEntity.getUsername());
+                loginResponseBody.setJwt(jwtService.generateJWT(account));
+                return loginResponseBody;
             }
         }
         return null;

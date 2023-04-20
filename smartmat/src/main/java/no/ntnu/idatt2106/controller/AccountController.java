@@ -2,9 +2,8 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
-import no.ntnu.idatt2106.repository.AccountRepository;
+import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AccountController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
@@ -60,6 +59,16 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/loginAccount")
+    public ResponseEntity<LoginResponseBody> loginAccount(@RequestBody AccountEntity account){
+        LoginResponseBody loginResponse = accountService.loginUser(account);
+        if(loginResponse == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else {
+            return ResponseEntity.ok(loginResponse);
+        }
+    }
+
     // TODO MAKE USERS TO AN ACCOUNT
     @PostMapping("/registerUser")
     public ResponseEntity<?> registerUser(@RequestBody AccountEntity account){
@@ -68,16 +77,6 @@ public class AccountController {
             return ResponseEntity.ok().body("User added");
         }catch (UserAlreadyExistsException userAlreadyExistsException){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody AccountEntity account){
-        String loginResponse = accountService.loginUser(account);
-        if(loginResponse == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }else {
-            return ResponseEntity.ok(loginResponse);
         }
     }
 
