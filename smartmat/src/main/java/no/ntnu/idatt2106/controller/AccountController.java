@@ -2,6 +2,7 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,8 +61,8 @@ public class AccountController {
     }
 
     @PostMapping("/loginAccount")
-    public ResponseEntity<?> loginAccount(@RequestBody AccountEntity account){
-        String loginResponse = accountService.loginUser(account);
+    public ResponseEntity<LoginResponseBody> loginAccount(@RequestBody AccountEntity account){
+        LoginResponseBody loginResponse = accountService.loginUser(account);
         if(loginResponse == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }else {
