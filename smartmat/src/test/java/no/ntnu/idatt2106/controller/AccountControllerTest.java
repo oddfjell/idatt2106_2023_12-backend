@@ -1,65 +1,76 @@
 package no.ntnu.idatt2106.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
+import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.service.AccountService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = AccountController.class)
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(MockitoExtension.class)
-public class AccountControllerTest {
 
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(AccountController.class)
+class AccountControllerTest {
+
+    private MockMvc mockMvc;
 
     @Autowired
-    private MockMvc mockMvc;
+    private AccountController accountController;
 
     @MockBean
     private AccountService accountService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
 
-
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(accountController).build();
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
-    @Test
-    public void getAllAccounts() {
+    @AfterEach
+    void tearDown() {
     }
 
     @Test
-    public void editAccount() {
+    void testRegisterUser() throws Exception {
+        AccountEntity account = new AccountEntity();
+        account.setUsername("TestUserOne");
+        account.setPassword("TestPassword");
+
+        doNothing().when(accountService).addUser(account);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String requestBody = objectMapper.writeValueAsString(account);
+        System.out.println(requestBody);
+
+        mockMvc.perform(post("http://localhost:8080/auth/account/registerUser")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody))
+                .andExpect(status().isCreated());
+
+        verify(accountService).addUser(account);
+
+
+
     }
 
-    @Test
-    public void removeAccount() {
-    }
 
-    @Test
-    public void registerAccount() {
-    }
-
-    @Test
-    public void registerUser() {
-    }
-
-    @Test
-    public void loginUser() {
-    }
 }
