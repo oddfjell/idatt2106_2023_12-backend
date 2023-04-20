@@ -17,24 +17,30 @@ public class AccountController {
     @CrossOrigin
     @GetMapping("/")
     public Iterable<AccountEntity> getAllAccounts() {
-
         return accountRepository.findAll();
-
     }
 
-    @PostMapping("/editAccount")
+    //TODO passord og brukernavn i ett?? Trenger da kanskje tall ellerno for å symbolisere det
+    @PutMapping("/editAccount")
     public ResponseEntity<?> editAccount(){
+        //get account from accountRepository
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeAccount(){
+        /*
+        %accountRepository.delete(account)%
+        SKJEKK FOR Å ANGI STATUS
+        */
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
-    // TODO MAKE USERS TO ACCOUNT
-    //  DO NOT USE THESE UNTIL THEN
-    //  On povons peut-etre utiliser an outre controller??
+
+
+
+
+    // TODO MAKE USERS TO ACCOUNT DO NOT USE THESE UNTIL THEN
     @PostMapping("/registerUser")
     public ResponseEntity<?> registerUser(){
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
