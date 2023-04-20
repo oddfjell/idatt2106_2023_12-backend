@@ -51,7 +51,18 @@ public class AccountController {
         return ResponseEntity.ok("Account removed");
     }
 
-    @PostMapping("/registeruser")
+    @PostMapping("/registerAccount")
+    public ResponseEntity<?> registerAccount(@RequestBody AccountEntity account){
+        boolean madeNewAccount = accountService.registerAccount(account);
+        if(!madeNewAccount){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+    }
+
+    // TODO MAKE USERS TO AN ACCOUNT
+    @PostMapping("/registerUser")
     public ResponseEntity<?> registerUser(@RequestBody AccountEntity account){
         try{
             accountService.addUser(account);

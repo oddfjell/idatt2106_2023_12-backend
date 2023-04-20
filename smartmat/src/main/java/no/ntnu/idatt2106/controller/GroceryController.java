@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping(value = "/grocery") //TODO auth?????
@@ -17,26 +18,38 @@ public class GroceryController {
 
     @PostMapping("/")
     public ResponseEntity<?> getProducts(){
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+        return new ResponseEntity<>(fridgeRepository.findAll(), HttpStatus.OK);
     }
 
     @PostMapping("/addProduct")
     public ResponseEntity<?> addProduct(){
+        /*
+        %accountRepository.add(account)%
+        SKJEKK FOR Å ANGI STATUS
+        */
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
-    @PostMapping("/editProduct")
+    @PutMapping("/editProduct")
     public ResponseEntity<?> editProduct(){
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
     @DeleteMapping("/removeProduct")
     public ResponseEntity<?> removeProduct(){
+        /*
+        %accountRepository.delete(account)%
+        SKJEKK FOR Å ANGI STATUS
+        */
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
     @DeleteMapping("/throwProduct")
     public ResponseEntity<?> throwProduct(){
+        /*
+        %accountRepository.throw(account)%
+        SKJEKK FOR Å ANGI STATUS
+        */
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 }
