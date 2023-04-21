@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface FridgeRepository extends JpaRepository<FridgeEntity, Long> {
-    int getAmount(String name);
+    /**int getAmount(String name);
     boolean doContain(FridgeEntity fridgeEntity);
 
-    boolean throwProduct(FridgeEntity fridgeEntity);
+    boolean throwProduct(FridgeEntity fridgeEntity);*/
 }

@@ -21,6 +21,7 @@ public class GroceryController {
         return new ResponseEntity<>(fridgeRepository.findAll(), HttpStatus.OK);
     }
 
+
     @PostMapping("/addProduct")
     public ResponseEntity<?> addProduct(@RequestBody FridgeEntity product){
         boolean added = groceryService.addProduct(product);

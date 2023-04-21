@@ -15,9 +15,11 @@ public class GroceryService {
     private WasteRepository wasteRepository;
 
     public boolean addProduct(FridgeEntity product){
+        return false;
+
         //TODO save må legge til et produkt og/eller øke amount
         // kan være forskjellige metoder
-        int before;
+        /**int before;
         if(fridgeRepository.doContain(product)){
             before = fridgeRepository.getAmount(product.getFullName());
         } else before = 0;
@@ -25,20 +27,24 @@ public class GroceryService {
         fridgeRepository.save(product);
         int after = fridgeRepository.getAmount(product.getFullName());
 
-        return before == (after - 1);
+        return before == (after - 1);*/
     }
 
     public boolean removeProduct(FridgeEntity product){
+        return false;
+
         //TODO DO NOT DELETE IF THE PRODUCT AMOUNT IS MORE THAN 1
-        int before = fridgeRepository.findAll().size();
+        /**int before = fridgeRepository.findAll().size();
         fridgeRepository.delete(product);
         int after = fridgeRepository.findAll().size();
-        return before == (after + 1);
+        return before == (after + 1);*/
     }
 
     public boolean throwProduct(FridgeEntity product){
+        return false;
+
         //TODO DO NOT DELETE IF THE PRODUCT AMOUNT IS MORE THAN 1
-        int beforeFridge = fridgeRepository.findAll().size();
+        /**int beforeFridge = fridgeRepository.findAll().size();
         int beforeWaste = wasteRepository.findAll().size();
 
         fridgeRepository.throwProduct(product);
@@ -49,6 +55,6 @@ public class GroceryService {
         //TODO feilskjekk om den ene skjer og ikke den andre
         if(beforeFridge == afterFridge + 1 && beforeWaste == afterWaste + 1){
             return true;
-        } else return false;
+        } else return false;*/
     }
 }
