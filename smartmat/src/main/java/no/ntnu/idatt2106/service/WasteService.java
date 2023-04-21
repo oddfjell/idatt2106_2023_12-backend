@@ -17,4 +17,8 @@ public class WasteService {
     public int getMoneyLostPerMonth(long id, int monthNumber) {
         return wasteRepository.getMoneyLostPerMonth(id, monthNumber).orElse(0);
     }
+
+    public int getMoneyLostByCategory(long id, long categoryId) {
+        return wasteRepository.getMoneyLostByCategory(id, categoryId).orElse(0);
+    }
 }
