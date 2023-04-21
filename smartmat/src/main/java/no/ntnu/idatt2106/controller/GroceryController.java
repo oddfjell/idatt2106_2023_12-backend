@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "/grocery") //TODO auth?????
+@RequestMapping(value = "/grocery")
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class GroceryController {
 
     @Autowired

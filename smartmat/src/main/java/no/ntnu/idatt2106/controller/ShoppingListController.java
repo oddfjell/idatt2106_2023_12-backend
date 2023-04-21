@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/shoppingList") //TODO auth?????
 @RestController
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class ShoppingListController {
 
     @Autowired
