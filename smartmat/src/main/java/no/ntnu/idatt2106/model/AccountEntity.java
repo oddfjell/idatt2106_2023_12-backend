@@ -1,6 +1,5 @@
 package no.ntnu.idatt2106.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +10,7 @@ public class AccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long account_id;
 
     @NotNull
     @NotBlank
@@ -24,15 +23,18 @@ public class AccountEntity {
     public AccountEntity() {
     }
 
-
     public AccountEntity(String username, String password) {
         super();
         this.username = username;
         this.password = password;
     }
 
-    public Long getId() {
-        return id;
+    public Long getAccount_id() {
+        return account_id;
+    }
+
+    public void setAccount_id(Long account_id) {
+        this.account_id = account_id;
     }
 
     public String getUsername() {
