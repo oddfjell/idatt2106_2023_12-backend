@@ -39,6 +39,10 @@ public class AccountService {
         accountRepository.removeAccountEntityById(account.getId());
     }
 
+    public void removeAccount(String username){
+        accountRepository.removeAccountEntityByUsername(username);
+    }
+
 
     public void addUser(AccountEntity account) throws UserAlreadyExistsException {
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isPresent()){

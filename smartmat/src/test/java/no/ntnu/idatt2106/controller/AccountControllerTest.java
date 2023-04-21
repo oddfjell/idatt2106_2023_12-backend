@@ -2,6 +2,7 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.SmartmatApplication;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.service.AccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.Objects;
 
 
 @SpringBootTest(classes = {SmartmatApplication.class},webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,13 +32,18 @@ class AccountControllerTest {
     @LocalServerPort
     int randomServerPort;
 
+    private AccountEntity account;
+
     @BeforeEach
     void setUp() {
-        System.out.println("YO");
+        account = new AccountEntity();
+        account.setUsername("TestUserOne");
+        account.setPassword("TestPassword");
     }
 
     @AfterEach
     void tearDown() {
+        accountService.removeAccount(account.getUsername());
     }
 
     @Test
@@ -45,9 +52,26 @@ class AccountControllerTest {
         String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerUser";
         URI uri = new URI(baseURL);
 
-        AccountEntity account = new AccountEntity();
-        account.setUsername("TestUserOne");
-        account.setPassword("TestPassword");
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
+
+        ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
+
+        Assertions.assertEquals(200, result.getStatusCode().value());
+        Assertions.assertEquals("User added", result.getBody());
+
+        result = this.restTemplate.postForEntity(uri, request, String.class);
+
+        Assertions.assertEquals(409, result.getStatusCode().value());
+
+    }
+
+    @Test
+    void testLoginUser() throws Exception{
+
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerUser";
+        URI uri = new URI(baseURL);
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -56,7 +80,26 @@ class AccountControllerTest {
         ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
 
         Assertions.assertEquals(200, result.getStatusCode().value());
+        Assertions.assertEquals("User added", result.getBody());
+
+
+
+        baseURL = "http://localhost:"+ randomServerPort +"/auth/account/loginAccount";
+        uri = new URI(baseURL);
+
+        headers = new HttpHeaders();
+
+        request = new HttpEntity<>(account,headers);
+
+        result = this.restTemplate.postForEntity(uri, request, String.class);
+
+        Assertions.assertEquals(200, result.getStatusCode().value());
+        Assertions.assertTrue(Objects.requireNonNull(result.getBody()).toString().contains("jwt"));
+
     }
+
+
+
 
 
 }
