@@ -1,28 +1,36 @@
 package no.ntnu.idatt2106.service;
 
 import no.ntnu.idatt2106.model.Recipe;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class RecipeSuggestionService {
 
-    private final String CSV_PATH = System.getProperty("user.dir")+"/smartmat/src/main/resources/recipes.csv";
-    private final String SCRIPT_PATH = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
+    private String csvPath = System.getProperty("user.dir")+"/smartmat/src/main/resources/recipes.csv";
+    private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
 
+    public RecipeSuggestionService(boolean test) {
+        if (test) {
+            csvPath = System.getProperty("user.dir")+"/smartmat/src/test/resources/recipesTestData.csv";
+        }
+    }
+
+    public RecipeSuggestionService() {
+    }
 
     public List<Recipe> readRecipesFromScraper() {
         ArrayList<Recipe> recipes = new ArrayList<>();
         String csvLine;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(CSV_PATH));
+            BufferedReader br = new BufferedReader(new FileReader(csvPath));
             while ((csvLine = br.readLine()) != null) {
                 String[] readRecipe = csvLine.split(",");
                 String url = readRecipe[0];
@@ -67,7 +75,7 @@ public class RecipeSuggestionService {
     }
 
     public void runScraper() throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder("python", SCRIPT_PATH);
+        ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath);
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();

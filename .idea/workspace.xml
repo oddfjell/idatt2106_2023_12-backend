@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3951e7fd-059c-40e9-b869-8f834da0a1b1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartmat/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/model/Recipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/model/Recipe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/controller/RecipeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/controller/RecipeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/payload/WeekMenuResponse.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/service/RecipeSuggestionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/src/main/java/no/ntnu/idatt2106/service/RecipeSuggestionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/smartmat/src/test/java/no/ntnu/idatt2106/service/RecipeSuggestionServiceTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/smartmat/src/test/java/no/ntnu/idatt2106/service/RecipeSuggestionServiceTests.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +65,7 @@
       <recent name="$PROJECT_DIR$/smartmat/src/test/resources" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.RecipeSuggestionService">
+  <component name="RunManager" selected="JUnit.RecipeSuggestionServiceTests">
     <configuration name="RecipeSuggestionService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="no.ntnu.idatt2106.service.RecipeSuggestionService" />
       <module name="smartmat" />
@@ -78,6 +79,21 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="RecipeSuggestionServiceTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="smartmat" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="no.ntnu.idatt2106.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="no.ntnu.idatt2106.service" />
+      <option name="MAIN_CLASS_NAME" value="no.ntnu.idatt2106.service.RecipeSuggestionServiceTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SmartmatApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="smartmat" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="no.ntnu.idatt2106.SmartmatApplication" />
@@ -87,6 +103,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.RecipeSuggestionServiceTests" />
         <item itemvalue="Application.RecipeSuggestionService" />
       </list>
     </recent_temporary>
