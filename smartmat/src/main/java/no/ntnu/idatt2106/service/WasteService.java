@@ -11,10 +11,10 @@ public class WasteService {
     private WasteRepository wasteRepository;
 
     public int getMoneyLost(long id) {
-        return wasteRepository.getMoneyLost(id);
+        return wasteRepository.getMoneyLost(id).orElse(0);
     }
 
     public int getMoneyLostPerMonth(long id, int monthNumber) {
-        return wasteRepository.getMoneyLostPerMonth(id, monthNumber);
+        return wasteRepository.getMoneyLostPerMonth(id, monthNumber).orElse(0);
     }
 }
