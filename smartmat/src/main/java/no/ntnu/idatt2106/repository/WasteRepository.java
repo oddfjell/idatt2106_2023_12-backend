@@ -8,4 +8,7 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
 
     @Query("SELECT SUM(e.money_lost) FROM WasteEntity e WHERE e.accountEntity.id = :id")
     int getMoneyLost(long id);
+
+    @Query("SELECT SUM(e.money_lost) FROM WasteEntity e WHERE e.accountEntity.id = :id AND e.month = :monthNumber")
+    int getMoneyLostPerMonth(long id, int monthNumber);
 }
