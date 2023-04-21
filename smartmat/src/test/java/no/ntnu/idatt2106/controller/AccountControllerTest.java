@@ -49,7 +49,7 @@ class AccountControllerTest {
     @Test
     void testRegisterUser() throws Exception {
 
-        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerUser";
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
         URI uri = new URI(baseURL);
 
         HttpHeaders headers = new HttpHeaders();
@@ -70,7 +70,7 @@ class AccountControllerTest {
     @Test
     void testLoginUser() throws Exception{
 
-        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerUser";
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
         URI uri = new URI(baseURL);
 
         HttpHeaders headers = new HttpHeaders();

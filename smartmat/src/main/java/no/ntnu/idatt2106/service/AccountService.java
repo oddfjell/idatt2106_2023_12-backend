@@ -1,7 +1,7 @@
 package no.ntnu.idatt2106.service;
 
 import jakarta.transaction.Transactional;
-import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
+import no.ntnu.idatt2106.exceptions.AccountAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.repository.AccountRepository;
@@ -43,9 +43,9 @@ public class AccountService {
     }
 
 
-    public void addUser(AccountEntity account) throws UserAlreadyExistsException {
+    public void addUser(AccountEntity account) throws AccountAlreadyExistsException {
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isPresent()){
-            throw new UserAlreadyExistsException();
+            throw new AccountAlreadyExistsException();
         }
 
         account.setPassword(encryptionService.encryptPassword(account.getPassword()));
