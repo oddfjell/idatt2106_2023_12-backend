@@ -14,7 +14,7 @@ public class FridgeEntity {
     @JoinColumn(name = "account_id")
     private AccountEntity accountEntity;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "grocery_id")
     private GroceryEntity groceryEntity;
 
