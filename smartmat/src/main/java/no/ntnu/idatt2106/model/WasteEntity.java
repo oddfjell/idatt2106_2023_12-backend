@@ -1,77 +1,57 @@
 package no.ntnu.idatt2106.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "waste")
 public class WasteEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String ean;
-    private String fullName;
-    private double price;
-    private double weight;
-
+    private Long waste_id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
-    private AccountEntity account;
+    private AccountEntity accountEntity;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "grocery_id")
+    private GroceryEntity groceryEntity;
+
+    private int money_lost;
 
     public WasteEntity() {
     }
 
-    public WasteEntity(String ean, String fullName, double price, double weight, AccountEntity account) {
-        super();
-        this.ean = ean;
-        this.fullName = fullName;
-        this.price = price;
-        this.weight = weight;
-        this.account = account;
+    public Long getWaste_id() {
+        return waste_id;
     }
 
-    public String getEan() {
-        return ean;
+    public void setWaste_id(Long waste_id) {
+        this.waste_id = waste_id;
     }
 
-    public void setEan(String ean) {
-        this.ean = ean;
+    public AccountEntity getAccountEntity() {
+        return accountEntity;
     }
 
-    public String getFullName() {
-        return fullName;
+    public void setAccountEntity(AccountEntity accountEntity) {
+        this.accountEntity = accountEntity;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public GroceryEntity getGroceryEntity() {
+        return groceryEntity;
     }
 
-    public double getPrice() {
-        return price;
+    public void setGroceryEntity(GroceryEntity groceryEntity) {
+        this.groceryEntity = groceryEntity;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public int getMoney_lost() {
+        return money_lost;
     }
 
-    public double getWeight() {
-        return weight;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public AccountEntity getAccount() {
-        return account;
-    }
-
-    public void setAccount(AccountEntity account) {
-        this.account = account;
+    public void setMoney_lost(int money_lost) {
+        this.money_lost = money_lost;
     }
 }
