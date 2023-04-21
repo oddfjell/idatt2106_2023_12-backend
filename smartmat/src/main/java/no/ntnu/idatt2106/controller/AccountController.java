@@ -27,7 +27,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/editAccount")
+    @PutMapping("/editAccount")
     public ResponseEntity<?> editAccount(@AuthenticationPrincipal AccountEntity account, @RequestParam("username") String username,
         @RequestParam("password") String password){
 
