@@ -20,14 +20,17 @@ public class WasteEntity {
 
     private int money_lost;
 
+    private int month;
+
     public WasteEntity() {
     }
 
-    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int money_lost) {
+    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int money_lost, int month) {
         super();
         this.accountEntity = accountEntity;
         this.groceryEntity = groceryEntity;
         this.money_lost = money_lost;
+        this.month = month;
     }
 
     public Long getWaste_id() {
@@ -60,5 +63,13 @@ public class WasteEntity {
 
     public void setMoney_lost(int money_lost) {
         this.money_lost = money_lost;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 }
