@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface FridgeRepository extends JpaRepository<FridgeEntity, Long> {
 
     List<FridgeEntity> findAllByAccountEntity(AccountEntity account);
+    FridgeEntity findByAccountEntityAndGroceryEntity(AccountEntity account, GroceryEntity grocery);
 
 }

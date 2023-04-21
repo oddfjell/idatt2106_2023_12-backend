@@ -2,7 +2,7 @@ package no.ntnu.idatt2106.service;
 
 
 import jakarta.transaction.Transactional;
-import no.ntnu.idatt2106.exceptions.UserDoesntExist;
+import no.ntnu.idatt2106.exceptions.UserDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -41,10 +40,10 @@ public class FridgeService {
 
     }
 
-    public void addGroceryToAccount(AccountEntity account, GroceryEntity grocery, int count) throws UserDoesntExist {
+    public void addGroceryToAccount(AccountEntity account, GroceryEntity grocery, int count) throws UserDoesntExistException {
 
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isEmpty()){
-            throw new UserDoesntExist();
+            throw new UserDoesntExistException();
         }
 
         FridgeEntity fridgeEntity = new FridgeEntity();
@@ -54,6 +53,25 @@ public class FridgeService {
 
         fridgeRepository.save(fridgeEntity);
     }
+
+    public void removeGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
+
+    }
+
+    public void removeGroceryFromAccountByAmount(AccountEntity account, GroceryEntity grocery, int count){
+
+    }
+
+    public void throwGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
+
+    }
+
+    public void throwGroceryFromAccountByAmount(AccountEntity account, GroceryEntity grocery, int count){
+
+    }
+
+
+
 
 
 
