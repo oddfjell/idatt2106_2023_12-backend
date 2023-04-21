@@ -20,4 +20,10 @@ public class WasteStatisticsController {
     public ResponseEntity<?> geMoneyLost(@AuthenticationPrincipal AccountEntity account){
         return new ResponseEntity<>(wasteService.getMoneyLost(account.getAccount_id()), HttpStatus.OK);
     }
+
+    @GetMapping("/{monthNumber}")
+    public ResponseEntity<?> geMoneyLostPerMonth(@AuthenticationPrincipal AccountEntity account,
+                                                 @PathVariable int monthNumber){
+        return new ResponseEntity<>(wasteService.getMoneyLostPerMonth(account.getAccount_id(), monthNumber), HttpStatus.OK);
+    }
 }
