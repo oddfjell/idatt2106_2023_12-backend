@@ -20,9 +20,15 @@ public class WasteStatisticsController {
         return new ResponseEntity<>(wasteService.getMoneyLost(account.getAccount_id()), HttpStatus.OK);
     }
 
-    @GetMapping("/{monthNumber}")
+    @GetMapping("/month/{monthNumber}")
     public ResponseEntity<?> geMoneyLostPerMonth(@AuthenticationPrincipal AccountEntity account,
                                                  @PathVariable int monthNumber){
         return new ResponseEntity<>(wasteService.getMoneyLostPerMonth(account.getAccount_id(), monthNumber), HttpStatus.OK);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<?> geyMoneyLostByCategory(@AuthenticationPrincipal AccountEntity account,
+                                                    @PathVariable long categoryId) {
+        return new ResponseEntity<>(wasteService.getMoneyLostByCategory(account.getAccount_id(), categoryId),HttpStatus.OK);
     }
 }
