@@ -27,15 +27,15 @@ public class AccountService {
     }
 
     public void updateUsername(String username, AccountEntity account){
-        accountRepository.updateUsername(username, account.getId());
+        accountRepository.updateUsername(username, account.getAccount_id());
     }
 
     public void updatePassword(String password, AccountEntity account){
-        accountRepository.updatePassword(encryptionService.encryptPassword(password), account.getId());
+        accountRepository.updatePassword(encryptionService.encryptPassword(password), account.getAccount_id());
     }
 
     public void removeAccount(AccountEntity account){
-        accountRepository.removeAccountEntityById(account.getId());
+        accountRepository.removeAccountEntityById(account.getAccount_id());
     }
 
     public void removeAccount(String username){
