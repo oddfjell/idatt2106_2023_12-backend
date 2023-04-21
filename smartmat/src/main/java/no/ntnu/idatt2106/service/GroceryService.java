@@ -2,7 +2,6 @@ package no.ntnu.idatt2106.service;
 
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.repository.FridgeRepository;
-import no.ntnu.idatt2106.repository.WasteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +10,6 @@ public class GroceryService {
 
     @Autowired
     private FridgeRepository fridgeRepository;
-    @Autowired
-    private WasteRepository wasteRepository;
 
     public boolean addProduct(FridgeEntity product){
         return false;
