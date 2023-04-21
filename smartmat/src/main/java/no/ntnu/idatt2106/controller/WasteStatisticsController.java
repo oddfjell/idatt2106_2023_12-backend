@@ -1,14 +1,20 @@
 package no.ntnu.idatt2106.controller;
 
-import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.service.WasteService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/waste") //TODO AUTH??
 @RestController
 public class WasteStatisticsController {
+
+    @Autowired
+    private WasteService wasteService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> geMoneyLost(@PathVariable long id){
+        return new ResponseEntity<>(wasteService.getMoneyLost(id), HttpStatus.OK);
+    }
 }
