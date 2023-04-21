@@ -4,6 +4,7 @@ import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,11 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AccountController {
 
-    private final AccountService accountService;
-
-    public AccountController(AccountService accountService) {
-        this.accountService = accountService;
-    }
+    @Autowired
+    private AccountService accountService;
 
     @CrossOrigin
     @GetMapping("/")
@@ -27,7 +25,6 @@ public class AccountController {
         }else{
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
     }
 
     @PutMapping("/editAccount")

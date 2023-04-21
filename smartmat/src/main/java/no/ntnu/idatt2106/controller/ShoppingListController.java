@@ -1,5 +1,6 @@
 package no.ntnu.idatt2106.controller;
 
+import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.repository.ShoppingListRepository;
 import no.ntnu.idatt2106.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class ShoppingListController {
 
     @Autowired
-    private ShoppingListRepository shoppingListRepository;
-    @Autowired
     private ShoppingListService shoppingListService;
 
     @GetMapping("/")
     public ResponseEntity<?> getProducts(){
-        return new ResponseEntity<>(shoppingListRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
 
     @PostMapping("/add")

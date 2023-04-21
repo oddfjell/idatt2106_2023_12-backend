@@ -10,7 +10,7 @@ public class AccountEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long account_id;
+    private Long id;
 
     @NotNull
     @NotBlank
@@ -30,11 +30,7 @@ public class AccountEntity {
     }
 
     public Long getAccount_id() {
-        return account_id;
-    }
-
-    public void setAccount_id(Long account_id) {
-        this.account_id = account_id;
+        return id;
     }
 
     public String getUsername() {

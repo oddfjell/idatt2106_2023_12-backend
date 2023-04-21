@@ -8,7 +8,7 @@ public class WasteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long waste_id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
@@ -23,12 +23,19 @@ public class WasteEntity {
     public WasteEntity() {
     }
 
+    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int money_lost) {
+        super();
+        this.accountEntity = accountEntity;
+        this.groceryEntity = groceryEntity;
+        this.money_lost = money_lost;
+    }
+
     public Long getWaste_id() {
-        return waste_id;
+        return id;
     }
 
     public void setWaste_id(Long waste_id) {
-        this.waste_id = waste_id;
+        this.id = waste_id;
     }
 
     public AccountEntity getAccountEntity() {

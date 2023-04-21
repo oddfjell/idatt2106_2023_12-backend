@@ -10,7 +10,7 @@ public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long category_id;
+    private Long id;
 
     @NotNull
     @NotBlank
@@ -21,12 +21,18 @@ public class CategoryEntity {
     public CategoryEntity() {
     }
 
+    public CategoryEntity(String name, String image) {
+        super();
+        this.name = name;
+        this.image = image;
+    }
+
     public Long getCategory_id() {
-        return category_id;
+        return id;
     }
 
     public void setCategory_id(Long category_id) {
-        this.category_id = category_id;
+        this.id = category_id;
     }
 
     public String getName() {

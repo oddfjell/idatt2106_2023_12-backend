@@ -8,7 +8,7 @@ public class ShoppingListEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long shopping_list_id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
@@ -23,12 +23,19 @@ public class ShoppingListEntity {
     public ShoppingListEntity() {
     }
 
+    public ShoppingListEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count) {
+        super();
+        this.accountEntity = accountEntity;
+        this.groceryEntity = groceryEntity;
+        this.count = count;
+    }
+
     public Long getShopping_list_id() {
-        return shopping_list_id;
+        return id;
     }
 
     public void setShopping_list_id(Long shopping_list_id) {
-        this.shopping_list_id = shopping_list_id;
+        this.id = shopping_list_id;
     }
 
     public AccountEntity getAccountEntity() {

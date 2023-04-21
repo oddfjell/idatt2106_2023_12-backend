@@ -5,6 +5,7 @@ import no.ntnu.idatt2106.exceptions.UserAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
 import no.ntnu.idatt2106.repository.AccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,17 +14,12 @@ import java.util.Optional;
 @Service
 @Transactional
 public class AccountService {
-
+    @Autowired
     private AccountRepository accountRepository;
+    @Autowired
     private JWTService jwtService;
+    @Autowired
     private EncryptionService encryptionService;
-
-
-    public AccountService(AccountRepository accountRepository, JWTService jwtService, EncryptionService encryptionService) {
-        this.accountRepository = accountRepository;
-        this.jwtService = jwtService;
-        this.encryptionService = encryptionService;
-    }
 
 
     public List<AccountEntity> getAllUsers(){
@@ -31,15 +27,19 @@ public class AccountService {
     }
 
     public void updateUsername(String username, AccountEntity account){
-        accountRepository.updateUsername(username, account.getId());
+        accountRepository.updateUsername(username, account.getAccount_id());
     }
 
     public void updatePassword(String password, AccountEntity account){
-        accountRepository.updatePassword(encryptionService.encryptPassword(password), account.getId());
+        accountRepository.updatePassword(encryptionService.encryptPassword(password), account.getAccount_id());
     }
 
     public void removeAccount(AccountEntity account){
-        accountRepository.removeAccountEntityById(account.getId());
+        accountRepository.removeAccountEntityById(account.getAccount_id());
+    }
+
+    public void removeAccount(String username){
+        accountRepository.removeAccountEntityByUsername(username);
     }
 
 

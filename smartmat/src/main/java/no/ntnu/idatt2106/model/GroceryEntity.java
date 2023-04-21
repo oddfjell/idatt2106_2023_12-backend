@@ -10,7 +10,7 @@ public class GroceryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long grocery_id;
+    private Long id;
 
     @NotNull
     @NotBlank
@@ -23,12 +23,18 @@ public class GroceryEntity {
     public GroceryEntity() {
     }
 
+    public GroceryEntity(String name, CategoryEntity category) {
+        super();
+        this.name = name;
+        this.category = category;
+    }
+
     public Long getGrocery_id() {
-        return grocery_id;
+        return id;
     }
 
     public void setGrocery_id(Long grocery_id) {
-        this.grocery_id = grocery_id;
+        this.id = grocery_id;
     }
 
     public String getName() {

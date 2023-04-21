@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.service.JWTService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -22,13 +23,11 @@ import java.util.Optional;
 public class JWTRequestFilter extends OncePerRequestFilter {
 
 
+    @Autowired
     private JWTService jwtService;
+    @Autowired
     private AccountRepository accountRepository;
 
-    public JWTRequestFilter(JWTService jwtService, AccountRepository accountRepository) {
-        this.jwtService = jwtService;
-        this.accountRepository = accountRepository;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

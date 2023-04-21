@@ -8,7 +8,7 @@ public class FridgeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fridge_id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
@@ -22,12 +22,19 @@ public class FridgeEntity {
 
     public FridgeEntity() {}
 
+    public FridgeEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count) {
+        super();
+        this.accountEntity = accountEntity;
+        this.groceryEntity = groceryEntity;
+        this.count = count;
+    }
+
     public Long getFridge_id() {
-        return fridge_id;
+        return id;
     }
 
     public void setFridge_id(Long fridge_id) {
-        this.fridge_id = fridge_id;
+        this.id = fridge_id;
     }
 
     public AccountEntity getAccountEntity() {

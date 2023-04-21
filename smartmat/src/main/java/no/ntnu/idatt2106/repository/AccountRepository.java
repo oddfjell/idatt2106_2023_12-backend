@@ -13,6 +13,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
     void removeAccountEntityById(Long id);
 
+    void removeAccountEntityByUsername(String username);
+
 
     @Modifying
     @Query("update AccountEntity a set a.username=?1 where a.id=?2")
