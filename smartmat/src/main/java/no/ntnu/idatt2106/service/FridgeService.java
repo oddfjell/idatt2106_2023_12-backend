@@ -62,7 +62,6 @@ public class FridgeService {
             throw new AccountDoesntExistException();
         }
 
-
         Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityIdAndGroceryEntityId(account.getAccount_id(),groceryEntity.getGrocery_id());
 
 
