@@ -48,12 +48,9 @@ public class FridgeService {
     }
 
     public void addGroceryToAccount(AccountEntity account, AddGroceryToAccountBody accountBody) throws AccountDoesntExistException, AccountAlreadyHasGroceryException {
-
-        System.out.println("START OF THE FUNCTION");
-
         GroceryEntity groceryEntity = new GroceryEntity();
         Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(accountBody.getCategoryId());
-        System.out.println("AFTER CATEGORY REPOSIORY");
+
         if(optionalCategoryEntity.isPresent()){
             groceryEntity.setCategory(optionalCategoryEntity.get());
         }else{
@@ -64,17 +61,13 @@ public class FridgeService {
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isEmpty()){
             throw new AccountDoesntExistException();
         }
-        System.out.println("BEFORE FRIDGE REPOSITORY");
+
 
         Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityIdAndGroceryEntityId(account.getAccount_id(),groceryEntity.getGrocery_id());
 
-        System.out.println("AFTER FRIDGE REPOSITORY");
 
         if(optionalFridgeEntity.isPresent()){
-            System.out.println("fridge was found");
             throw new AccountAlreadyHasGroceryException();
-        }else{
-            System.out.println("fridge was not found");
         }
 
         FridgeEntity fridgeEntity = new FridgeEntity();
