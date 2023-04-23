@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface GroceryRepository extends JpaRepository<GroceryEntity, Long> {
     List<GroceryEntity> findAllByCategoryId(Long id);
+
+    void removeById(Long id);
 }

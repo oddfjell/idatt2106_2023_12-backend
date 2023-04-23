@@ -30,7 +30,7 @@ public class FridgeController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addGroceryToAccount(@AuthenticationPrincipal AccountEntity account, @RequestBody AddGroceryToAccountBody addGroceryToAccountBody){
-        System.out.println("IM HERE!");
+
         try{
             fridgeService.addGroceryToAccount(account, addGroceryToAccountBody);
             return ResponseEntity.ok().build();

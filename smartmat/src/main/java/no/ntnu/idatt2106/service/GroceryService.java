@@ -28,4 +28,12 @@ public class GroceryService {
         return groceryRepository.findAllByCategoryId(id);
     }
 
+    public void addGrocery(GroceryEntity grocery){
+        groceryRepository.save(grocery);
+    }
+
+    public void removeGrocery(GroceryEntity grocery){
+        groceryRepository.removeById(grocery.getGrocery_id());
+    }
+
 }

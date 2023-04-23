@@ -94,8 +94,7 @@ public class FridgeService {
     }
 
     public void removeGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
-        Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityAndGroceryEntity(account,grocery);
-        optionalFridgeEntity.ifPresent(fridgeEntity -> fridgeRepository.delete(fridgeEntity));
+        fridgeRepository.removeByAccountEntityIdAndGroceryEntityId(account.getAccount_id(),grocery.getGrocery_id());
     }
 
     public void removeGroceryFromAccountByAmount(AccountEntity account, GroceryEntity grocery, int count){
