@@ -36,11 +36,10 @@ public class FridgeController {
             return ResponseEntity.ok().build();
         }catch (AccountAlreadyHasGroceryException accountAlreadyHasGroceryException){
             fridgeService.updateGroceryCount(account,addGroceryToAccountBody);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Updated grocery count");
         }catch (AccountDoesntExistException accountDoesntExistException){
             return ResponseEntity.badRequest().build();
         }
-
     }
 
 

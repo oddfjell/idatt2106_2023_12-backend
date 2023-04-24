@@ -169,12 +169,19 @@ class FridgeControllerTest {
 
     result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
 
+    Assertions.assertEquals(200,result.getStatusCode().value());
+
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), String.class);
+
+    Assertions.assertEquals(200,result.getStatusCode().value());
+    Assertions.assertEquals("Updated grocery count",result.getBody().toString());
+
     fridgeService.removeGroceryFromAccount(account,grocery);
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
     accountService.removeAccount(account.getUsername());
 
-    Assertions.assertEquals(200,result.getStatusCode().value());
+
 
   }
 }

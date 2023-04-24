@@ -62,10 +62,10 @@ public class FridgeService {
             throw new AccountDoesntExistException();
         }
 
-        Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityIdAndGroceryEntityId(account.getAccount_id(),groceryEntity.getGrocery_id());
-
+        Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),groceryEntity.getName());
 
         if(optionalFridgeEntity.isPresent()){
+            System.out.println("Exception thrown");
             throw new AccountAlreadyHasGroceryException();
         }
 
@@ -79,18 +79,12 @@ public class FridgeService {
 
     public void updateGroceryCount(AccountEntity account, AddGroceryToAccountBody accountBody){
 
-        GroceryEntity groceryEntity = new GroceryEntity();
-        Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(accountBody.getCategoryId());
-        if(optionalCategoryEntity.isPresent()){
-            groceryEntity.setCategory(optionalCategoryEntity.get());
-        }else{
-            groceryEntity.setCategory(null);
+        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),accountBody.getName());
+        if(fridgeEntity.isEmpty()){
+            throw new IllegalArgumentException();
         }
-        groceryEntity.setName(accountBody.getName());
 
-
-
-        fridgeRepository.updateCount(accountBody.getCount(),account,groceryEntity);
+        fridgeRepository.updateCount(accountBody.getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
     }
 
     public void removeGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
@@ -103,7 +97,6 @@ public class FridgeService {
             if(count > fridgeEntity.getCount()){
                 throw new IllegalArgumentException();
             }
-
             fridgeRepository.updateCount(fridgeEntity.getCount() - count, account, grocery);
         });
     }

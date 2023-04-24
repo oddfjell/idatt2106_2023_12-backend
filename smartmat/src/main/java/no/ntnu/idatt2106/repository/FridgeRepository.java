@@ -15,7 +15,7 @@ public interface FridgeRepository extends JpaRepository<FridgeEntity, Long> {
     List<FridgeEntity> findAllByAccountEntity(AccountEntity account);
     Optional<FridgeEntity> findByAccountEntityAndGroceryEntity(AccountEntity account, GroceryEntity grocery);
 
-    Optional<FridgeEntity> findByAccountEntityIdAndGroceryEntityId(Long accountId, Long groceryId);
+    Optional<FridgeEntity> findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountUsername, String groceryName);
 
     void removeByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountUsername, String groceryName);
 
