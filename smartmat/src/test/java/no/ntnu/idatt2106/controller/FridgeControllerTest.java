@@ -111,7 +111,6 @@ class FridgeControllerTest {
   @Test
   void addGroceryToAccount() throws URISyntaxException {
 
-/*
     AccountEntity account = new AccountEntity();
     account.setUsername("TestUserFridgeTwo");
     account.setPassword("TestPassword");
@@ -169,12 +168,12 @@ class FridgeControllerTest {
 
     System.out.println(result);
 
-    System.out.println(account.getAccount_id()+  " , " +  grocery.getGrocery_id());
+    System.out.println(account.getUsername()+  " , " +  grocery.getGrocery_id());
     fridgeService.removeGroceryFromAccount(account,grocery);
 
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
-    accountService.removeAccount(account.getUsername());*/
+    accountService.removeAccount(account.getUsername());
 
   }
 }
