@@ -169,8 +169,9 @@ class FridgeControllerTest {
 
     System.out.println(result);
 
-    fridgeService.removeGroceryFromAccount(account,grocery);
     System.out.println(account.getAccount_id()+  " , " +  grocery.getGrocery_id());
+    fridgeService.removeGroceryFromAccount(account,grocery);
+
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
     accountService.removeAccount(account.getUsername());*/
