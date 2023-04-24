@@ -181,7 +181,5 @@ class FridgeControllerTest {
     categoryService.removeCategory(category);
     accountService.removeAccount(account.getUsername());
 
-
-
   }
 }

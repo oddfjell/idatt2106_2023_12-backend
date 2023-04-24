@@ -47,22 +47,21 @@ public class FridgeService {
 
     }
 
-    public void addGroceryToAccount(AccountEntity account, AddGroceryToAccountBody accountBody) throws AccountDoesntExistException, AccountAlreadyHasGroceryException {
-        GroceryEntity groceryEntity = new GroceryEntity();
-        Optional<CategoryEntity> optionalCategoryEntity = categoryRepository.findById(accountBody.getCategoryId());
+    public void addGroceryToAccount(AccountEntity account, AddGroceryToAccountBody addGroceryToAccountBody) throws AccountDoesntExistException, AccountAlreadyHasGroceryException {
 
-        if(optionalCategoryEntity.isPresent()){
-            groceryEntity.setCategory(optionalCategoryEntity.get());
-        }else{
-            groceryEntity.setCategory(null);
+        Optional<GroceryEntity> groceryEntityOptional = groceryRepository.findByNameIgnoreCase(addGroceryToAccountBody.getName());
+
+        if(groceryEntityOptional.isEmpty()){
+            throw new IllegalArgumentException();
         }
-        groceryEntity.setName(accountBody.getName());
+
+        GroceryEntity grocery = groceryEntityOptional.get();
 
         if(accountRepository.findByUsernameIgnoreCase(account.getUsername()).isEmpty()){
             throw new AccountDoesntExistException();
         }
 
-        Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),groceryEntity.getName());
+        Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),grocery.getName());
 
         if(optionalFridgeEntity.isPresent()){
             System.out.println("Exception thrown");
@@ -71,8 +70,8 @@ public class FridgeService {
 
         FridgeEntity fridgeEntity = new FridgeEntity();
         fridgeEntity.setAccountEntity(account);
-        fridgeEntity.setGroceryEntity(groceryEntity);
-        fridgeEntity.setCount(accountBody.getCount());
+        fridgeEntity.setGroceryEntity(grocery);
+        fridgeEntity.setCount(addGroceryToAccountBody.getCount());
 
         fridgeRepository.save(fridgeEntity);
     }
@@ -84,7 +83,7 @@ public class FridgeService {
             throw new IllegalArgumentException();
         }
 
-        fridgeRepository.updateCount(accountBody.getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
+        fridgeRepository.updateCount(accountBody.getCount() + fridgeEntity.get().getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
     }
 
     public void removeGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
