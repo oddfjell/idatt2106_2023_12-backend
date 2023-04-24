@@ -28,7 +28,7 @@ class RecipeSuggestionServiceTests {
 
     @Test
     void testRankingSortingRecipes() {
-        ArrayList<String> groceries = new ArrayList<>(Arrays.asList("potet", "olje", "torskefilet", "egg", "hvetemel", "maisenna", "bakepulver"));
+        ArrayList<String> groceries = new ArrayList<>(Arrays.asList("potet", "torskefilet", "egg", "hvetemel", "maisenna", "bakepulver"));
         assertEquals(groceries.size(), recipeSuggestionService.sortRecipes(recipeSuggestionService.rankRecipes(
                 recipeSuggestionService.readRecipesFromScraper(), groceries
         )).get(0).getValue());

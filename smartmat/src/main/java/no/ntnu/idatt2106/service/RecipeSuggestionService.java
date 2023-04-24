@@ -19,7 +19,7 @@ public class RecipeSuggestionService {
 
     public RecipeSuggestionService(boolean test) {
         if (test) {
-            csvPath = System.getProperty("user.dir")+"src/test/resources/recipesTestData.csv";
+            csvPath = System.getProperty("user.dir")+"/src/test/resources/recipesTestData.csv";
             System.out.println(csvPath);
         }
     }
