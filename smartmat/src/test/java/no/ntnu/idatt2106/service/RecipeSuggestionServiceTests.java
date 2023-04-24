@@ -5,7 +5,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,9 +28,9 @@ class RecipeSuggestionServiceTests {
 
     @Test
     void testRankingSortingRecipes() {
-        String[] ingredients = {"potet", "olje", "torskefilet", "egg", "hvetemel", "maisenna", "bakepulver"};
-        assertEquals(ingredients.length, recipeSuggestionService.sortRecipes(recipeSuggestionService.rankRecipes(
-                recipeSuggestionService.readRecipesFromScraper(), ingredients
+        ArrayList<String> groceries = new ArrayList<>(Arrays.asList("potet", "olje", "torskefilet", "egg", "hvetemel", "maisenna", "bakepulver"));
+        assertEquals(groceries.size(), recipeSuggestionService.sortRecipes(recipeSuggestionService.rankRecipes(
+                recipeSuggestionService.readRecipesFromScraper(), groceries
         )).get(0).getValue());
     }
 

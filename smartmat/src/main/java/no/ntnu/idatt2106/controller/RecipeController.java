@@ -2,54 +2,62 @@ package no.ntnu.idatt2106.controller;
 
 
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.FridgeEntity;
+import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.Recipe;
 import no.ntnu.idatt2106.payload.RecipeSuggestionRequest;
 import no.ntnu.idatt2106.repository.FridgeRepository;
 import no.ntnu.idatt2106.service.RecipeSuggestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@RequestMapping(value = "/recipes")
 @RestController
+@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
+@RequestMapping(value = "/recipes")
 public class RecipeController {
 
     @Autowired
     private RecipeSuggestionService recipeSuggestionService;
     
+    @Autowired
+    private FridgeRepository fridgeRepository;
 
     @GetMapping("/weekMenu")
     public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity) {
 
-        ArrayList<Recipe> weekMenu = (ArrayList<Recipe>) recipeSuggestionService.getNRecipes(7,
+        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
+
+        List<Recipe> weekMenu =  recipeSuggestionService.getNRecipes(7,
                 recipeSuggestionService.sortRecipes(
                         recipeSuggestionService.rankRecipes(
-                                recipeSuggestionService.readRecipesFromScraper(), recipeSuggestionRequest.getIngredients())));
-        return null;
+                                recipeSuggestionService.readRecipesFromScraper(), groceries)));
+        return ResponseEntity.ok(weekMenu);
     }
 
     @GetMapping("/recipe")
-    public ResponseEntity<?> getRecipe(@AuthenticationPrincipal AccountEntity accountEntity) {
+    public ResponseEntity<Recipe> getRecipe(@AuthenticationPrincipal AccountEntity accountEntity) {
+        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
         Recipe recipeSuggest = recipeSuggestionService.getNRecipes(1,
                 recipeSuggestionService.sortRecipes(
                         recipeSuggestionService.rankRecipes(
-                                recipeSuggestionService.readRecipesFromScraper(), recipeSuggestionRequest.getIngredients()))).get(0);
-        return null;
+                                recipeSuggestionService.readRecipesFromScraper(), groceries))).get(0);
+        return ResponseEntity.ok(recipeSuggest);
     }
 
-    @GetMapping("/newRecipe")
-    public ResponseEntity<?> getNewRecipe(@AuthenticationPrincipal AccountEntity accountEntity) {
-        Recipe recipeSuggest = recipeSuggestionService.getNRecipes(1,
+    @PostMapping("/newRecipe")
+    public ResponseEntity<Recipe> getNewRecipe(@AuthenticationPrincipal AccountEntity accountEntity, @RequestBody List<Recipe> recipes) {
+        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
+        Recipe recipeSuggest = recipeSuggestionService.getNRecipes(30,
                 recipeSuggestionService.sortRecipes(
                         recipeSuggestionService.rankRecipes(
-                                recipeSuggestionService.readRecipesFromScraper(), recipeSuggestionRequest.getIngredients()))).get(0);
-        return null;
+                                recipeSuggestionService.readRecipesFromScraper(), groceries))).stream().filter(r->!recipes.contains(r)).findFirst().get();
+        return ResponseEntity.ok(recipeSuggest);
     }
 
     @GetMapping("/nRecipes")

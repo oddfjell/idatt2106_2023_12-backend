@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.model;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Recipe {
 
@@ -9,6 +10,21 @@ public class Recipe {
    private String[] ingredients;
    private String title;
    private int servings;
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Recipe recipe = (Recipe) o;
+      return Objects.equals(url, recipe.url) && Arrays.equals(ingredients, recipe.ingredients) && Objects.equals(title, recipe.title);
+   }
+
+   @Override
+   public int hashCode() {
+      int result = Objects.hash(url, title);
+      result = 31 * result + Arrays.hashCode(ingredients);
+      return result;
+   }
 
    public Recipe(String url, String title, String[] ingredients) {
       this.url = url;
