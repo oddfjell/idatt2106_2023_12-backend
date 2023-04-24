@@ -183,4 +183,82 @@ class FridgeControllerTest {
     accountService.removeAccount(account.getUsername());
 
   }
+
+  @Test
+  void removeGroceryFromAccountByAmount() throws GroceryAlreadyExistsException, URISyntaxException {
+
+    AccountEntity account = new AccountEntity();
+    account.setUsername("TestUserFridgeThree");
+    account.setPassword("TestPassword");
+
+    String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
+    URI uri = new URI(baseURL);
+
+    HttpHeaders headers = new HttpHeaders();
+
+    HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
+
+    ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
+
+    Assertions.assertEquals(200, result.getStatusCode().value());
+    Assertions.assertEquals("User added", result.getBody());
+
+    baseURL = "http://localhost:"+ randomServerPort +"/auth/account/loginAccount";
+    uri = new URI(baseURL);
+
+    headers = new HttpHeaders();
+
+    request = new HttpEntity<>(account,headers);
+
+    result = this.restTemplate.postForEntity(uri, request, String.class);
+
+    String jwt = Objects.requireNonNull(result.getBody()).toString().substring(result.getBody().toString().indexOf("\"jwt\"") + 7, result.getBody().toString().length() - 2);
+
+
+    CategoryEntity category = new CategoryEntity();
+    category.setName("TestCategory2");
+    category.setImage(null);
+
+    categoryService.addCategory(category);
+
+    GroceryEntity grocery = new GroceryEntity();
+    grocery.setName("TestGrocery2");
+    grocery.setCategory(category);
+
+    groceryService.addGrocery(grocery);
+
+    AddGroceryToAccountBody groceryToAccountBody = new AddGroceryToAccountBody();
+    groceryToAccountBody.setName("TestGrocery2");
+    groceryToAccountBody.setCount(4);
+    groceryToAccountBody.setCategoryId(category.getCategory_id());
+
+    baseURL = "http://localhost:"+ randomServerPort +"/fridge/add";
+    uri = new URI(baseURL);
+
+    MultiValueMap<String, String> headers2 = new LinkedMultiValueMap<>();
+    headers2.add("Authorization", "Bearer " + jwt);
+
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
+    Assertions.assertEquals(200,result.getStatusCode().value());
+
+    baseURL = "http://localhost:"+ randomServerPort +"/fridge/remove";
+    uri = new URI(baseURL);
+
+    groceryToAccountBody.setCount(2);
+
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
+    Assertions.assertEquals(200,result.getStatusCode().value());
+
+    groceryToAccountBody.setCount(3);
+
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), String.class);
+    Assertions.assertEquals(400,result.getStatusCode().value());
+    Assertions.assertEquals("Something went wrong. May be invalid count number",result.getBody().toString());
+
+    fridgeService.removeGroceryFromAccount(account,grocery);
+    groceryService.removeGrocery(grocery);
+    categoryService.removeCategory(category);
+    accountService.removeAccount(account.getUsername());
+  }
+
 }

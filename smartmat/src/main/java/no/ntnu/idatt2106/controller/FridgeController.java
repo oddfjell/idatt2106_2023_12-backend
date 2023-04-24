@@ -42,5 +42,16 @@ public class FridgeController {
         }
     }
 
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeGroceryFromAccountByAmount(@AuthenticationPrincipal AccountEntity account, @RequestBody AddGroceryToAccountBody addGroceryToAccountBody){
+
+        try {
+            fridgeService.removeGroceryFromAccountByAmount(account,addGroceryToAccountBody);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Something went wrong. May be invalid count number");
+        }
+    }
+
 
 }
