@@ -103,9 +103,12 @@ class FridgeControllerTest {
 
     result = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers2), List.class);
 
-    System.out.println(result);
-
     accountService.removeAccount(account.getUsername());
+
+    Assertions.assertEquals(200,result.getStatusCode().value());
+    Assertions.assertTrue(result.getBody().toString().contains("["));
+
+
   }
 
   @Test
@@ -166,14 +169,12 @@ class FridgeControllerTest {
 
     result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
 
-    System.out.println(result);
-
-    System.out.println(account.getUsername()+  " , " +  grocery.getGrocery_id());
     fridgeService.removeGroceryFromAccount(account,grocery);
-
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
     accountService.removeAccount(account.getUsername());
+
+    Assertions.assertEquals(200,result.getStatusCode().value());
 
   }
 }
