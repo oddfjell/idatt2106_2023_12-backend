@@ -2,6 +2,7 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.SmartmatApplication;
 import no.ntnu.idatt2106.exceptions.AccountAlreadyExistsException;
+import no.ntnu.idatt2106.exceptions.GroceryAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.CategoryEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
@@ -112,7 +113,7 @@ class FridgeControllerTest {
   }
 
   @Test
-  void addGroceryToAccount() throws URISyntaxException {
+  void addGroceryToAccount() throws URISyntaxException, GroceryAlreadyExistsException {
 
     AccountEntity account = new AccountEntity();
     account.setUsername("TestUserFridgeTwo");

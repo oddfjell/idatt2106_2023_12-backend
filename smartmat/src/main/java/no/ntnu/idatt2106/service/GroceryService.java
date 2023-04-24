@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.service;
 
 import jakarta.transaction.Transactional;
+import no.ntnu.idatt2106.exceptions.GroceryAlreadyExistsException;
 import no.ntnu.idatt2106.model.CategoryEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
@@ -28,7 +29,11 @@ public class GroceryService {
         return groceryRepository.findAllByCategoryId(id);
     }
 
-    public void addGrocery(GroceryEntity grocery){
+    public void addGrocery(GroceryEntity grocery) throws GroceryAlreadyExistsException {
+        if(groceryRepository.findByNameIgnoreCase(grocery.getName()).isPresent()){
+            throw new GroceryAlreadyExistsException();
+        }
+
         groceryRepository.save(grocery);
     }
 
