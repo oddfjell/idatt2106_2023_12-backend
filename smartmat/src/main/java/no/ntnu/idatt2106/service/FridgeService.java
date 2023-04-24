@@ -5,10 +5,9 @@ import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.AccountAlreadyHasGroceryException;
 import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
-import no.ntnu.idatt2106.model.CategoryEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
-import no.ntnu.idatt2106.model.api.AddGroceryToAccountBody;
+import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.repository.CategoryRepository;
 import no.ntnu.idatt2106.repository.FridgeRepository;
@@ -47,9 +46,9 @@ public class FridgeService {
 
     }
 
-    public void addGroceryToAccount(AccountEntity account, AddGroceryToAccountBody addGroceryToAccountBody) throws AccountDoesntExistException, AccountAlreadyHasGroceryException {
+    public void addGroceryToAccount(AccountEntity account, FridgeGroceryBody fridgeGroceryBody) throws AccountDoesntExistException, AccountAlreadyHasGroceryException {
 
-        Optional<GroceryEntity> groceryEntityOptional = groceryRepository.findByNameIgnoreCase(addGroceryToAccountBody.getName());
+        Optional<GroceryEntity> groceryEntityOptional = groceryRepository.findByNameIgnoreCase(fridgeGroceryBody.getName());
 
         if(groceryEntityOptional.isEmpty()){
             throw new IllegalArgumentException();
@@ -71,12 +70,12 @@ public class FridgeService {
         FridgeEntity fridgeEntity = new FridgeEntity();
         fridgeEntity.setAccountEntity(account);
         fridgeEntity.setGroceryEntity(grocery);
-        fridgeEntity.setCount(addGroceryToAccountBody.getCount());
+        fridgeEntity.setCount(fridgeGroceryBody.getCount());
 
         fridgeRepository.save(fridgeEntity);
     }
 
-    public void updateGroceryCount(AccountEntity account, AddGroceryToAccountBody accountBody){
+    public void updateGroceryCount(AccountEntity account, FridgeGroceryBody accountBody){
 
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),accountBody.getName());
         if(fridgeEntity.isEmpty()){
@@ -90,7 +89,7 @@ public class FridgeService {
         fridgeRepository.removeByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),grocery.getName());
     }
 
-    public void removeGroceryFromAccountByAmount(AccountEntity account, AddGroceryToAccountBody accountBody) throws Exception {
+    public void removeGroceryFromAccountByAmount(AccountEntity account, FridgeGroceryBody accountBody) throws Exception {
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),accountBody.getName());
         if(fridgeEntity.isEmpty() || fridgeEntity.get().getCount() < accountBody.getCount()){
             throw new Exception();

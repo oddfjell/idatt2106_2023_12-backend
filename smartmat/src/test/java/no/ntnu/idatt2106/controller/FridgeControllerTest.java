@@ -1,14 +1,11 @@
 package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.SmartmatApplication;
-import no.ntnu.idatt2106.exceptions.AccountAlreadyExistsException;
 import no.ntnu.idatt2106.exceptions.GroceryAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.CategoryEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
-import no.ntnu.idatt2106.model.api.AddGroceryToAccountBody;
-import no.ntnu.idatt2106.repository.CategoryRepository;
-import no.ntnu.idatt2106.repository.GroceryRepository;
+import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
 import no.ntnu.idatt2106.service.AccountService;
 import no.ntnu.idatt2106.service.CategoryService;
 import no.ntnu.idatt2106.service.FridgeService;
@@ -29,8 +26,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = {SmartmatApplication.class},webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FridgeControllerTest {
@@ -157,7 +152,7 @@ class FridgeControllerTest {
 
     groceryService.addGrocery(grocery);
 
-    AddGroceryToAccountBody groceryToAccountBody = new AddGroceryToAccountBody();
+    FridgeGroceryBody groceryToAccountBody = new FridgeGroceryBody();
     groceryToAccountBody.setName("TestGrocery");
     groceryToAccountBody.setCount(4);
     groceryToAccountBody.setCategoryId(category.getCategory_id());
@@ -227,7 +222,7 @@ class FridgeControllerTest {
 
     groceryService.addGrocery(grocery);
 
-    AddGroceryToAccountBody groceryToAccountBody = new AddGroceryToAccountBody();
+    FridgeGroceryBody groceryToAccountBody = new FridgeGroceryBody();
     groceryToAccountBody.setName("TestGrocery2");
     groceryToAccountBody.setCount(4);
     groceryToAccountBody.setCategoryId(category.getCategory_id());
