@@ -1,10 +1,13 @@
 package no.ntnu.idatt2106.service;
 
 import jakarta.transaction.Transactional;
+import no.ntnu.idatt2106.dto.ShoppingListDTO;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.repository.ShoppingListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -12,6 +15,10 @@ public class ShoppingListService {
 
     @Autowired
     private ShoppingListRepository shoppingListRepository;
+
+    public List<ShoppingListDTO> getShoppingList(long id){
+        return shoppingListRepository.getShoppingList(id);
+    }
 
     public boolean addToShoppingList(ShoppingListEntity product){
         //TODO save må legge til et produkt og/eller øke amount
