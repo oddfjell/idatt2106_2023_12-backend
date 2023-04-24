@@ -1,6 +1,5 @@
 package no.ntnu.idatt2106.model;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -11,93 +10,54 @@ public class FridgeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String ean;
-    private String fullName;
-    private String brand;
-    private String url;
-    private String imageUrl;
-    private String description;
-    private double price;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
-    private AccountEntity account;
+    private AccountEntity accountEntity;
 
-    public FridgeEntity() {
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @JoinColumn(name = "grocery_id")
+    private GroceryEntity groceryEntity;
+
+    private int count;
+
+    public FridgeEntity() {}
+
+    public FridgeEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count) {
+        super();
+        this.accountEntity = accountEntity;
+        this.groceryEntity = groceryEntity;
+        this.count = count;
     }
 
-    public FridgeEntity(String ean, String fullName, String brand, String url, String imageUrl, String description, double price, AccountEntity account) {
-        this.ean = ean;
-        this.fullName = fullName;
-        this.brand = brand;
-        this.url = url;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.price = price;
-        this.account = account;
+    public Long getFridge_id() {
+        return id;
     }
 
-    public String getEan() {
-        return ean;
+    public void setFridge_id(Long fridge_id) {
+        this.id = fridge_id;
     }
 
-    public void setEan(String ean) {
-        this.ean = ean;
+    public AccountEntity getAccountEntity() {
+        return accountEntity;
     }
 
-    public String getFullName() {
-        return fullName;
+    public void setAccountEntity(AccountEntity accountEntity) {
+        this.accountEntity = accountEntity;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public GroceryEntity getGroceryEntity() {
+        return groceryEntity;
     }
 
-    public String getBrand() {
-        return brand;
+    public void setGroceryEntity(GroceryEntity groceryEntity) {
+        this.groceryEntity = groceryEntity;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public int getCount() {
+        return count;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public AccountEntity getAccount() {
-        return account;
-    }
-
-    public void setAccount(AccountEntity account) {
-        this.account = account;
+    public void setCount(int count) {
+        this.count = count;
     }
 }

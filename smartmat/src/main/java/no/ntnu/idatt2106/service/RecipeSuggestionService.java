@@ -20,6 +20,7 @@ public class RecipeSuggestionService {
     public RecipeSuggestionService(boolean test) {
         if (test) {
             csvPath = System.getProperty("user.dir")+"/smartmat/src/test/resources/recipesTestData.csv";
+            System.out.println(csvPath);
         }
     }
 
@@ -84,6 +85,8 @@ public class RecipeSuggestionService {
     }
 
     public static void main(String[] args) {
+        RecipeSuggestionService rsst = new RecipeSuggestionService(true);
+        System.out.println(rsst.readRecipesFromScraper().size());
         String[] priorityIngredients = {"tomat", "egg", "potet", "løk", "pasta"};
         RecipeSuggestionService rss = new RecipeSuggestionService();
         rss.getNRecipes(10, rss.sortRecipes(rss.rankRecipes(rss.readRecipesFromScraper(), priorityIngredients))).forEach(System.out::println);

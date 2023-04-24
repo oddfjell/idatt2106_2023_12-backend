@@ -1,6 +1,5 @@
 package no.ntnu.idatt2106.model;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,11 +23,14 @@ public class AccountEntity {
     public AccountEntity() {
     }
 
-
     public AccountEntity(String username, String password) {
         super();
         this.username = username;
         this.password = password;
+    }
+
+    public Long getAccount_id() {
+        return id;
     }
 
     public String getUsername() {
