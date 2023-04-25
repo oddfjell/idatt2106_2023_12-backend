@@ -2,7 +2,11 @@ package no.ntnu.idatt2106.service;
 
 import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.dto.ShoppingListDTO;
+import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
+import no.ntnu.idatt2106.repository.AccountRepository;
+import no.ntnu.idatt2106.repository.GroceryRepository;
 import no.ntnu.idatt2106.repository.ShoppingListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,15 +20,54 @@ public class ShoppingListService {
     @Autowired
     private ShoppingListRepository shoppingListRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private GroceryRepository groceryRepository;
+
     public List<ShoppingListDTO> getShoppingList(long id){
         return shoppingListRepository.getShoppingList(id);
     }
 
-    public boolean addToShoppingList(ShoppingListEntity product){
-        //TODO save må legge til et produkt og/eller øke amount
-        // kan være forskjellige metoder
-        return false;
+
+    public boolean addToShoppingList(long id, ShoppingListDTO shoppingListDTO){
+
+        try {
+
+            // Finds correct user
+            AccountEntity account = accountRepository.findById(id);
+            if (account == null) {
+                System.out.println("Account with id " + id + " does not exist in database.");
+                return false;
+            }
+
+            // Finds correct grocery
+            GroceryEntity grocery = groceryRepository.findGroceryEntitiesByNameIgnoreCase(shoppingListDTO.getName());
+            if (grocery == null) {
+                System.out.println("Grocery " + shoppingListDTO.getName() + " does not exist in database.");
+                return false;
+            }
+
+            // Checks if grocery is already added to shopping list
+            boolean groceryAlreadyExistOnShoppingList = shoppingListRepository.groceryAlreadyExist(id, shoppingListDTO.getName());
+            if (groceryAlreadyExistOnShoppingList) {
+                shoppingListRepository.updateCountIfExist(account, grocery, shoppingListDTO.getCount());
+            } else {
+                ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, shoppingListDTO.getCount(), false);
+                shoppingListRepository.save(groceryToBeAdded);
+            }
+
+            return true;
+
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+
     }
+
 
     public boolean removeFromShoppingList(ShoppingListEntity product){
         //TODO DO NOT DELETE IF THE PRODUCT AMOUNT IS MORE THAN 1
