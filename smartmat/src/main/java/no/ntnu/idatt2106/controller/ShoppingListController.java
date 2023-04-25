@@ -52,4 +52,18 @@ public class ShoppingListController {
         */
         return new ResponseEntity<>(HttpStatus.TOO_EARLY);
     }
+
+
+    @PostMapping("/mark")
+    public ResponseEntity<?> markGroceryAsFound(@AuthenticationPrincipal AccountEntity account, @RequestBody ShoppingListDTO groceryName){
+        shoppingListService.updateFoundInStore(account,groceryName.getName());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/buy")
+    public ResponseEntity<?> buy(@AuthenticationPrincipal AccountEntity account){
+        shoppingListService.buyMarkedGroceries(account);
+        return ResponseEntity.ok().build();
+    }
+
 }
