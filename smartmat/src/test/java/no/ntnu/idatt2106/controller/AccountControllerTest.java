@@ -83,7 +83,6 @@ class AccountControllerTest {
         Assertions.assertEquals("User added", result.getBody());
 
 
-
         baseURL = "http://localhost:"+ randomServerPort +"/auth/account/loginAccount";
         uri = new URI(baseURL);
 
