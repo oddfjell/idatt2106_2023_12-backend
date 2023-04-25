@@ -25,16 +25,16 @@ public class ShoppingListController {
     // GET STORED SHOPPING LIST FOR AN ACCOUNT
     @GetMapping("/")
     public ResponseEntity<List<ShoppingListDTO>> getShoppingList(@AuthenticationPrincipal AccountEntity account){
-        return new ResponseEntity<>(shoppingListService.getShoppingList(account.getAccount_id()), HttpStatus.TOO_EARLY);
+        return new ResponseEntity<>(shoppingListService.getShoppingList(account.getAccount_id()), HttpStatus.OK);
     }
 
+    // ADD GROCERY TO SHOPPING LIST
     @PostMapping("/add")
-    public ResponseEntity<?> addToShoppingList(@RequestBody ShoppingListEntity product){
-        boolean added = shoppingListService.addToShoppingList(product);
-        if(added){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public boolean addToShoppingList(@AuthenticationPrincipal AccountEntity account,
+                                  @RequestBody ShoppingListDTO shoppingListDTO){
+        return shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO);
     }
+
 
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeFromShoppingList(@RequestBody ShoppingListEntity product){
