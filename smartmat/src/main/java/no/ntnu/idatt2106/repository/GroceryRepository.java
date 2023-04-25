@@ -11,4 +11,8 @@ public interface GroceryRepository extends JpaRepository<GroceryEntity, Long> {
 
     // FINDS GROCERY BY NAME
     GroceryEntity findGroceryEntitiesByNameIgnoreCase(String name);
+
+    Optional<GroceryEntity> findByNameIgnoreCase(String name);
+
+    void removeById(Long id);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +33,15 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
             "SET s.count = s.count + :count " +
             "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
     void updateCountIfExist(AccountEntity account, GroceryEntity grocery, int count);
+
+    Optional<ShoppingListEntity> findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountName, String groceryName);
+
+    List<ShoppingListEntity> findAllByAccountEntityAndFoundInStoreTrue(AccountEntity account);
+
+    void removeAllByAccountEntityAndFoundInStoreTrue(AccountEntity account);
+
+    @Modifying
+    @Query("update ShoppingListEntity s set s.foundInStore=?1 where s.accountEntity=?2 and s.groceryEntity=?3")
+    void updateFoundInStore(boolean update, AccountEntity account, GroceryEntity grocery);
+
 }
