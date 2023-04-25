@@ -16,6 +16,7 @@ import no.ntnu.idatt2106.repository.GroceryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +78,7 @@ public class FridgeService {
         fridgeEntity.setAccountEntity(account);
         fridgeEntity.setGroceryEntity(grocery);
         fridgeEntity.setCount(fridgeGroceryBody.getCount());
+        fridgeEntity.setDate(LocalDate.now());
 
         fridgeRepository.save(fridgeEntity);
     }

@@ -20,13 +20,18 @@ public class GroceryEntity {
     @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
+    private int expiryDate;
+
+
+
     public GroceryEntity() {
     }
 
-    public GroceryEntity(String name, CategoryEntity category) {
+    public GroceryEntity(String name, CategoryEntity category, int expiryDate) {
         super();
         this.name = name;
         this.category = category;
+        this.expiryDate = expiryDate;
     }
 
     public Long getGrocery_id() {
@@ -51,5 +56,13 @@ public class GroceryEntity {
 
     public void setCategory(CategoryEntity category) {
         this.category = category;
+    }
+
+    public int getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(int expiryDate) {
+        this.expiryDate = expiryDate;
     }
 }
