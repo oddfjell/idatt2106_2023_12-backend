@@ -149,6 +149,7 @@ class FridgeControllerTest {
     GroceryEntity grocery = new GroceryEntity();
     grocery.setName("TestGrocery");
     grocery.setCategory(category);
+    grocery.setExpiryDate(4);
 
     groceryService.addGrocery(grocery);
 
@@ -219,6 +220,7 @@ class FridgeControllerTest {
     GroceryEntity grocery = new GroceryEntity();
     grocery.setName("TestGrocery2");
     grocery.setCategory(category);
+    grocery.setExpiryDate(4);
 
     groceryService.addGrocery(grocery);
 
