@@ -79,14 +79,12 @@ public class ShoppingListService {
             try {
                 fridgeService.addGroceryToAccount(shoppingListEntity.getAccountEntity(),fridgeGroceryBody);
             } catch (AccountDoesntExistException e) {
-                fridgeService.updateGroceryCount(shoppingListEntity.getAccountEntity(), fridgeGroceryBody);
-            } catch (AccountAlreadyHasGroceryException e) {
                 throw new IllegalArgumentException();
+            } catch (AccountAlreadyHasGroceryException e) {
+                fridgeService.updateGroceryCount(shoppingListEntity.getAccountEntity(), fridgeGroceryBody);
             }
         });
-
         shoppingListRepository.removeAllByAccountEntityAndFoundInStoreTrue(account);
-
     }
 
 }

@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.dto.ShoppingListDTO;
+import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.repository.ShoppingListRepository;
@@ -61,9 +62,13 @@ public class ShoppingListController {
     }
 
     @PostMapping("/buy")
-    public ResponseEntity<?> buy(@AuthenticationPrincipal AccountEntity account){
-        shoppingListService.buyMarkedGroceries(account);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> buy(@AuthenticationPrincipal AccountEntity account) {
+        try{
+            shoppingListService.buyMarkedGroceries(account);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }
