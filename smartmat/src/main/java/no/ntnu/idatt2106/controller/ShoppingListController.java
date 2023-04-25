@@ -30,9 +30,15 @@ public class ShoppingListController {
 
     // ADD GROCERY TO SHOPPING LIST
     @PostMapping("/add")
-    public boolean addToShoppingList(@AuthenticationPrincipal AccountEntity account,
+    public ResponseEntity<Boolean> addToShoppingList(@AuthenticationPrincipal AccountEntity account,
                                   @RequestBody ShoppingListDTO shoppingListDTO){
-        return shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO);
+        boolean added = shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO);
+
+        if (added) {
+            return new ResponseEntity<>(added, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(added, HttpStatus.BAD_REQUEST);
+        }
     }
 
 
