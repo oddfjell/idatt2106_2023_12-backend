@@ -30,33 +30,19 @@ public class RecipeController {
 
     @GetMapping("/weekMenu")
     public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity) {
-
-        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
-
-        List<Recipe> weekMenu =  recipeSuggestionService.getNRecipes(7,
-                recipeSuggestionService.sortRecipes(
-                        recipeSuggestionService.rankRecipes(
-                                recipeSuggestionService.readRecipesFromScraper(), groceries)));
+        List<Recipe> weekMenu =  recipeSuggestionService.getNRecipes(7, accountEntity);
         return ResponseEntity.ok(weekMenu);
     }
 
     @GetMapping("/recipe")
     public ResponseEntity<Recipe> getRecipe(@AuthenticationPrincipal AccountEntity accountEntity) {
-        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
-        Recipe recipeSuggest = recipeSuggestionService.getNRecipes(1,
-                recipeSuggestionService.sortRecipes(
-                        recipeSuggestionService.rankRecipes(
-                                recipeSuggestionService.readRecipesFromScraper(), groceries))).get(0);
+        Recipe recipeSuggest = recipeSuggestionService.getNRecipes(1, accountEntity).get(0);
         return ResponseEntity.ok(recipeSuggest);
     }
 
     @PostMapping("/newRecipe")
     public ResponseEntity<Recipe> getNewRecipe(@AuthenticationPrincipal AccountEntity accountEntity, @RequestBody List<Recipe> recipes) {
-        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
-        Recipe recipeSuggest = recipeSuggestionService.getNRecipes(30,
-                recipeSuggestionService.sortRecipes(
-                        recipeSuggestionService.rankRecipes(
-                                recipeSuggestionService.readRecipesFromScraper(), groceries))).stream().filter(r->!recipes.contains(r)).findFirst().get();
+        Recipe recipeSuggest = recipeSuggestionService.getNRecipes(30, accountEntity).stream().filter(r->!recipes.contains(r)).findFirst().get();
         return ResponseEntity.ok(recipeSuggest);
     }
 

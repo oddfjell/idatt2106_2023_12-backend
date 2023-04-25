@@ -1,6 +1,11 @@
 package no.ntnu.idatt2106.service;
 
+import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.FridgeEntity;
+import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.Recipe;
+import no.ntnu.idatt2106.repository.FridgeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -13,6 +18,9 @@ import java.util.regex.Pattern;
 
 @Service
 public class RecipeSuggestionService {
+
+    @Autowired
+    private FridgeRepository fridgeRepository;
 
     private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipes.csv";
     private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
@@ -70,7 +78,12 @@ public class RecipeSuggestionService {
          return recipes;
     }
 
-    public List<Recipe> getNRecipes(int n, List<Recipe> recipes){
+    public List<Recipe> getNRecipes(int n, AccountEntity accountEntity){
+        List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
+
+        List<Recipe> recipes = this.sortRecipes(
+                        this.rankRecipes(
+                                this.readRecipesFromScraper(), groceries));
         return recipes.subList(0, n);
     }
 
