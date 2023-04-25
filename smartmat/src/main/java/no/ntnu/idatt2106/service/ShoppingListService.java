@@ -51,15 +51,15 @@ public class ShoppingListService {
         //product.setStatus = true;
     }
 
-    public void updateFoundInStore(AccountEntity account, String groceryName){
+    public void updateFoundInStore(AccountEntity account, String groceryName) throws Exception {
         Optional<ShoppingListEntity> shoppingListEntityOptional = shoppingListRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(), groceryName);
         if(shoppingListEntityOptional.isEmpty()){
-            throw new IllegalArgumentException();
+            throw new Exception();
         }
 
         Optional<GroceryEntity> groceryEntity = groceryRepository.findByNameIgnoreCase(groceryName);
         if(groceryEntity.isEmpty()){
-            throw new IllegalArgumentException();
+            throw new Exception();
         }
 
         shoppingListRepository.updateFoundInStore(!shoppingListEntityOptional.get().isFoundInStore(),account,groceryEntity.get());
@@ -67,11 +67,11 @@ public class ShoppingListService {
     }
 
 
-    public void buyMarkedGroceries(AccountEntity account){
+    public void buyMarkedGroceries(AccountEntity account) throws Exception {
 
         List<ShoppingListEntity> shoppingListEntityList = shoppingListRepository.findAllByAccountEntityAndFoundInStoreTrue(account);
 
-        shoppingListEntityList.forEach(shoppingListEntity -> {
+        for (ShoppingListEntity shoppingListEntity:shoppingListEntityList) {
             FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody();
             fridgeGroceryBody.setName(shoppingListEntity.getGroceryEntity().getName());
             fridgeGroceryBody.setCount(shoppingListEntity.getCount());
@@ -79,11 +79,12 @@ public class ShoppingListService {
             try {
                 fridgeService.addGroceryToAccount(shoppingListEntity.getAccountEntity(),fridgeGroceryBody);
             } catch (AccountDoesntExistException e) {
-                throw new IllegalArgumentException();
+                throw new Exception();
             } catch (AccountAlreadyHasGroceryException e) {
                 fridgeService.updateGroceryCount(shoppingListEntity.getAccountEntity(), fridgeGroceryBody);
             }
-        });
+        }
+
         shoppingListRepository.removeAllByAccountEntityAndFoundInStoreTrue(account);
     }
 

@@ -57,8 +57,12 @@ public class ShoppingListController {
 
     @PostMapping("/mark")
     public ResponseEntity<?> markGroceryAsFound(@AuthenticationPrincipal AccountEntity account, @RequestBody ShoppingListDTO groceryName){
-        shoppingListService.updateFoundInStore(account,groceryName.getName());
-        return ResponseEntity.ok().build();
+        try {
+            shoppingListService.updateFoundInStore(account,groceryName.getName());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("/buy")
