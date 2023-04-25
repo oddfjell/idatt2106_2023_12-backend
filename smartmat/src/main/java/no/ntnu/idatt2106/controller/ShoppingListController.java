@@ -1,12 +1,17 @@
 package no.ntnu.idatt2106.controller;
 
+import no.ntnu.idatt2106.dto.ShoppingListDTO;
+import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.repository.ShoppingListRepository;
 import no.ntnu.idatt2106.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping(value = "/shoppingList") //TODO auth?????
 @RestController
@@ -16,9 +21,10 @@ public class ShoppingListController {
     @Autowired
     private ShoppingListService shoppingListService;
 
+    // GET STORED SHOPPING LIST FOR AN ACCOUNT
     @GetMapping("/")
-    public ResponseEntity<?> getProducts(){
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
+    public ResponseEntity<List<ShoppingListDTO>> getShoppingList(@AuthenticationPrincipal AccountEntity account){
+        return new ResponseEntity<>(shoppingListService.getShoppingList(account.getAccount_id()), HttpStatus.TOO_EARLY);
     }
 
     @PostMapping("/add")

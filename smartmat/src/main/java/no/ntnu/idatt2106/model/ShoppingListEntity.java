@@ -20,14 +20,18 @@ public class ShoppingListEntity {
 
     private int count;
 
+    @Column(name = "found_in_store")
+    private boolean foundInStore;
+
     public ShoppingListEntity() {
     }
 
-    public ShoppingListEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count) {
+    public ShoppingListEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count, boolean foundInStore) {
         super();
         this.accountEntity = accountEntity;
         this.groceryEntity = groceryEntity;
         this.count = count;
+        this.foundInStore = foundInStore;
     }
 
     public Long getShopping_list_id() {
@@ -60,5 +64,13 @@ public class ShoppingListEntity {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean isFoundInStore() {
+        return foundInStore;
+    }
+
+    public void setFoundInStore(boolean foundInStore) {
+        this.foundInStore = foundInStore;
     }
 }
