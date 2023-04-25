@@ -8,6 +8,7 @@ import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
+import no.ntnu.idatt2106.model.api.FridgeResponseBody;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.repository.CategoryRepository;
 import no.ntnu.idatt2106.repository.FridgeRepository;
@@ -32,17 +33,22 @@ public class FridgeService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public List<GroceryEntity> getAllGroceriesByAccount(AccountEntity account){
-        List<GroceryEntity> groceryEntityList = new ArrayList<>();
+    public List<FridgeResponseBody> getAllGroceriesByAccount(AccountEntity account){
+        List<FridgeResponseBody> fridgeResponseBodyList = new ArrayList<>();
 
         List<FridgeEntity> fridgeEntityList = fridgeRepository.findAllByAccountEntity(account);
 
         fridgeEntityList.forEach(fridgeEntity -> {
             GroceryEntity groceryEntity = groceryRepository.findById(fridgeEntity.getGroceryEntity().getGrocery_id()).orElse(null);
-            groceryEntityList.add(groceryEntity);
+            FridgeResponseBody fridgeResponseBody = new FridgeResponseBody();
+            fridgeResponseBody.setName(groceryEntity.getName());
+            fridgeResponseBody.setCount(fridgeEntity.getCount());
+            fridgeResponseBody.setCategoryName(groceryEntity.getCategory().getName());
+            fridgeResponseBody.setCategoryImage(groceryEntity.getCategory().getImage());
+            fridgeResponseBodyList.add(fridgeResponseBody);
         });
 
-        return groceryEntityList;
+        return fridgeResponseBodyList;
 
     }
 

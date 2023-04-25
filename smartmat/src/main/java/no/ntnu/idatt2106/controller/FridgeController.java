@@ -6,6 +6,7 @@ import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
+import no.ntnu.idatt2106.model.api.FridgeResponseBody;
 import no.ntnu.idatt2106.service.FridgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class FridgeController {
     FridgeService fridgeService;
 
     @GetMapping("/groceries")
-    public ResponseEntity<List<GroceryEntity>> getGroceriesByAccount(@AuthenticationPrincipal AccountEntity account){
+    public ResponseEntity<List<FridgeResponseBody>> getGroceriesByAccount(@AuthenticationPrincipal AccountEntity account){
         return ResponseEntity.ok(fridgeService.getAllGroceriesByAccount(account));
     }
 
