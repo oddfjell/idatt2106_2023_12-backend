@@ -97,13 +97,19 @@ public class FridgeService {
         fridgeRepository.removeByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),grocery.getName());
     }
 
-    public void removeGroceryFromAccountByAmount(AccountEntity account, FridgeGroceryBody accountBody) throws Exception {
-        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),accountBody.getName());
-        if(fridgeEntity.isEmpty() || fridgeEntity.get().getCount() < accountBody.getCount()){
+    public void removeGroceryFromAccountByAmount(AccountEntity account, FridgeGroceryBody fridgeGroceryBody) throws Exception {
+        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryBody.getName());
+        if(fridgeEntity.isEmpty() || fridgeEntity.get().getCount() < fridgeGroceryBody.getCount()){
             throw new Exception();
         }
 
-        fridgeRepository.updateCount(fridgeEntity.get().getCount() - accountBody.getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
+
+        if(fridgeEntity.get().getCount() - fridgeGroceryBody.getCount() < 1){
+            fridgeRepository.removeByAccountEntityAndGroceryEntityNameIgnoreCase(account,fridgeGroceryBody.getName());
+        }else{
+            fridgeRepository.updateCount(fridgeEntity.get().getCount() - fridgeGroceryBody.getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
+        }
+
     }
 
     public void throwGroceryFromAccount(AccountEntity account, GroceryEntity grocery){

@@ -19,6 +19,8 @@ public interface FridgeRepository extends JpaRepository<FridgeEntity, Long> {
 
     void removeByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountUsername, String groceryName);
 
+    void removeByAccountEntityAndGroceryEntityNameIgnoreCase(AccountEntity account, String groceryName);
+
     @Modifying
     @Query("update FridgeEntity f set f.count=?1 where f.accountEntity=?2 and f.groceryEntity=?3")
     void updateCount(int count, AccountEntity account, GroceryEntity grocery);
