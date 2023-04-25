@@ -46,6 +46,9 @@ public class FridgeController {
     @PostMapping("/remove")
     public ResponseEntity<?> removeGroceryFromAccountByAmount(@AuthenticationPrincipal AccountEntity account, @RequestBody FridgeGroceryBody fridgeGroceryBody){
 
+        System.out.println(fridgeGroceryBody.getName());
+        System.out.println(account.getUsername());
+
         try {
             fridgeService.removeGroceryFromAccountByAmount(account, fridgeGroceryBody);
             return ResponseEntity.ok().build();
@@ -54,10 +57,9 @@ public class FridgeController {
         }
     }
 
+    //TODO
     @PostMapping("/throw")
     public ResponseEntity<?> throwGroceryFromAccountByAmount(){
         return ResponseEntity.status(HttpStatus.TOO_EARLY).build();
     }
-
-
 }
