@@ -46,6 +46,12 @@ public class ShoppingListService {
 
         try {
 
+            // Checks if count is positive + nonzero
+            if (shoppingListDTO.getCount() < 1) {
+                System.out.println("Count must be greater than 1.");
+                return false;
+            }
+
             // Finds correct user
             AccountEntity account = accountRepository.findById(id);
             if (account == null) {
