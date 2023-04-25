@@ -11,6 +11,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
 
     Optional<AccountEntity> findByUsernameIgnoreCase(String username);
 
+    AccountEntity findById(long id);
+
     void removeAccountEntityById(Long id);
 
     void removeAccountEntityByUsername(String username);

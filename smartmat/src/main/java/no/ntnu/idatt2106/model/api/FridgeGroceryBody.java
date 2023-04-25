@@ -1,15 +1,15 @@
 package no.ntnu.idatt2106.model.api;
 
-public class AddGroceryToAccountBody {
+public class FridgeGroceryBody {
 
     private String name;
     private Long categoryId;
     private int count;
 
-    public AddGroceryToAccountBody() {
+    public FridgeGroceryBody() {
     }
 
-    public AddGroceryToAccountBody(String name, Long categoryId, int count) {
+    public FridgeGroceryBody(String name, Long categoryId, int count) {
         super();
         this.name = name;
         this.categoryId = categoryId;

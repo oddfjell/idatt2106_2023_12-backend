@@ -15,7 +15,18 @@ public interface FridgeRepository extends JpaRepository<FridgeEntity, Long> {
     List<FridgeEntity> findAllByAccountEntity(AccountEntity account);
     Optional<FridgeEntity> findByAccountEntityAndGroceryEntity(AccountEntity account, GroceryEntity grocery);
 
-    Optional<FridgeEntity> findByAccountEntityIdAndGroceryEntityId(Long accountId, Long groceryId);
+    Optional<FridgeEntity> findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountUsername, String groceryName);
+
+
+    void removeByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountUsername, String groceryName);
+
+    void removeByAccountEntityAndGroceryEntityNameIgnoreCase(AccountEntity account, String groceryName);
+
+    void deleteByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountUsername, String groceryName);
+
+    @Modifying
+    @Query("DELETE FROM FridgeEntity f WHERE f.accountEntity=?1 AND f.groceryEntity=?2")
+    void deleteByAccountEntityAndGroceryEntity(AccountEntity account, GroceryEntity grocery);
 
     @Modifying
     @Query("update FridgeEntity f set f.count=?1 where f.accountEntity=?2 and f.groceryEntity=?3")

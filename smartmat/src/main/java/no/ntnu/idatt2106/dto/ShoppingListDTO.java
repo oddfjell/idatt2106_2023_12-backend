@@ -12,6 +12,10 @@ public class ShoppingListDTO {
         this.foundInStore = foundInStore;
     }
 
+    public ShoppingListDTO(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

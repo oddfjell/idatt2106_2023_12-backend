@@ -1,6 +1,9 @@
 package no.ntnu.idatt2106.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "fridge")
@@ -18,14 +21,20 @@ public class FridgeEntity {
     @JoinColumn(name = "grocery_id")
     private GroceryEntity groceryEntity;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate date;
+
     private int count;
+
+
 
     public FridgeEntity() {}
 
-    public FridgeEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count) {
+    public FridgeEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, LocalDate date, int count) {
         super();
         this.accountEntity = accountEntity;
         this.groceryEntity = groceryEntity;
+        this.date = date;
         this.count = count;
     }
 
@@ -59,5 +68,13 @@ public class FridgeEntity {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
