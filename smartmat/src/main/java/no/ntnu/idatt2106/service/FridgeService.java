@@ -103,13 +103,11 @@ public class FridgeService {
             throw new Exception();
         }
 
-
         if(fridgeEntity.get().getCount() - fridgeGroceryBody.getCount() < 1){
-            fridgeRepository.removeByAccountEntityAndGroceryEntityNameIgnoreCase(account,fridgeGroceryBody.getName());
+            fridgeRepository.deleteByAccountEntityAndGroceryEntity(fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
         }else{
             fridgeRepository.updateCount(fridgeEntity.get().getCount() - fridgeGroceryBody.getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
         }
-
     }
 
     public void throwGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
