@@ -59,7 +59,7 @@ public class RecipeSuggestionService {
         Matcher matcher;
         for (Recipe recipe: recipes) {
             for (String ingredient: priorityIngredients) {
-                pattern = Pattern.compile(ingredient);
+                pattern = Pattern.compile(ingredient, Pattern.CASE_INSENSITIVE);
                 for (String recipeIngredient: recipe.getIngredients()) {
                     matcher = pattern.matcher(recipeIngredient);
                     if (matcher.find()) {
@@ -80,20 +80,18 @@ public class RecipeSuggestionService {
 
     public List<Recipe> getNRecipes(int n, AccountEntity accountEntity){
         List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
-
         List<Recipe> recipes = this.sortRecipes(
                         this.rankRecipes(
                                 this.readRecipesFromScraper(), groceries));
         return recipes.subList(0, n);
     }
 
-    public void runScraper() throws IOException, InterruptedException {
+    public int runScraper() throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath);
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();
-        //TODO logger
-        System.out.println(process.waitFor());
+        return process.waitFor();
     }
 
 }

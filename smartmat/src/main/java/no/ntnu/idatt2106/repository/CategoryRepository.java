@@ -7,4 +7,6 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
 
   void removeById(Long id);
 
+  CategoryEntity getCategoryEntityById(Long id);
+
 }

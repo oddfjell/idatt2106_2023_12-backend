@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +25,6 @@ public class RecipeController {
 
     @Autowired
     private RecipeSuggestionService recipeSuggestionService;
-    
-    @Autowired
-    private FridgeRepository fridgeRepository;
 
     @GetMapping("/weekMenu")
     public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity) {
@@ -49,5 +47,14 @@ public class RecipeController {
     @GetMapping("/nRecipes")
     public ResponseEntity<?> getNRecipes() {
         return null;
+    }
+
+    @PutMapping
+    public ResponseEntity<?> scrapeRecipes() throws IOException, InterruptedException {
+        int exitVal = recipeSuggestionService.runScraper();
+        if (exitVal != 0){
+            return (ResponseEntity<?>) ResponseEntity.internalServerError();
+        }
+        return ResponseEntity.ok(exitVal);
     }
 }
