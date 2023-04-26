@@ -46,12 +46,6 @@ public class ShoppingListService {
 
         try {
 
-            // Checks if count is positive + nonzero
-            if (shoppingListDTO.getCount() < 1) {
-                System.out.println("Count must be greater than 1.");
-                return false;
-            }
-
             // Finds correct user
             AccountEntity account = accountRepository.findById(id);
 
@@ -65,10 +59,13 @@ public class ShoppingListService {
             // Checks if grocery is already added to shopping list
             boolean groceryAlreadyExistOnShoppingList = shoppingListRepository.groceryExist(id, shoppingListDTO.getName());
             if (groceryAlreadyExistOnShoppingList) {
-                shoppingListRepository.updateCountIfExist(account, grocery, shoppingListDTO.getCount());
+                shoppingListRepository.updateCountIfExist(account, grocery, 1);
+                System.out.println("Updated count for '" + shoppingListDTO.getName() +"'.");
+
             } else {
-                ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, shoppingListDTO.getCount(), false);
+                ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, 1, false);
                 shoppingListRepository.save(groceryToBeAdded);
+                System.out.println("Added '" + shoppingListDTO.getName() +"' to shopping list.");
             }
 
             return true;
