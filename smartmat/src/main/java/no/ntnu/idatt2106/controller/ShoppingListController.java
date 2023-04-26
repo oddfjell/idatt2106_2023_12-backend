@@ -1,10 +1,9 @@
 package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.dto.ShoppingListDTO;
-import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.Recipe;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
-import no.ntnu.idatt2106.repository.ShoppingListRepository;
 import no.ntnu.idatt2106.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RequestMapping(value = "/shoppingList") //TODO auth?????
 @RestController
@@ -41,6 +41,22 @@ public class ShoppingListController {
         }
     }
 
+    @PostMapping("/addAllFromMenu")
+    public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
+                                                          @RequestBody List<Recipe> recipes) {
+        System.err.println("HALLOO");
+        AtomicInteger countNotFound = new AtomicInteger();
+        shoppingListService.getCorrectGroceriesFromRecipes(recipes)
+                .forEach(item -> {
+                    ShoppingListDTO shoppingListDTO = new ShoppingListDTO(item);
+                    shoppingListDTO.setCount(1);
+                    shoppingListDTO.setFoundInStore(false);
+                    if (!shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO)) {
+                        countNotFound.getAndIncrement();
+                    }
+                });
+        return ResponseEntity.ok("Could not find " + countNotFound + " items");
+    }
 
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeFromShoppingList(@RequestBody ShoppingListEntity product){

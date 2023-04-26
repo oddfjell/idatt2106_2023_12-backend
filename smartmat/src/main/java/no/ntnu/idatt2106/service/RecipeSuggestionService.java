@@ -80,20 +80,18 @@ public class RecipeSuggestionService {
 
     public List<Recipe> getNRecipes(int n, AccountEntity accountEntity){
         List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
-        System.out.println(groceries);
         List<Recipe> recipes = this.sortRecipes(
                         this.rankRecipes(
                                 this.readRecipesFromScraper(), groceries));
         return recipes.subList(0, n);
     }
 
-    public void runScraper() throws IOException, InterruptedException {
+    public int runScraper() throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("python", scriptPath);
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();
-        //TODO logger
-        System.out.println(process.waitFor());
+        return process.waitFor();
     }
 
 }
