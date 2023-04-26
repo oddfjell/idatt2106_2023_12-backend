@@ -6,16 +6,19 @@ public class FridgeResponseBody {
     private String categoryName;
     private String categoryImage;
     private int count;
+    private int expiresInDays;
+
 
     public FridgeResponseBody() {
     }
 
-    public FridgeResponseBody(String name, String categoryName, String categoryImage, int count) {
+    public FridgeResponseBody(String name, String categoryName, String categoryImage, int count, int expiresInDays) {
         super();
         this.name = name;
         this.categoryName = categoryName;
         this.categoryImage = categoryImage;
         this.count = count;
+        this.expiresInDays = expiresInDays;
     }
 
     public String getName() {
@@ -48,5 +51,13 @@ public class FridgeResponseBody {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public int getExpiresInDays() {
+        return expiresInDays;
+    }
+
+    public void setExpiresInDays(int expiresInDays) {
+        this.expiresInDays = expiresInDays;
     }
 }
