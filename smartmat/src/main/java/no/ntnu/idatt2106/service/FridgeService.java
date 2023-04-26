@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class FridgeService {
             fridgeResponseBody.setCount(fridgeEntity.getCount());
             fridgeResponseBody.setCategoryName(groceryEntity.getCategory().getName());
             fridgeResponseBody.setCategoryImage(groceryEntity.getCategory().getImage());
+            fridgeResponseBody.setExpiresInDays(groceryEntity.getExpiryDate() - (int) ChronoUnit.DAYS.between(fridgeEntity.getDate(),LocalDate.now()));
             fridgeResponseBodyList.add(fridgeResponseBody);
         });
 

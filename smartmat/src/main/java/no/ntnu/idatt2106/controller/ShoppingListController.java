@@ -28,6 +28,8 @@ public class ShoppingListController {
         return new ResponseEntity<>(shoppingListService.getShoppingList(account.getAccount_id()), HttpStatus.OK);
     }
 
+    // TODO: EDIT ENDPOINT FOR JUST ADDING (DONT INCLUDE COUNT, SHOULD BE ITS OWN METHOD 'updateCount')
+
     // ADD GROCERY TO SHOPPING LIST
     @PostMapping("/add")
     public ResponseEntity<Boolean> addToShoppingList(@AuthenticationPrincipal AccountEntity account,
@@ -35,12 +37,12 @@ public class ShoppingListController {
         boolean added = shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO);
 
         if (added) {
-            return new ResponseEntity<>(added, HttpStatus.CREATED);
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(added, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
-
+    
     @PostMapping("/addAllFromMenu")
     public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
                                                           @RequestBody List<Recipe> recipes) {
@@ -58,12 +60,17 @@ public class ShoppingListController {
         return ResponseEntity.ok("Could not find " + countNotFound + " items");
     }
 
+    // REMOVE GROCERY FROM SHOPPING LIST
     @DeleteMapping("/remove")
-    public ResponseEntity<?> removeFromShoppingList(@RequestBody ShoppingListEntity product){
-        boolean removed = shoppingListService.removeFromShoppingList(product);
+    public ResponseEntity<Boolean> removeFromShoppingList(@AuthenticationPrincipal AccountEntity account,
+                                                          @RequestBody ShoppingListDTO shoppingListDTO){
+        boolean removed = shoppingListService.removeFromShoppingList(account.getAccount_id(), shoppingListDTO);
+
         if(removed){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        } else return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
     }
 
     //TODO NOTAT: decline blir remove

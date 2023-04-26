@@ -59,5 +59,4 @@ public class FridgeController {
         return ResponseEntity.status(HttpStatus.TOO_EARLY).build();
     }
 
-
 }
