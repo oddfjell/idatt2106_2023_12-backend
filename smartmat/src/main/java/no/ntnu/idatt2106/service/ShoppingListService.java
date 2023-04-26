@@ -54,10 +54,6 @@ public class ShoppingListService {
 
             // Finds correct user
             AccountEntity account = accountRepository.findById(id);
-            if (account == null) {
-                System.out.println("Account with id " + id + " does not exist in database.");
-                return false;
-            }
 
             // Finds correct grocery
             GroceryEntity grocery = groceryRepository.findGroceryEntitiesByNameIgnoreCase(shoppingListDTO.getName());
@@ -67,7 +63,7 @@ public class ShoppingListService {
             }
 
             // Checks if grocery is already added to shopping list
-            boolean groceryAlreadyExistOnShoppingList = shoppingListRepository.groceryAlreadyExist(id, shoppingListDTO.getName());
+            boolean groceryAlreadyExistOnShoppingList = shoppingListRepository.groceryExist(id, shoppingListDTO.getName());
             if (groceryAlreadyExistOnShoppingList) {
                 shoppingListRepository.updateCountIfExist(account, grocery, shoppingListDTO.getCount());
             } else {
@@ -86,12 +82,34 @@ public class ShoppingListService {
     }
 
 
-    public boolean removeFromShoppingList(ShoppingListEntity product){
-        //TODO DO NOT DELETE IF THE PRODUCT AMOUNT IS MORE THAN 1
-        int before = shoppingListRepository.findAll().size();
-        shoppingListRepository.delete(product);
-        int after = shoppingListRepository.findAll().size();
-        return before == (after + 1);
+    public boolean removeFromShoppingList(long id, ShoppingListDTO shoppingListDTO){
+
+        try {
+
+            // Finds correct user
+            AccountEntity account = accountRepository.findById(id);
+
+            // Finds correct grocery
+            GroceryEntity grocery = groceryRepository.findGroceryEntitiesByNameIgnoreCase(shoppingListDTO.getName());
+            if (grocery == null) {
+                System.out.println("Grocery " + shoppingListDTO.getName() + " does not exist in database.");
+                return false;
+            }
+
+            // Checks if grocery exists in shopping list
+            boolean groceryExist = shoppingListRepository.groceryExist(id, shoppingListDTO.getName());
+            if (!groceryExist) {
+                System.out.println("User " + account.getUsername() + " does not have " + grocery.getName() + " in its shopping list.");
+                return false;
+            }
+
+            shoppingListRepository.removeByAccountEntityIdAndGroceryEntityId(account.getAccount_id(), grocery.getGrocery_id());
+            return true;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
     }
 
     public void acceptRequest(ShoppingListEntity product){//TODO ta imot en slags form for id

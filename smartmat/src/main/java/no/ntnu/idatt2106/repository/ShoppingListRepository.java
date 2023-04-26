@@ -21,11 +21,11 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
             "WHERE s.accountEntity.id = :id")
     List<ShoppingListDTO> getShoppingList(long id);
 
-    // CHECKS IF GROCERY IS ALREADY ADDED TO SHOPPING LIST
+    // CHECK IF GROCERY EXIST IN SHOPPING LIST
     @Query("SELECT CASE WHEN (COUNT(s) > 0) THEN TRUE ELSE FALSE END " +
             "FROM ShoppingListEntity s " +
             "WHERE s.accountEntity.id = :id AND s.groceryEntity.name = :groceryName")
-    boolean groceryAlreadyExist(long id, String groceryName);
+    boolean groceryExist(long id, String groceryName);
 
     // UPDATE COUNT ON GROCERY
     @Modifying
@@ -33,6 +33,9 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
             "SET s.count = s.count + :count " +
             "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
     void updateCountIfExist(AccountEntity account, GroceryEntity grocery, int count);
+
+    // REMOVE GROCERY FROM SHOPPING LIST
+    void removeByAccountEntityIdAndGroceryEntityId(long id, long groceryId);
 
     Optional<ShoppingListEntity> findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountName, String groceryName);
 
