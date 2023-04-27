@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -50,6 +48,8 @@ public class FridgeService {
             fridgeResponseBody.setExpiresInDays(groceryEntity.getExpiryDate() - (int) ChronoUnit.DAYS.between(fridgeEntity.getDate(),LocalDate.now()));
             fridgeResponseBodyList.add(fridgeResponseBody);
         });
+
+        fridgeResponseBodyList.sort(Comparator.comparing(FridgeResponseBody::getExpiresInDays));
 
         return fridgeResponseBodyList;
 
