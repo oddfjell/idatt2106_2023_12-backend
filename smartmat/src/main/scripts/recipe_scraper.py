@@ -22,7 +22,7 @@ for a in soup.find_all('a', {'class': 'cm-list-item'}):
     urls.append('https://www.matprat.no'+href)
 
 abs_path = os.path.dirname(__file__)
-relative_path = "../resources/recipes.csv"
+relative_path = "../resources/recipeEntities.csv"
 full_path = os.path.join(abs_path, relative_path)
 
 f = open(full_path, 'w')

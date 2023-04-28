@@ -2,7 +2,7 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.dto.ShoppingListDTO;
 import no.ntnu.idatt2106.model.AccountEntity;
-import no.ntnu.idatt2106.model.Recipe;
+import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +44,10 @@ public class ShoppingListController {
     /**
     @PostMapping("/addAllFromMenu")
     public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
-                                                          @RequestBody List<Recipe> recipes) {
+                                                          @RequestBody List<RecipeEntity> recipeEntities) {
         System.err.println("HALLOO");
         AtomicInteger countNotFound = new AtomicInteger();
-        shoppingListService.getCorrectGroceriesFromRecipes(recipes)
+        shoppingListService.getCorrectGroceriesFromRecipes(recipeEntities)
                 .forEach(item -> {
                     ShoppingListDTO shoppingListDTO = new ShoppingListDTO(item);
                     shoppingListDTO.setCount(1);
