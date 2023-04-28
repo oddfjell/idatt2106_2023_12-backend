@@ -2,6 +2,7 @@ package no.ntnu.idatt2106.service;
 
 
 import jakarta.transaction.Transactional;
+import no.ntnu.idatt2106.exceptions.ProfileAlreadyExistsInAccountException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.ProfileEntity;
 import no.ntnu.idatt2106.model.api.NewProfileBody;
@@ -22,7 +23,11 @@ public class ProfileService {
         return profileRepository.findAllByAccount(account);
     }
 
-    public void addProfileToAccount(NewProfileBody newProfileBody, AccountEntity account){
+    public void addProfileToAccount(NewProfileBody newProfileBody, AccountEntity account) throws ProfileAlreadyExistsInAccountException {
+
+        if(profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account).isPresent()){
+            throw new ProfileAlreadyExistsInAccountException();
+        }
 
         ProfileEntity profile = new ProfileEntity();
         profile.setUsername(newProfileBody.getUsername());

@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.exceptions.AccountAlreadyExistsException;
+import no.ntnu.idatt2106.exceptions.ProfileAlreadyExistsInAccountException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.ProfileEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
@@ -85,8 +86,13 @@ public class AccountController {
 
     @PostMapping("/registerProfile")
     public ResponseEntity<?> registerUser(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
-        profileService.addProfileToAccount(profileBody, account);
-        return ResponseEntity.ok().build();
+        try {
+            profileService.addProfileToAccount(profileBody, account);
+            return ResponseEntity.ok().build();
+        } catch (ProfileAlreadyExistsInAccountException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Profile username already exists");
+        }
+
     }
 
 }
