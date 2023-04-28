@@ -43,11 +43,12 @@ public class ShoppingListService {
     }
 
 
+    // TODO: ikke count 1, men gitt count (samme med foundInStroe, ikke false, men gitt
     // LOGIC FOR ADDING TO DB
     public boolean add(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
-            ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, 1, false);
+            ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, shoppingListDTO.getCount(), shoppingListDTO.isFoundInStore());
             shoppingListRepository.save(groceryToBeAdded);
             return true;
         } catch (Exception e) {
@@ -165,6 +166,7 @@ public class ShoppingListService {
                             "has count = 0, so it is ignored");
                 } else {
                     add(account, shoppingListDTO);
+                    System.out.println("Grocery " + shoppingListDTO.getName() + " is not present is database, is it was added.");
                 }
             }
         }
