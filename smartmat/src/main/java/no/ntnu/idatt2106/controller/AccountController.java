@@ -2,13 +2,18 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.exceptions.AccountAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.ProfileEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
+import no.ntnu.idatt2106.model.api.NewProfileBody;
 import no.ntnu.idatt2106.service.AccountService;
+import no.ntnu.idatt2106.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping(value = "/auth/account")
 @CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
@@ -17,6 +22,9 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ProfileService profileService;
 
     @CrossOrigin
     @GetMapping("/")
@@ -69,10 +77,16 @@ public class AccountController {
         }
     }
 
-    // TODO MAKE USERS TO AN ACCOUNT
-    @PostMapping("/registerUser")
-    public ResponseEntity<?> registerUser(@RequestBody AccountEntity account){
-        return ResponseEntity.badRequest().build();
+
+    @GetMapping("/profiles")
+    public ResponseEntity<List<ProfileEntity>> getProfilesInAccount(@AuthenticationPrincipal AccountEntity account){
+        return ResponseEntity.ok(profileService.getAllProfilesByAccount(account));
+    }
+
+    @PostMapping("/registerProfile")
+    public ResponseEntity<?> registerUser(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
+        profileService.addProfileToAccount(profileBody, account);
+        return ResponseEntity.ok().build();
     }
 
 }
