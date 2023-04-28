@@ -1,22 +1,35 @@
 package no.ntnu.idatt2106.model;
 
+import jakarta.persistence.*;
+
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Recipe {
+@Entity
+@Table(name = "recipe")
+public class RecipeEntity {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
    private String url;
+
+   @Transient
    private int value;
+   @Transient
    private String[] ingredients;
+   @Transient
    private String title;
+   @Transient
    private int servings;
 
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
-      Recipe recipe = (Recipe) o;
-      return Objects.equals(url, recipe.url) && Arrays.equals(ingredients, recipe.ingredients) && Objects.equals(title, recipe.title);
+      RecipeEntity recipeEntity = (RecipeEntity) o;
+      return Objects.equals(url, recipeEntity.url) && Arrays.equals(ingredients, recipeEntity.ingredients) && Objects.equals(title, recipeEntity.title);
    }
 
    @Override
@@ -26,12 +39,32 @@ public class Recipe {
       return result;
    }
 
-   public Recipe(String url, String title, String[] ingredients) {
+   public RecipeEntity() {
+   }
+
+   public RecipeEntity(String url, String title, String[] ingredients) {
+      super();
       this.url = url;
       this.value = 0;
       this.ingredients = ingredients;
       this.title = title;
       this.servings = 4;
+   }
+
+   public Long getId() {
+      return id;
+   }
+
+   public void setId(Long id) {
+      this.id = id;
+   }
+
+   public int getServings() {
+      return servings;
+   }
+
+   public void setServings(int servings) {
+      this.servings = servings;
    }
 
    public String getUrl() {
@@ -68,7 +101,7 @@ public class Recipe {
 
    @Override
    public String toString() {
-      return "Recipe{" +
+      return "RecipeEntity{" +
               "url='" + url + '\'' +
               ", value=" + value +
               ", ingredients=" + Arrays.toString(ingredients) +

@@ -5,6 +5,7 @@ import no.ntnu.idatt2106.dto.ShoppingListDTO;
 
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
+import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
 
@@ -17,7 +18,8 @@ import no.ntnu.idatt2106.repository.ShoppingListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,7 +29,6 @@ public class ShoppingListService {
     private ShoppingListRepository shoppingListRepository;
 
     @Autowired
-
     private AccountRepository accountRepository;
 
     @Autowired
@@ -191,4 +192,38 @@ public class ShoppingListService {
         }
         shoppingListRepository.removeAllByAccountEntityAndFoundInStoreTrue(account);
     }
+
+/**
+    public List<String> getCorrectGroceriesFromRecipes(List<Recipe> recipes) {
+    public List<String> getCorrectGroceriesFromRecipes(List<RecipeEntity> recipeEntities) {
+        HashSet<String> allGroceries = groceryRepository.findAll().stream().map(GroceryEntity::getName).map(String::toLowerCase).collect(Collectors.toCollection(HashSet::new));
+        ArrayList<String> groceriesToAdd = new ArrayList<>();
+        ingredientsListToIngredients(recipeEntities.stream().map(RecipeEntity::getIngredients)
+                .flatMap(Arrays::stream).toList())
+                .forEach(i -> groceriesToAdd.add(ingredientToGrocery(i,allGroceries)));
+
+        return groceriesToAdd;
+    }
+
+    public List<String> ingredientsListToIngredients(List<String> ingredients){
+        return ingredients.stream().map(i -> {
+            String[] split = i.split(" ");
+            String string = "";
+            for (int j = 2; j < split.length; j++) {
+                string+=" "+split[j];
+            }
+            return string;
+        }).toList();
+    }
+
+    public String ingredientToGrocery(String ingredient, Set<String> allGroceries) {
+            for (String t: ingredient.replace("\"", "").split(" ")) {
+                if (allGroceries.contains(t)) {
+                    return t;
+                }
+            }
+
+        return ingredient;
+    }
+*/
 }
