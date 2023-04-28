@@ -34,6 +34,14 @@ public class Recipe {
       this.servings = 4;
    }
 
+   public int getServings() {
+      return servings;
+   }
+
+   public void setServings(int servings) {
+      this.servings = servings;
+   }
+
    public String getUrl() {
       return url;
    }

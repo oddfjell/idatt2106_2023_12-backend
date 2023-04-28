@@ -2,7 +2,8 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.dto.ShoppingListDTO;
 import no.ntnu.idatt2106.model.AccountEntity;
-
+import no.ntnu.idatt2106.model.Recipe;
+import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RequestMapping(value = "/shoppingList")
 @RestController
@@ -32,7 +34,37 @@ public class ShoppingListController {
                                              @RequestBody List<ShoppingListDTO> listOfDTOs) {
         boolean success = shoppingListService.save(account, listOfDTOs);
 
-        if (success) {
+        if (added) {
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
+        }
+    }
+    
+    @PostMapping("/addAllFromMenu")
+    public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
+                                                          @RequestBody List<Recipe> recipes) {
+        System.err.println("HALLOO");
+        AtomicInteger countNotFound = new AtomicInteger();
+        shoppingListService.getCorrectGroceriesFromRecipes(recipes)
+                .forEach(item -> {
+                    ShoppingListDTO shoppingListDTO = new ShoppingListDTO(item);
+                    shoppingListDTO.setCount(1);
+                    shoppingListDTO.setFoundInStore(false);
+                    if (!shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO)) {
+                        countNotFound.getAndIncrement();
+                    }
+                });
+        return ResponseEntity.ok("Could not find " + countNotFound + " items");
+    }
+
+    // REMOVE GROCERY FROM SHOPPING LIST
+    @DeleteMapping("/remove")
+    public ResponseEntity<Boolean> removeFromShoppingList(@AuthenticationPrincipal AccountEntity account,
+                                                          @RequestBody ShoppingListDTO shoppingListDTO){
+        boolean removed = shoppingListService.removeFromShoppingList(account.getAccount_id(), shoppingListDTO);
+
+        if(removed){
             return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);

@@ -29,5 +29,10 @@ public class GroceryController {
         return ResponseEntity.ok(groceryService.getAllGroceriesByCategoryId(Long.parseLong(id)));
     }
 
+    @PostMapping("/populate")
+    public ResponseEntity<?> populateDB(){
+        groceryService.populateDbGroceries();
+        return ResponseEntity.ok("amen");
+    }
 
 }
