@@ -1,14 +1,21 @@
 package no.ntnu.idatt2106.model;
 
+import jakarta.persistence.Transient;
+
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Recipe {
 
    private String url;
+
+   @Transient
    private int value;
+   @Transient
    private String[] ingredients;
+   @Transient
    private String title;
+   @Transient
    private int servings;
 
    @Override
