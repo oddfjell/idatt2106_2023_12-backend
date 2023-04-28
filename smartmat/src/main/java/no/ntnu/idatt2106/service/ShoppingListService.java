@@ -5,7 +5,7 @@ import no.ntnu.idatt2106.dto.ShoppingListDTO;
 
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
-import no.ntnu.idatt2106.model.Recipe;
+import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.model.ShoppingListEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
 
@@ -150,10 +150,10 @@ public class ShoppingListService {
         shoppingListRepository.removeAllByAccountEntityAndFoundInStoreTrue(account);
     }
 
-    public List<String> getCorrectGroceriesFromRecipes(List<Recipe> recipes) {
+    public List<String> getCorrectGroceriesFromRecipes(List<RecipeEntity> recipeEntities) {
         HashSet<String> allGroceries = groceryRepository.findAll().stream().map(GroceryEntity::getName).map(String::toLowerCase).collect(Collectors.toCollection(HashSet::new));
         ArrayList<String> groceriesToAdd = new ArrayList<>();
-        ingredientsListToIngredients(recipes.stream().map(Recipe::getIngredients)
+        ingredientsListToIngredients(recipeEntities.stream().map(RecipeEntity::getIngredients)
                 .flatMap(Arrays::stream).toList())
                 .forEach(i -> groceriesToAdd.add(ingredientToGrocery(i,allGroceries)));
 
