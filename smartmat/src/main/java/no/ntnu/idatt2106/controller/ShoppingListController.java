@@ -51,7 +51,7 @@ public class ShoppingListController {
                     ShoppingListDTO shoppingListDTO = new ShoppingListDTO(item);
                     shoppingListDTO.setCount(1);
                     shoppingListDTO.setFoundInStore(false);
-                    if (!shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO)) {
+                    if (!shoppingListService.add(account.getAccount_id(), shoppingListDTO)) {
                         countNotFound.getAndIncrement();
                     }
                 });
