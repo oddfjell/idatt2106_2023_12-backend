@@ -41,6 +41,7 @@ public class ShoppingListController {
         }
     }
     
+    /**
     @PostMapping("/addAllFromMenu")
     public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
                                                           @RequestBody List<Recipe> recipes) {
@@ -57,19 +58,7 @@ public class ShoppingListController {
                 });
         return ResponseEntity.ok("Could not find " + countNotFound + " items");
     }
-
-    // REMOVE GROCERY FROM SHOPPING LIST
-    @DeleteMapping("/remove")
-    public ResponseEntity<Boolean> removeFromShoppingList(@AuthenticationPrincipal AccountEntity account,
-                                                          @RequestBody ShoppingListDTO shoppingListDTO){
-        boolean removed = shoppingListService.removeFromShoppingList(account.getAccount_id(), shoppingListDTO);
-
-        if(removed){
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
-        }
-    }
+    */
 
     // BUY MARKED GROCERIES
     @PostMapping("/buy")
