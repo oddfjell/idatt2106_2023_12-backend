@@ -6,6 +6,7 @@ import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
+import no.ntnu.idatt2106.model.api.FridgeGroceryThrowBody;
 import no.ntnu.idatt2106.model.api.FridgeResponseBody;
 import no.ntnu.idatt2106.service.FridgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +56,12 @@ public class FridgeController {
     }
 
     @PostMapping("/throw")
-    public ResponseEntity<?> throwGroceryFromAccountByAmount(){
-        return ResponseEntity.status(HttpStatus.TOO_EARLY).build();
+    public ResponseEntity<?> throwGroceryFromAccountByAmount(@AuthenticationPrincipal AccountEntity account, @RequestBody FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {
+        try{
+            fridgeService.throwGroceryFromFridgeToWaste(account, fridgeGroceryThrowBody);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Something went wrong. May be invalid count number");
+        }
     }
-
 }

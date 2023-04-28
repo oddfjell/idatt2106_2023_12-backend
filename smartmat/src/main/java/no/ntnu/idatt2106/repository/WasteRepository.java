@@ -1,7 +1,10 @@
 package no.ntnu.idatt2106.repository;
 
+import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.WasteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -40,4 +43,8 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
     Optional<Integer> getMoneyLostByMonth(long id, int monthNumber);
 
 
+
+
+    //TODO JONAS FIKS
+    Optional<WasteEntity> findWasteEntitiesByGroceryEntity(GroceryEntity groceryEntity);
 }

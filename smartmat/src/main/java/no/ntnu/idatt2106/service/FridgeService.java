@@ -7,12 +7,11 @@ import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
+import no.ntnu.idatt2106.model.WasteEntity;
 import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
+import no.ntnu.idatt2106.model.api.FridgeGroceryThrowBody;
 import no.ntnu.idatt2106.model.api.FridgeResponseBody;
-import no.ntnu.idatt2106.repository.AccountRepository;
-import no.ntnu.idatt2106.repository.CategoryRepository;
-import no.ntnu.idatt2106.repository.FridgeRepository;
-import no.ntnu.idatt2106.repository.GroceryRepository;
+import no.ntnu.idatt2106.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +31,8 @@ public class FridgeService {
     AccountRepository accountRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    WasteRepository wasteRepository;
 
     public List<FridgeResponseBody> getAllGroceriesByAccount(AccountEntity account){
         List<FridgeResponseBody> fridgeResponseBodyList = new ArrayList<>();
@@ -120,12 +121,28 @@ public class FridgeService {
 
     }
 
+    private final int tempValue = 100;
+    public void throwGroceryFromFridgeToWaste(AccountEntity account, FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {//FridgeEntity product
 
+        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryThrowBody.getName());
+        if(fridgeEntity.isEmpty()){
+            throw new Exception();
+        }
 
+        if(fridgeGroceryThrowBody.getPercent() == 0){
+            FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getName(), fridgeGroceryThrowBody.getCategoryId(), 1);
+            removeGroceryFromAccountByAmount(account, fridgeGroceryBody);
+        } else{
+            double money = tempValue * fridgeGroceryThrowBody.getPercent();
 
-
-
-
-
-
+            if(wasteRepository.findWasteEntitiesByGroceryEntity(fridgeEntity.get().getGroceryEntity()).isPresent()){
+                //UPDATE MONEY LOST    plusse på
+                //TODO JONAS
+                // WÆÆÆ
+            } else{
+                //TODO JONAS
+                // wasteRepository.save(new WasteEntity(account, fridgeEntity.get().getGroceryEntity(), money, java.time.LocalDateTime.now()))
+            }
+        }
+    }
 }

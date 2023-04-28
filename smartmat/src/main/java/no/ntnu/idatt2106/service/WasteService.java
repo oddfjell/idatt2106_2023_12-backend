@@ -1,5 +1,7 @@
 package no.ntnu.idatt2106.service;
 
+import no.ntnu.idatt2106.model.FridgeEntity;
+import no.ntnu.idatt2106.model.WasteEntity;
 import no.ntnu.idatt2106.repository.WasteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
