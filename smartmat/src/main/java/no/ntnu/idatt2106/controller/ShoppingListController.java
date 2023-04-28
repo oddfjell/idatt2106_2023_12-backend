@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@RequestMapping(value = "/shoppingList") //TODO auth?????
+@RequestMapping(value = "/shoppingList")
 @RestController
 @CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
 public class ShoppingListController {
@@ -24,25 +24,24 @@ public class ShoppingListController {
 
     // GET STORED SHOPPING LIST FOR AN ACCOUNT
     @GetMapping("/")
-    public ResponseEntity<List<ShoppingListDTO>> getShoppingList(@AuthenticationPrincipal AccountEntity account){
+    public ResponseEntity<List<ShoppingListDTO>> getShoppingList(@AuthenticationPrincipal AccountEntity account) {
         return new ResponseEntity<>(shoppingListService.getShoppingList(account.getAccount_id()), HttpStatus.OK);
     }
 
-    // TODO: EDIT ENDPOINT FOR JUST ADDING (DONT INCLUDE COUNT, SHOULD BE ITS OWN METHOD 'updateCount')
+    // SAVE CHANGES IN SHOPPING LIST
+    @PutMapping("/save")
+    public ResponseEntity<Boolean> updateAll(@AuthenticationPrincipal AccountEntity account,
+                                             @RequestBody List<ShoppingListDTO> listOfDTOs) {
+        boolean success = shoppingListService.save(account, listOfDTOs);
 
-    // ADD GROCERY TO SHOPPING LIST
-    @PostMapping("/add")
-    public ResponseEntity<Boolean> addToShoppingList(@AuthenticationPrincipal AccountEntity account,
-                                  @RequestBody ShoppingListDTO shoppingListDTO){
-        boolean added = shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO);
-
-        if (added) {
+        if (success) {
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
         }
     }
     
+    /**
     @PostMapping("/addAllFromMenu")
     public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
                                                           @RequestBody List<RecipeEntity> recipeEntities) {
@@ -53,55 +52,22 @@ public class ShoppingListController {
                     ShoppingListDTO shoppingListDTO = new ShoppingListDTO(item);
                     shoppingListDTO.setCount(1);
                     shoppingListDTO.setFoundInStore(false);
-                    if (!shoppingListService.addToShoppingList(account.getAccount_id(), shoppingListDTO)) {
+                    if (!shoppingListService.add(account.getAccount_id(), shoppingListDTO)) {
                         countNotFound.getAndIncrement();
                     }
                 });
         return ResponseEntity.ok("Could not find " + countNotFound + " items");
     }
+    */
 
-    // REMOVE GROCERY FROM SHOPPING LIST
-    @DeleteMapping("/remove")
-    public ResponseEntity<Boolean> removeFromShoppingList(@AuthenticationPrincipal AccountEntity account,
-                                                          @RequestBody ShoppingListDTO shoppingListDTO){
-        boolean removed = shoppingListService.removeFromShoppingList(account.getAccount_id(), shoppingListDTO);
-
-        if(removed){
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(false, HttpStatus.OK);
-        }
-    }
-
-    //TODO NOTAT: decline blir remove
-    @PutMapping("/accept")
-    public ResponseEntity<?> acceptRequest(@RequestBody ShoppingListEntity product){//TODO ta imot en slags form for id
-        /*
-        shoppingListRepository.%bytt status til ordentlig objekt i lista (account)%
-        SKJEKK FOR Å ANGI STATUS
-        */
-        return new ResponseEntity<>(HttpStatus.TOO_EARLY);
-    }
-
-
-    @PostMapping("/mark")
-    public ResponseEntity<?> markGroceryAsFound(@AuthenticationPrincipal AccountEntity account, @RequestBody ShoppingListDTO groceryName){
-        try {
-            shoppingListService.updateFoundInStore(account,groceryName.getName());
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-
+    // BUY MARKED GROCERIES
     @PostMapping("/buy")
     public ResponseEntity<?> buy(@AuthenticationPrincipal AccountEntity account) {
-        try{
+        try {
             shoppingListService.buyMarkedGroceries(account);
             return ResponseEntity.ok().build();
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
-
 }
