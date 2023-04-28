@@ -192,6 +192,7 @@ public class ShoppingListService {
         shoppingListRepository.removeAllByAccountEntityAndFoundInStoreTrue(account);
     }
 
+/**
     public List<String> getCorrectGroceriesFromRecipes(List<Recipe> recipes) {
         HashSet<String> allGroceries = groceryRepository.findAll().stream().map(GroceryEntity::getName).map(String::toLowerCase).collect(Collectors.toCollection(HashSet::new));
         ArrayList<String> groceriesToAdd = new ArrayList<>();
@@ -222,4 +223,5 @@ public class ShoppingListService {
 
         return ingredient;
     }
+*/
 }
