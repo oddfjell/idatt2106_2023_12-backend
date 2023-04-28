@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -42,9 +41,7 @@ public class ShoppingListService {
         return shoppingListRepository.getShoppingList(id);
     }
 
-
-    // TODO: ikke count 1, men gitt count (samme med foundInStroe, ikke false, men gitt
-    // LOGIC FOR ADDING TO DB
+    // Logic for adding to db
     public boolean add(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
@@ -58,7 +55,7 @@ public class ShoppingListService {
     }
 
 
-    // LOGIC FOR UPDATING COUNT
+    // Logic for updating count
     public boolean updateCount(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
@@ -70,7 +67,7 @@ public class ShoppingListService {
         }
     }
 
-    // LOGIC FOR UPDATING FOUNDINSTORE
+    // Logic for updating foundInStore
     public boolean updateFoundInStore(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
@@ -82,7 +79,7 @@ public class ShoppingListService {
         }
     }
 
-    // LOGIC FOR CHECKING EXISTENCE IN DB
+    // Logic for checking existence in db
     public boolean exist(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             return shoppingListRepository.groceryExist(account.getAccount_id(), shoppingListDTO.getName());
@@ -92,7 +89,7 @@ public class ShoppingListService {
         }
     }
 
-    // LOGIC FOR DELETING FROM DB
+    // Logic for deleting from db
     public boolean delete(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
@@ -104,7 +101,7 @@ public class ShoppingListService {
         }
     }
 
-    // LOGIC FOR FINDING CORRECT GROCERY BASED ON NAME?
+    // Logic for finding correct grocery based on name
     public GroceryEntity findGrocery(ShoppingListDTO shoppingListDTO) {
         try {
             return groceryRepository.findGroceryEntitiesByNameIgnoreCase(shoppingListDTO.getName());
@@ -114,16 +111,17 @@ public class ShoppingListService {
         }
     }
 
-    // LOGIC FOR GETTING OLD COUNT
+    // Logic for getting old count
     public int getOldCount(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         return shoppingListRepository.getOldCount(account, findGrocery(shoppingListDTO));
     }
 
-    // LOGIC FOR GETTING OLD COUNT
+    // Logic for getting old foundInStore
     public boolean getOldFoundInStore(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         return shoppingListRepository.getOldFoundInStore(account, findGrocery(shoppingListDTO));
     }
 
+    // Logic for saving changes in frontend to db
     public boolean save(AccountEntity account, List<ShoppingListDTO> listOfDTOs) {
         for (ShoppingListDTO shoppingListDTO : listOfDTOs) {
 
