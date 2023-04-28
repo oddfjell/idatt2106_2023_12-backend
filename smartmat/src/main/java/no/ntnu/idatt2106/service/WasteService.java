@@ -24,11 +24,15 @@ public class WasteService {
         return wasteRepository.getMoneyLostByCategory(id, categoryId).orElse(0);
     }
 
+    /**
     public List<List> getMoneyLostPerMonth(long id) {
         return wasteRepository.getMoneyLostPerMonth(id);
     }
+     */
 
+    /**
     public int getMoneyLostByMonth(long id, int monthNumber) {
         return wasteRepository.getMoneyLostByMonth(id, monthNumber).orElse(0);
     }
+     */
 }
