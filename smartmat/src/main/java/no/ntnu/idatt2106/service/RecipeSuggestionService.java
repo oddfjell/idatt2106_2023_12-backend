@@ -3,7 +3,7 @@ package no.ntnu.idatt2106.service;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
-import no.ntnu.idatt2106.model.Recipe;
+import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.repository.FridgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +34,8 @@ public class RecipeSuggestionService {
     public RecipeSuggestionService() {
     }
 
-    public List<Recipe> readRecipesFromScraper() {
-        ArrayList<Recipe> recipes = new ArrayList<>();
+    public List<RecipeEntity> readRecipesFromScraper() {
+        ArrayList<RecipeEntity> recipeEntities = new ArrayList<>();
         String csvLine;
         try {
             BufferedReader br = new BufferedReader(new FileReader(csvPath));
@@ -45,45 +45,45 @@ public class RecipeSuggestionService {
                 String title = readRecipe[1];
                 String[] ingredients = new String[readRecipe.length-2];
                 System.arraycopy(readRecipe, 2, ingredients, 0, readRecipe.length - 2);
-                recipes.add(new Recipe(url, title, ingredients));
+                recipeEntities.add(new RecipeEntity(url, title, ingredients));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return recipes;
+        return recipeEntities;
     }
 
-    public List<Recipe> rankRecipes(List<Recipe> recipes, List<String> priorityIngredients) {
+    public List<RecipeEntity> rankRecipes(List<RecipeEntity> recipeEntities, List<String> priorityIngredients) {
         Pattern pattern;
         Matcher matcher;
-        for (Recipe recipe: recipes) {
+        for (RecipeEntity recipeEntity : recipeEntities) {
             for (String ingredient: priorityIngredients) {
                 pattern = Pattern.compile(ingredient, Pattern.CASE_INSENSITIVE);
-                for (String recipeIngredient: recipe.getIngredients()) {
+                for (String recipeIngredient: recipeEntity.getIngredients()) {
                     matcher = pattern.matcher(recipeIngredient);
                     if (matcher.find()) {
-                        recipe.setValue();
+                        recipeEntity.setValue();
                     }
                 }
             }
         }
-        return recipes;
+        return recipeEntities;
     }
 
-    public List<Recipe> sortRecipes(List<Recipe> recipes) {
-         recipes.sort((r1, r2) -> {
+    public List<RecipeEntity> sortRecipes(List<RecipeEntity> recipeEntities) {
+         recipeEntities.sort((r1, r2) -> {
              return r2.getValue()- r1.getValue();
          });
-         return recipes;
+         return recipeEntities;
     }
 
-    public List<Recipe> getNRecipes(int n, AccountEntity accountEntity){
+    public List<RecipeEntity> getNRecipes(int n, AccountEntity accountEntity){
         List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
-        List<Recipe> recipes = this.sortRecipes(
+        List<RecipeEntity> recipeEntities = this.sortRecipes(
                         this.rankRecipes(
                                 this.readRecipesFromScraper(), groceries));
-        return recipes.subList(0, n);
+        return recipeEntities.subList(0, n);
     }
 
     public int runScraper() throws IOException, InterruptedException {
