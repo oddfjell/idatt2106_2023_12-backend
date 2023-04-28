@@ -58,13 +58,8 @@ public class RecipeController {
     }
 
     @PostMapping("/saveRecipe")
-    public ResponseEntity<?> saveRecipe(@RequestBody RecipeEntity recipe){
-        try {
-            recipeService.addRecipeUrl(recipe);
-            return ResponseEntity.ok().build();
-        } catch (RecipeUrlAlreadyExistsException e) {
-            return ResponseEntity.ok("Recipe url already exists");
-        }
-
+    public ResponseEntity<?> saveRecipe(@AuthenticationPrincipal AccountEntity account, @RequestBody RecipeEntity recipe){
+        recipeService.addRecipeToAccount(recipe,account);
+        return ResponseEntity.ok("Recipe added to account");
     }
 }
