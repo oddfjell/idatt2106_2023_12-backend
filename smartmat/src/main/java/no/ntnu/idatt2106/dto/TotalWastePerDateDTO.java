@@ -5,10 +5,12 @@ import java.util.Date;
 public class TotalWastePerDateDTO {
 
     private Date date;
+    private double money_lost;
     private double total;
 
-    public TotalWastePerDateDTO(Date date, double total) {
+    public TotalWastePerDateDTO(Date date, double money_lost, double total) {
         this.date = date;
+        this.money_lost = money_lost;
         this.total = total;
     }
 
@@ -18,6 +20,14 @@ public class TotalWastePerDateDTO {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public double getMoney_lost() {
+        return money_lost;
+    }
+
+    public void setMoney_lost(double money_lost) {
+        this.money_lost = money_lost;
     }
 
     public double getTotal() {
