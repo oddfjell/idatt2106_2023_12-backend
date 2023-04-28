@@ -39,4 +39,13 @@ public class ShoppingListDTO {
     public void setFoundInStore(boolean foundInStore) {
         this.foundInStore = foundInStore;
     }
+
+    @Override
+    public String toString() {
+        return "ShoppingListDTO{" +
+                "name='" + name + '\'' +
+                ", count=" + count +
+                ", foundInStore=" + foundInStore +
+                '}';
+    }
 }

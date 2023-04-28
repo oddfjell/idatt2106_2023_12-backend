@@ -1,11 +1,9 @@
 package no.ntnu.idatt2106.service;
 
-import no.ntnu.idatt2106.model.Recipe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
