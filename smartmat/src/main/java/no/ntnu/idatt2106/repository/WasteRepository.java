@@ -28,18 +28,10 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
             "WHERE w.accountEntity.id = :id AND g.category.id = :categoryId")
     Optional<Integer> getMoneyLostByCategory(long id, long categoryId);
 
-    /**
-    // GET WASTE FOR EACH MONTH
-    @Query("SELECT w.month, SUM(w.money_lost) AS money_lost FROM WasteEntity  w " +
-            "WHERE w.accountEntity.id = :id " +
-            "GROUP BY w.month " +
-            "ORDER BY w.month ASC")
-    List<List> getMoneyLostPerMonth(long id);
-    */
 
-    /**
-    // GET WASTE FOR A GIVEN MONTH
-    @Query("SELECT SUM(e.money_lost) FROM WasteEntity e WHERE e.accountEntity.id = :id AND e.month = :monthNumber")
-    Optional<Integer> getMoneyLostByMonth(long id, int monthNumber);
-    */
+    // Get total waste per date by month
+    @Query(value = "SELECT date, money_lost, SUM(money_lost) OVER (ORDER BY money_lost) AS total  " +
+            " FROM waste " +
+            "WHERE account_id=?1 AND month(date)=?2", nativeQuery = true)
+    List<List<Object>> getTotalWastePerDateByMonth(long id, int month);
 }
