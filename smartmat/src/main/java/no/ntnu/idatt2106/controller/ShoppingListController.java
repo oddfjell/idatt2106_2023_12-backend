@@ -34,7 +34,7 @@ public class ShoppingListController {
                                              @RequestBody List<ShoppingListDTO> listOfDTOs) {
         boolean success = shoppingListService.save(account, listOfDTOs);
 
-        if (added) {
+        if (success) {
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
