@@ -114,12 +114,15 @@ public class FridgeService {
     public void removeGroceryFromAccountByAmount(AccountEntity account, FridgeGroceryBody fridgeGroceryBody) throws Exception {
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryBody.getName());
         if(fridgeEntity.isEmpty() || fridgeEntity.get().getCount() < fridgeGroceryBody.getCount()){
+            logger.info("{} does not exist or has a smaller count than {}", fridgeGroceryBody.getName(), fridgeGroceryBody.getCount());
             throw new Exception();
         }
 
         if(fridgeEntity.get().getCount() - fridgeGroceryBody.getCount() < 1){
+            logger.info("{} was deleted due to being set to 0 or less", fridgeGroceryBody.getName());
             fridgeRepository.deleteByAccountEntityAndGroceryEntity(fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
         }else{
+            logger.info("Removing {} of the {}s", fridgeGroceryBody.getCount(), fridgeGroceryBody.getName());
             fridgeRepository.updateCount(fridgeEntity.get().getCount() - fridgeGroceryBody.getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
         }
     }
@@ -131,13 +134,5 @@ public class FridgeService {
     public void throwGroceryFromAccountByAmount(AccountEntity account, GroceryEntity grocery, int count){
 
     }
-
-
-
-
-
-
-
-
 
 }

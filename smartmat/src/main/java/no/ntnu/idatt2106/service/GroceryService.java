@@ -7,6 +7,8 @@ import no.ntnu.idatt2106.repository.CategoryRepository;
 import no.ntnu.idatt2106.repository.FridgeRepository;
 import no.ntnu.idatt2106.repository.GroceryRepository;
 import no.ntnu.idatt2106.repository.WasteRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,23 +30,29 @@ public class GroceryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);
+
 
     public List<GroceryEntity> getAllGroceries(){
+        logger.info("Returning all the groceries");
         return groceryRepository.findAll();
     }
 
     public List<GroceryEntity> getAllGroceriesByCategoryId(Long id){
+        logger.info("Returning all the groceries by category id {}", id);
         return groceryRepository.findAllByCategoryId(id);
     }
 
     public void addGrocery(GroceryEntity grocery) throws GroceryAlreadyExistsException {
         if(groceryRepository.findByNameIgnoreCase(grocery.getName()).isPresent()){
+            logger.info("{} already exists", grocery.getName());
             throw new GroceryAlreadyExistsException();
         }
-
+        logger.info("Added {} to the groceries", grocery.getName());
         groceryRepository.save(grocery);
     }
 
+    //TODO logg
     public void populateDbGroceries() {
         ArrayList<GroceryEntity> groceries = new ArrayList<>();
         String path = "/Users/josteinlind/Skole/test/varer.txt";
@@ -78,6 +86,7 @@ public class GroceryService {
     }
 
     public void removeGrocery(GroceryEntity grocery){
+        logger.info("Removing {} from groceries", grocery.getName());
         groceryRepository.removeById(grocery.getGrocery_id());
     }
 }

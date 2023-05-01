@@ -5,6 +5,8 @@ import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.repository.FridgeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class RecipeSuggestionService {
 
     private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipes.csv";
     private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
+    private static final Logger logger = LoggerFactory.getLogger(RecipeSuggestionService.class);
 
     public RecipeSuggestionService(boolean test) {
         if (test) {
