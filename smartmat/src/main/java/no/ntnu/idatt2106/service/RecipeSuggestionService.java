@@ -31,6 +31,7 @@ public class RecipeSuggestionService {
     public RecipeSuggestionService(boolean test) {
         if (test) {
             csvPath = System.getProperty("user.dir")+"/src/test/resources/recipesTestData.csv";
+            logger.info("Got file for recipes");
         }
     }
 
@@ -53,6 +54,7 @@ public class RecipeSuggestionService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.info("Returning recipes from scraper");
 
         return recipeEntities;
     }
@@ -71,6 +73,7 @@ public class RecipeSuggestionService {
                 }
             }
         }
+        logger.info("Returning ranked recipes");
         return recipeEntities;
     }
 
@@ -78,6 +81,7 @@ public class RecipeSuggestionService {
          recipeEntities.sort((r1, r2) -> {
              return r2.getValue()- r1.getValue();
          });
+         logger.info("Returning sorted recipes");
          return recipeEntities;
     }
 
@@ -86,6 +90,7 @@ public class RecipeSuggestionService {
         List<RecipeEntity> recipeEntities = this.sortRecipes(
                         this.rankRecipes(
                                 this.readRecipesFromScraper(), groceries));
+        logger.info("Returning {} recipes", n);
         return recipeEntities.subList(0, n);
     }
 
@@ -94,6 +99,7 @@ public class RecipeSuggestionService {
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();
+        logger.info("Running SCRAPER");
         return process.waitFor();
     }
 

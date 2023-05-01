@@ -52,7 +52,7 @@ public class GroceryService {
         groceryRepository.save(grocery);
     }
 
-    //TODO logg
+    //TODO logg ja
     public void populateDbGroceries() {
         ArrayList<GroceryEntity> groceries = new ArrayList<>();
         String path = "/Users/josteinlind/Skole/test/varer.txt";
@@ -82,7 +82,8 @@ public class GroceryService {
                 System.err.println(g.getName());
             }
         });
-        System.err.println("HALLLOOOOO "+groceries.size());
+        logger.info("Grocery size is {}", groceries.size());
+        //System.err.println("HALLLOOOOO "+groceries.size());
     }
 
     public void removeGrocery(GroceryEntity grocery){
