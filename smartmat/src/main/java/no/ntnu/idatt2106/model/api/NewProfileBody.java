@@ -4,13 +4,15 @@ public class NewProfileBody {
 
     private String username;
     private boolean restricted;
+    private String password;
 
     public NewProfileBody() {
     }
 
-    public NewProfileBody(String username, boolean restricted) {
+    public NewProfileBody(String username, boolean restricted, String password) {
         this.username = username;
         this.restricted = restricted;
+        this.password = password;
     }
 
     public String getUsername() {
@@ -27,5 +29,13 @@ public class NewProfileBody {
 
     public void setRestricted(boolean restricted) {
         this.restricted = restricted;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

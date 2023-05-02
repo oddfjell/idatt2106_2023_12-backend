@@ -92,7 +92,16 @@ public class AccountController {
         } catch (ProfileAlreadyExistsInAccountException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Profile username already exists");
         }
+    }
 
+    @PostMapping("/profileLogin")
+    public ResponseEntity<ProfileEntity> loginProfile(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
+        ProfileEntity profile = profileService.loginProfile(account,profileBody);
+        if(profile != null){
+            return ResponseEntity.ok(profile);
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

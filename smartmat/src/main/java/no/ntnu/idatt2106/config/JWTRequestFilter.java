@@ -6,7 +6,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.ProfileEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
+import no.ntnu.idatt2106.repository.ProfileRepository;
 import no.ntnu.idatt2106.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,7 +50,6 @@ public class JWTRequestFilter extends OncePerRequestFilter {
 
             }catch (JWTDecodeException ignored){
             }
-
         }
 
         filterChain.doFilter(request, response);

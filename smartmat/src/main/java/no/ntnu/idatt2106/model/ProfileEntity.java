@@ -13,6 +13,7 @@ public class ProfileEntity {
 
     private String username;
     private boolean restricted;
+    private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
@@ -21,9 +22,10 @@ public class ProfileEntity {
     public ProfileEntity() {
     }
 
-    public ProfileEntity(String username, boolean restricted, AccountEntity account) {
+    public ProfileEntity(String username, boolean restricted, String password, AccountEntity account) {
         this.username = username;
         this.restricted = restricted;
+        this.password = password;
         this.account = account;
     }
 
@@ -57,5 +59,13 @@ public class ProfileEntity {
 
     public void setAccount(AccountEntity account) {
         this.account = account;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
