@@ -14,6 +14,8 @@ import java.util.Optional;
 
 public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity, Long> {
 
+
+
     // GET STORED SHOPPING LIST FOR AN ACCOUNT
     @Query(value = "SELECT new no.ntnu.idatt2106.dto.ShoppingListDTO (g.name, s.count, s.foundInStore) FROM ShoppingListEntity s " +
             "INNER JOIN GroceryEntity  g " +
@@ -21,30 +23,55 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
             "WHERE s.accountEntity.id = :id")
     List<ShoppingListDTO> getShoppingList(long id);
 
+
+
     // CHECK IF GROCERY EXIST IN SHOPPING LIST
     @Query("SELECT CASE WHEN (COUNT(s) > 0) THEN TRUE ELSE FALSE END " +
             "FROM ShoppingListEntity s " +
             "WHERE s.accountEntity.id = :id AND s.groceryEntity.name = :groceryName")
     boolean groceryExist(long id, String groceryName);
 
+
+
     // UPDATE COUNT ON GROCERY
     @Modifying
     @Query("UPDATE ShoppingListEntity s " +
-            "SET s.count = s.count + :count " +
+            "SET s.count = :count " +
             "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
-    void updateCountIfExist(AccountEntity account, GroceryEntity grocery, int count);
+    void updateCount(AccountEntity account, GroceryEntity grocery, int count);
+
+
 
     // REMOVE GROCERY FROM SHOPPING LIST
     void removeByAccountEntityIdAndGroceryEntityId(long id, long groceryId);
 
+
+
     Optional<ShoppingListEntity> findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(String accountName, String groceryName);
+
+
 
     List<ShoppingListEntity> findAllByAccountEntityAndFoundInStoreTrue(AccountEntity account);
 
+
+
     void removeAllByAccountEntityAndFoundInStoreTrue(AccountEntity account);
+
+
 
     @Modifying
     @Query("update ShoppingListEntity s set s.foundInStore=?1 where s.accountEntity=?2 and s.groceryEntity=?3")
     void updateFoundInStore(boolean update, AccountEntity account, GroceryEntity grocery);
 
+
+
+    @Query (value = "SELECT s.count FROM ShoppingListEntity s " +
+            "WHERE s.accountEntity= :account AND s.groceryEntity = :grocery")
+    int getOldCount (AccountEntity account, GroceryEntity grocery);
+
+
+
+    @Query (value = "SELECT s.foundInStore FROM ShoppingListEntity s " +
+            "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
+    boolean getOldFoundInStore (AccountEntity account, GroceryEntity grocery);
 }
