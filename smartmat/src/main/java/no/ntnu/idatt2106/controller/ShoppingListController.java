@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,24 +42,21 @@ public class ShoppingListController {
         }
     }
     
-    /**
+
     @PostMapping("/addAllFromMenu")
     public ResponseEntity<?> addAllFromMenuToShoppingList(@AuthenticationPrincipal AccountEntity account,
                                                           @RequestBody List<RecipeEntity> recipeEntities) {
-        System.err.println("HALLOO");
-        AtomicInteger countNotFound = new AtomicInteger();
+        List<ShoppingListDTO> dtos = new ArrayList<>();
         shoppingListService.getCorrectGroceriesFromRecipes(recipeEntities)
                 .forEach(item -> {
                     ShoppingListDTO shoppingListDTO = new ShoppingListDTO(item);
                     shoppingListDTO.setCount(1);
                     shoppingListDTO.setFoundInStore(false);
-                    if (!shoppingListService.add(account.getAccount_id(), shoppingListDTO)) {
-                        countNotFound.getAndIncrement();
-                    }
+                    dtos.add(shoppingListDTO);
                 });
-        return ResponseEntity.ok("Could not find " + countNotFound + " items");
+        boolean saved = shoppingListService.save(account, dtos);
+        return ResponseEntity.ok("save ok?: " + saved);
     }
-    */
 
     // BUY MARKED GROCERIES
     @PostMapping("/buy")

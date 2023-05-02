@@ -2,6 +2,8 @@ package no.ntnu.idatt2106.model;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "waste")
 public class WasteEntity {
@@ -18,19 +20,19 @@ public class WasteEntity {
     @JoinColumn(name = "grocery_id")
     private GroceryEntity groceryEntity;
 
-    private int money_lost;
+    private double money_lost;
 
-    private int month;
+    private Date date;
 
     public WasteEntity() {
     }
 
-    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int money_lost, int month) {
+    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, double money_lost, Date date) {
         super();
         this.accountEntity = accountEntity;
         this.groceryEntity = groceryEntity;
         this.money_lost = money_lost;
-        this.month = month;
+        this.date = date;
     }
 
     public Long getWaste_id() {
@@ -57,19 +59,19 @@ public class WasteEntity {
         this.groceryEntity = groceryEntity;
     }
 
-    public int getMoney_lost() {
+    public double getMoney_lost() {
         return money_lost;
     }
 
-    public void setMoney_lost(int money_lost) {
+    public void setMoney_lost(double money_lost) {
         this.money_lost = money_lost;
     }
 
-    public int getMonth() {
-        return month;
+    public Date getDate() {
+        return date;
     }
 
-    public void setMonth(int month) {
-        this.month = month;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
