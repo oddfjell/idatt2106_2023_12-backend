@@ -218,9 +218,7 @@ public class ShoppingListService {
         shoppingListRepository.removeAllByAccountEntityAndFoundInStoreTrue(account);
         logger.info("Adding groceries to {}s fridge and removing them fro the shopping list", account.getUsername());
     }
-
-/**
-    public List<String> getCorrectGroceriesFromRecipes(List<Recipe> recipes) {
+    //TODO asdasdasdas
     public List<String> getCorrectGroceriesFromRecipes(List<RecipeEntity> recipeEntities) {
         HashSet<String> allGroceries = groceryRepository.findAll().stream().map(GroceryEntity::getName).map(String::toLowerCase).collect(Collectors.toCollection(HashSet::new));
         ArrayList<String> groceriesToAdd = new ArrayList<>();
@@ -251,5 +249,4 @@ public class ShoppingListService {
 
         return ingredient;
     }
-*/
 }
