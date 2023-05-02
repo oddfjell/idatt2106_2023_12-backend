@@ -133,14 +133,6 @@ public class FridgeService {
         }
     }
 
-    public void throwGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
-
-    }
-
-    public void throwGroceryFromAccountByAmount(AccountEntity account, GroceryEntity grocery, int count){
-
-    }
-
     public void throwGroceryFromFridgeToWaste(AccountEntity account, FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {//FridgeEntity product
 
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryThrowBody.getName());
