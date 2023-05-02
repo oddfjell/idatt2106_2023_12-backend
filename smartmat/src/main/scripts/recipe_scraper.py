@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
 options=Options()
-options.headless=True
+options.add_argument("--headless=new")
 driver = webdriver.Firefox(options=options)
 url = "https://www.matprat.no/oppskrifter?filtersActive=23"
 driver.get(url)
@@ -33,6 +33,7 @@ for url in urls:
     csv_line = []
     csv_line.append(url)
     csv_line.append(scraper.title())
+    csv_line.append(scraper.image())
     csv_line = csv_line + scraper.ingredients()
     writer.writerow(csv_line)
 

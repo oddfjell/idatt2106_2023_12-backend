@@ -5,6 +5,8 @@ import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.repository.FridgeRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +24,14 @@ public class RecipeSuggestionService {
     @Autowired
     private FridgeRepository fridgeRepository;
 
-    private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipes.csv";
+    private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipeEntities.csv";
     private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
+    private static final Logger logger = LoggerFactory.getLogger(RecipeSuggestionService.class);
 
     public RecipeSuggestionService(boolean test) {
         if (test) {
             csvPath = System.getProperty("user.dir")+"/src/test/resources/recipesTestData.csv";
+            logger.info("Got file for recipes");
         }
     }
 
@@ -43,13 +47,15 @@ public class RecipeSuggestionService {
                 String[] readRecipe = csvLine.split(",");
                 String url = readRecipe[0];
                 String title = readRecipe[1];
-                String[] ingredients = new String[readRecipe.length-2];
-                System.arraycopy(readRecipe, 2, ingredients, 0, readRecipe.length - 2);
-                recipeEntities.add(new RecipeEntity(url, title, ingredients));
+                String image = readRecipe[2];
+                String[] ingredients = new String[readRecipe.length-3];
+                System.arraycopy(readRecipe, 3, ingredients, 0, readRecipe.length - 3);
+                recipeEntities.add(new RecipeEntity(url, title, ingredients, image));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        logger.info("Returning recipes from scraper");
 
         return recipeEntities;
     }
@@ -68,6 +74,7 @@ public class RecipeSuggestionService {
                 }
             }
         }
+        logger.info("Returning ranked recipes");
         return recipeEntities;
     }
 
@@ -75,6 +82,7 @@ public class RecipeSuggestionService {
          recipeEntities.sort((r1, r2) -> {
              return r2.getValue()- r1.getValue();
          });
+         logger.info("Returning sorted recipes");
          return recipeEntities;
     }
 
@@ -83,6 +91,7 @@ public class RecipeSuggestionService {
         List<RecipeEntity> recipeEntities = this.sortRecipes(
                         this.rankRecipes(
                                 this.readRecipesFromScraper(), groceries));
+        logger.info("Returning {} recipes", n);
         return recipeEntities.subList(0, n);
     }
 
@@ -91,6 +100,7 @@ public class RecipeSuggestionService {
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();
+        logger.info("Running SCRAPER");
         return process.waitFor();
     }
 
