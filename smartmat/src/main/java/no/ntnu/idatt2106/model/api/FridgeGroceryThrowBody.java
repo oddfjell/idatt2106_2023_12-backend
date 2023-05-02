@@ -11,7 +11,8 @@ public class FridgeGroceryThrowBody {
     /*private String name;
     private Long categoryId;
     private double percent;*/
-    private GroceryEntity groceryEntity;
+    private String name;
+    //private GroceryEntity groceryEntity;
     private double newMoneyValue;
     private java.sql.Date throwDate;
 
@@ -27,22 +28,32 @@ public class FridgeGroceryThrowBody {
     }
 
     //TODO antar at % er ganget i front end
-    public FridgeGroceryThrowBody(GroceryEntity groceryEntity, double newMoneyValue) {
-        this.groceryEntity = groceryEntity;
+    public FridgeGroceryThrowBody(String name, double newMoneyValue, Date throwDate) {
+        this.name = name;
         this.newMoneyValue = newMoneyValue;
-        this.throwDate = Date.valueOf(LocalDate.now());
+        this.throwDate = throwDate;//Date.valueOf(LocalDate.now());
     }
 
     public java.sql.Date getThrowDate() {
         return throwDate;
     }
+    public void setThrowDate() {
+        this.throwDate = Date.valueOf(LocalDate.now());
+    }
 
-    public GroceryEntity getGroceryEntity() {
+    /*public GroceryEntity getGroceryEntity() {
         return groceryEntity;
     }
 
     public void setGroceryEntity(GroceryEntity groceryEntity) {
         this.groceryEntity = groceryEntity;
+    }*/
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getNewMoneyValue() {

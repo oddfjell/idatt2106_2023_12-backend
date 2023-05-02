@@ -58,6 +58,7 @@ public class FridgeController {
     @PostMapping("/throw")
     public ResponseEntity<?> throwGroceryFromAccountByAmount(@AuthenticationPrincipal AccountEntity account, @RequestBody FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {
         try{
+            fridgeGroceryThrowBody.setThrowDate();
             fridgeService.throwGroceryFromFridgeToWaste(account, fridgeGroceryThrowBody);
             return ResponseEntity.ok().build();
         } catch (Exception e) {

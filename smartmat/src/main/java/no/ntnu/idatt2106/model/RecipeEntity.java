@@ -23,6 +23,8 @@ public class RecipeEntity {
    private String title;
    @Transient
    private int servings;
+   @Transient
+   private String image;
 
    @Override
    public boolean equals(Object o) {
@@ -42,13 +44,14 @@ public class RecipeEntity {
    public RecipeEntity() {
    }
 
-   public RecipeEntity(String url, String title, String[] ingredients) {
+   public RecipeEntity(String url, String title, String[] ingredients, String image) {
       super();
       this.url = url;
       this.value = 0;
       this.ingredients = ingredients;
       this.title = title;
       this.servings = 4;
+      this.image = image;
    }
 
    public Long getId() {
@@ -97,6 +100,14 @@ public class RecipeEntity {
 
    public void setTitle(String title) {
       this.title = title;
+   }
+
+   public String getImage() {
+      return image;
+   }
+
+   public void setImage(String image) {
+      this.image = image;
    }
 
    @Override

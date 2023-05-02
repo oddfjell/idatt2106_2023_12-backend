@@ -24,7 +24,7 @@ public class RecipeSuggestionService {
     @Autowired
     private FridgeRepository fridgeRepository;
 
-    private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipes.csv";
+    private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipeEntities.csv";
     private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
     private static final Logger logger = LoggerFactory.getLogger(RecipeSuggestionService.class);
 
@@ -47,9 +47,10 @@ public class RecipeSuggestionService {
                 String[] readRecipe = csvLine.split(",");
                 String url = readRecipe[0];
                 String title = readRecipe[1];
-                String[] ingredients = new String[readRecipe.length-2];
-                System.arraycopy(readRecipe, 2, ingredients, 0, readRecipe.length - 2);
-                recipeEntities.add(new RecipeEntity(url, title, ingredients));
+                String image = readRecipe[2];
+                String[] ingredients = new String[readRecipe.length-3];
+                System.arraycopy(readRecipe, 3, ingredients, 0, readRecipe.length - 3);
+                recipeEntities.add(new RecipeEntity(url, title, ingredients, image));
             }
         } catch (IOException e) {
             e.printStackTrace();

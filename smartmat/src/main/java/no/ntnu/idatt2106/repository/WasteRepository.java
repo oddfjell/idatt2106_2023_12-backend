@@ -40,7 +40,13 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
 
 
 
-    //TODO JONAS FIKS
+
+
+
+    @Query("SELECT w FROM WasteEntity w " +
+            "WHERE w.groceryEntity = :groceryEntity " +
+            "AND w.accountEntity = :account " +
+            "AND w.date = :date")
     Optional<WasteEntity> findWasteEntitiesByGroceryEntity(AccountEntity account, GroceryEntity groceryEntity, java.sql.Date date);
 
     /*@Modifying

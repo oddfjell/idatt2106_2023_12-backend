@@ -143,21 +143,23 @@ public class FridgeService {
 
     public void throwGroceryFromFridgeToWaste(AccountEntity account, FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {//FridgeEntity product
 
-        //TODO trenger jeg denne???
-        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryThrowBody.getGroceryEntity().getName());
+        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryThrowBody.getName());
         if(fridgeEntity.isEmpty()){
+            logger.info("Fridge to {} does not contain {}", account.getUsername(), fridgeGroceryThrowBody.getName());
             throw new Exception();
         }
 
         if(fridgeGroceryThrowBody.getNewMoneyValue() != 0){
             if(wasteRepository.findWasteEntitiesByGroceryEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate()).isPresent()){
                 wasteRepository.updateMoneyLost(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate(), fridgeGroceryThrowBody.getNewMoneyValue());
+                logger.info("Making a new WasteEntity for {}", fridgeGroceryThrowBody.getName());
             } else{
                 wasteRepository.save(new WasteEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getNewMoneyValue(), fridgeGroceryThrowBody.getThrowDate()));
+                logger.info("Adding {} to the WasteEntity {}", fridgeGroceryThrowBody.getNewMoneyValue(), fridgeGroceryThrowBody.getName());
             }
         }
-
-        FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getGroceryEntity().getName(), fridgeGroceryThrowBody.getGroceryEntity().getGrocery_id(), 1);
+        FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getName(), fridgeEntity.get().getGroceryEntity().getGrocery_id(), 1);
         removeGroceryFromAccountByAmount(account, fridgeGroceryBody);
+        logger.info("Successfully thrown {}", fridgeGroceryThrowBody.getName());
     }
 }
