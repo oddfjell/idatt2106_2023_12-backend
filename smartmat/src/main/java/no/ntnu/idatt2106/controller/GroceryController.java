@@ -13,7 +13,7 @@ import java.util.List;
 
 @RequestMapping(value = "/grocery")
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173/","http://localhost:4173/"}, allowCredentials = "true")
 public class GroceryController {
 
     @Autowired

@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @RequestMapping(value = "/shoppingList")
 @RestController
-@CrossOrigin(origins = "http://localhost:5173/", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173/","http://localhost:4173/"}, allowCredentials = "true")
 public class ShoppingListController {
 
     @Autowired
