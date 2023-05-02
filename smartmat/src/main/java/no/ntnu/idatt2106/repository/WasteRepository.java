@@ -30,8 +30,102 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
 
 
     // Get total waste per date by month
-    @Query(value = "SELECT date, money_lost, SUM(money_lost) OVER (ORDER BY money_lost) AS total  " +
-            " FROM waste " +
-            "WHERE account_id=?1 AND month(date)=?2", nativeQuery = true)
+    @Query(value = "SELECT cast(date.date as date) as date, ifnull(money_lost,0) as money_lost, ifnull((SUM(money_lost) OVER (ORDER BY date.date)),0) as total " +
+            "FROM " +
+            "( " +
+            "    SELECT date, sum(money_lost) as money_lost " +
+            "    from waste " +
+            "    where account_id = ?1 and month(date)=?2 " +
+            "    group by date " +
+            ") as waste " +
+            "" +
+            "right JOIN " +
+            "(" +
+            "select FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(year(now()),'-',?2,'-',n)),'%Y-%m-%d') as date from ( " +
+            "select (((b4.0 << 1 | b3.0) << 1 | b2.0) << 1 | b1.0) << 1 | b0.0 as n " +
+            "from  (select 0 union all select 1) as b0, " +
+            "(select 0 union all select 1) as b1, " +
+            "(select 0 union all select 1) as b2, " +
+            "(select 0 union all select 1) as b3, " +
+            "(select 0 union all select 1) as b4 ) t " +
+            "where n > 0 and n <= if(month(now())=?2, DAY(now()), DAY(LAST_DAY(CONCAT(YEAR(CURDATE()), '-', ?2, '-', '01')))) " +
+            "order by date " +
+            ") as date " +
+            "on waste.date = date.date", nativeQuery = true)
     List<List<Object>> getTotalWastePerDateByMonth(long id, int month);
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * SELECT cast(date.date as date) as date, ifnull(money_lost,0) as money_lost, ifnull((SUM(money_lost) OVER (ORDER BY date.date)),0) as total
+     *      FROM
+     *      (
+     *           SELECT date, sum(money_lost) as money_lost
+     *           from waste
+     *           where account_id = 1 and month(date)=2
+     *           group by date
+     *       ) as waste
+     *
+     *       right JOIN
+     *       (
+     * select FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(year(now()),'-',2,'-',n)),'%Y-%m-%d') as date
+     * from
+     * (
+     * 	select (((b4.0 << 1 | b3.0) << 1 | b2.0) << 1 | b1.0) << 1 | b0.0 as n
+     *     from  (select 0 union all select 1) as b0,
+     *     (select 0 union all select 1) as b1,
+     *     (select 0 union all select 1) as b2,
+     *     (select 0 union all select 1) as b3,
+     *     (select 0 union all select 1) as b4
+     * ) t
+     * where n > 0 and n <= if(month(now())=2, DAY(now()), DAY(LAST_DAY(CONCAT(YEAR(CURDATE()), '-', '2', '-', '01'))))
+     * ORDER by date
+     *       ) as date
+     *       on waste.date = date.date
+     */
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    /**
+     * SELECT date, money_lost, (SUM(money_lost) OVER (ORDER BY date)) as total
+     * FROM
+     * (
+     *     SELECT date, sum(money_lost) as money_lost
+     *     from waste
+     *     where account_id = 1 and month(date)=1
+     *     group by date
+     * ) as subqueery
+     */
+
+    /**
+     * SELECT dates.date, ifnull(sum(waste.money_lost),0) as money_lost
+     * from waste
+     * right JOIN
+     * (
+     *     SELECT adddate('2023-01-01', @rownum := @rownum + 1) as date
+     * 	FROM waste
+     * 	JOIN (SELECT @rownum := -1) r
+     * 	LIMIT 31
+     * ) as dates
+     * on waste.date = dates.date
+     * group by dates.date
+     */
+
+    // ALLE DATOER I DAGENS MÅNED
+    /**
+     * select FROM_UNIXTIME(UNIX_TIMESTAMP(CONCAT(year(now()),'-',month(now()),'-',n)),'%Y-%m-%d') as Date from (
+     *         select (((b4.0 << 1 | b3.0) << 1 | b2.0) << 1 | b1.0) << 1 | b0.0 as n
+     *                 from  (select 0 union all select 1) as b0,
+     *                       (select 0 union all select 1) as b1,
+     *                       (select 0 union all select 1) as b2,
+     *                       (select 0 union all select 1) as b3,
+     *                       (select 0 union all select 1) as b4 ) t
+     *         where n > 0 and n <= day(last_day(now()))
+     * order by Date
+     */
+
+
 }
