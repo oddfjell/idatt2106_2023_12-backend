@@ -102,6 +102,14 @@ public class RecipeEntity {
       this.title = title;
    }
 
+   public String getImage() {
+      return image;
+   }
+
+   public void setImage(String image) {
+      this.image = image;
+   }
+
    @Override
    public String toString() {
       return "RecipeEntity{" +

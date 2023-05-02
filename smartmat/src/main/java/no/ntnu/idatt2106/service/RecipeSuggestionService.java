@@ -48,7 +48,7 @@ public class RecipeSuggestionService {
                 String url = readRecipe[0];
                 String title = readRecipe[1];
                 String image = readRecipe[2];
-                String[] ingredients = new String[readRecipe.length-2];
+                String[] ingredients = new String[readRecipe.length-3];
                 System.arraycopy(readRecipe, 3, ingredients, 0, readRecipe.length - 3);
                 recipeEntities.add(new RecipeEntity(url, title, ingredients, image));
             }
