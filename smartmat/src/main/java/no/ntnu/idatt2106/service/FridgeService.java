@@ -7,8 +7,11 @@ import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.FridgeEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
+import no.ntnu.idatt2106.model.WasteEntity;
 import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
+import no.ntnu.idatt2106.model.api.FridgeGroceryThrowBody;
 import no.ntnu.idatt2106.model.api.FridgeResponseBody;
+import no.ntnu.idatt2106.repository.*;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.repository.CategoryRepository;
 import no.ntnu.idatt2106.repository.FridgeRepository;
@@ -19,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -34,6 +38,8 @@ public class FridgeService {
     AccountRepository accountRepository;
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+    WasteRepository wasteRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(FridgeService.class);
 
@@ -127,12 +133,25 @@ public class FridgeService {
         }
     }
 
-    public void throwGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
+    public void throwGroceryFromFridgeToWaste(AccountEntity account, FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {//FridgeEntity product
 
+        Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryThrowBody.getName());
+        if(fridgeEntity.isEmpty()){
+            logger.info("Fridge to {} does not contain {}", account.getUsername(), fridgeGroceryThrowBody.getName());
+            throw new Exception();
+        }
+
+        if(fridgeGroceryThrowBody.getNewMoneyValue() != 0){
+            if(wasteRepository.findWasteEntitiesByGroceryEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate()).isPresent()){
+                wasteRepository.updateMoneyLost(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate(), fridgeGroceryThrowBody.getNewMoneyValue());
+                logger.info("Making a new WasteEntity for {}", fridgeGroceryThrowBody.getName());
+            } else{
+                wasteRepository.save(new WasteEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getNewMoneyValue(), fridgeGroceryThrowBody.getThrowDate()));
+                logger.info("Adding {} to the WasteEntity {}", fridgeGroceryThrowBody.getNewMoneyValue(), fridgeGroceryThrowBody.getName());
+            }
+        }
+        FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getName(), fridgeEntity.get().getGroceryEntity().getGrocery_id(), 1);
+        removeGroceryFromAccountByAmount(account, fridgeGroceryBody);
+        logger.info("Successfully thrown {}", fridgeGroceryThrowBody.getName());
     }
-
-    public void throwGroceryFromAccountByAmount(AccountEntity account, GroceryEntity grocery, int count){
-
-    }
-
 }
