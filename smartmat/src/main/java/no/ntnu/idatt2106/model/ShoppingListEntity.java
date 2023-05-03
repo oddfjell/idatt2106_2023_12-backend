@@ -23,15 +23,18 @@ public class ShoppingListEntity {
     @Column(name = "found_in_store")
     private boolean foundInStore;
 
+    private boolean suggestion;
+
     public ShoppingListEntity() {
     }
 
-    public ShoppingListEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count, boolean foundInStore) {
+    public ShoppingListEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, int count, boolean foundInStore, boolean suggestion) {
         super();
         this.accountEntity = accountEntity;
         this.groceryEntity = groceryEntity;
         this.count = count;
         this.foundInStore = foundInStore;
+        this.suggestion = suggestion;
     }
 
     public Long getShopping_list_id() {
@@ -72,5 +75,13 @@ public class ShoppingListEntity {
 
     public void setFoundInStore(boolean foundInStore) {
         this.foundInStore = foundInStore;
+    }
+
+    public boolean isSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(boolean suggestion) {
+        this.suggestion = suggestion;
     }
 }

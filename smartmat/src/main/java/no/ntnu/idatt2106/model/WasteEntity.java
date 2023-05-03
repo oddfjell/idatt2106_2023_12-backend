@@ -2,6 +2,7 @@ package no.ntnu.idatt2106.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -22,12 +23,12 @@ public class WasteEntity {
 
     private double money_lost;
 
-    private Date date;
+    private LocalDate date;
 
     public WasteEntity() {
     }
 
-    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, double money_lost, Date date) {
+    public WasteEntity(AccountEntity accountEntity, GroceryEntity groceryEntity, double money_lost, LocalDate date) {
         super();
         this.accountEntity = accountEntity;
         this.groceryEntity = groceryEntity;
@@ -67,11 +68,11 @@ public class WasteEntity {
         this.money_lost = money_lost;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 }

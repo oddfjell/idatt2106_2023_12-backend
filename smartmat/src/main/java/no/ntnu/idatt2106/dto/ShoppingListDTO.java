@@ -6,10 +6,13 @@ public class ShoppingListDTO {
     private int count;
     private boolean foundInStore;
 
-    public ShoppingListDTO(String name, int count, boolean foundInStore) {
+    private boolean suggestion;
+
+    public ShoppingListDTO(String name, int count, boolean foundInStore, boolean suggestion) {
         this.name = name;
         this.count = count;
         this.foundInStore = foundInStore;
+        this.suggestion = suggestion;
     }
 
     public ShoppingListDTO(String name) {
@@ -38,6 +41,14 @@ public class ShoppingListDTO {
 
     public void setFoundInStore(boolean foundInStore) {
         this.foundInStore = foundInStore;
+    }
+
+    public boolean isSuggestion() {
+        return suggestion;
+    }
+
+    public void setSuggestion(boolean suggestion) {
+        this.suggestion = suggestion;
     }
 
     @Override

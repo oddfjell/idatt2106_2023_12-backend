@@ -43,4 +43,6 @@ public class WasteService {
         logger.info("Returning list of total waste per month");
         return list;
     }
+
+
 }

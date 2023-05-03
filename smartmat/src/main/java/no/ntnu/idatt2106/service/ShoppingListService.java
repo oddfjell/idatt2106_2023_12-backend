@@ -50,7 +50,7 @@ public class ShoppingListService {
     public boolean add(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
-            ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, shoppingListDTO.getCount(), shoppingListDTO.isFoundInStore());
+            ShoppingListEntity groceryToBeAdded = new ShoppingListEntity(account, grocery, shoppingListDTO.getCount(), shoppingListDTO.isFoundInStore(), shoppingListDTO.isSuggestion());
             shoppingListRepository.save(groceryToBeAdded);
             logger.info("Adding {} to {}s shopping list", shoppingListDTO.getName(), account.getUsername());
             return true;
@@ -77,11 +77,11 @@ public class ShoppingListService {
     }
 
     // Logic for updating foundInStore
-    public boolean updateFoundInStore(AccountEntity account, ShoppingListDTO shoppingListDTO) {
+    public boolean updateShoppingListEntity(AccountEntity account, ShoppingListDTO shoppingListDTO) {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
             shoppingListRepository.updateFoundInStore(shoppingListDTO.isFoundInStore(), account, grocery);
-            logger.info("{}s foundInSTore value in {}s list is now {}", grocery.getName(), account.getUsername(), shoppingListDTO.isFoundInStore());
+            logger.info("{}s foundInSTore and suggestion value in {}s list is now {} and {}", grocery.getName(), account.getUsername(), shoppingListDTO.isFoundInStore(),shoppingListDTO.isSuggestion());
             return true;
         } catch (Exception e) {
             logger.error("Exception: {}", e.getMessage());
@@ -140,6 +140,11 @@ public class ShoppingListService {
         return shoppingListRepository.getOldFoundInStore(account, findGrocery(shoppingListDTO));
     }
 
+    public boolean getOldSuggestion(AccountEntity account, ShoppingListDTO shoppingListDTO) {
+        logger.info("Getting the old suggestion for {} in {}s shopping list", shoppingListDTO.getName(), account.getUsername());
+        return shoppingListRepository.getOldSuggestion(account, findGrocery(shoppingListDTO));
+    }
+
     // Logic for saving changes in frontend to db
     public boolean save(AccountEntity account, List<ShoppingListDTO> listOfDTOs) {
         for (ShoppingListDTO shoppingListDTO : listOfDTOs) {
@@ -172,8 +177,14 @@ public class ShoppingListService {
 
                 // If new foundInStore is different from old foundInStore
                 if (getOldFoundInStore(account, shoppingListDTO) != shoppingListDTO.isFoundInStore()) {
-                    updateFoundInStore(account, shoppingListDTO);
+                    updateShoppingListEntity(account, shoppingListDTO);
                     logger.info("Grocery {} had new foundInStore, so it was updated.", shoppingListDTO.getName());
+                    //System.out.println("Grocery " + shoppingListDTO.getName() + " had new foundInStore, so it was updated.");
+                }
+
+                if (getOldSuggestion(account, shoppingListDTO) != shoppingListDTO.isSuggestion()) {
+                    updateShoppingListEntity(account, shoppingListDTO);
+                    logger.info("Grocery {} had new suggestion, so it was updated.", shoppingListDTO.getName());
                     //System.out.println("Grocery " + shoppingListDTO.getName() + " had new foundInStore, so it was updated.");
                 }
             }

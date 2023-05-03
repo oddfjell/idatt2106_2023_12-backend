@@ -4,10 +4,12 @@ import no.ntnu.idatt2106.dto.WastePerCategoryDTO;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.WasteEntity;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,7 +65,7 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
             "WHERE w.groceryEntity = :groceryEntity " +
             "AND w.accountEntity = :account " +
             "AND w.date = :date")
-    Optional<WasteEntity> findWasteEntitiesByGroceryEntity(AccountEntity account, GroceryEntity groceryEntity, java.sql.Date date);
+    Optional<WasteEntity> findWasteEntitiesByGroceryEntity(AccountEntity account, GroceryEntity groceryEntity, LocalDate date);
 
     /*@Modifying
     @Query("UPDATE WasteEntity w SET w.money_lost = w.money_lost + :newValue WHERE w.id = :id")
@@ -75,7 +77,7 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
             "WHERE w.groceryEntity = :groceryEntity " +
             "AND w.accountEntity = :accountEntity " +
             "AND w.date = :date")
-    void updateMoneyLost(AccountEntity accountEntity, GroceryEntity groceryEntity, java.sql.Date date, Double newValue);
+    void updateMoneyLost(AccountEntity accountEntity, GroceryEntity groceryEntity, LocalDate date, Double newValue);
 
 
 }

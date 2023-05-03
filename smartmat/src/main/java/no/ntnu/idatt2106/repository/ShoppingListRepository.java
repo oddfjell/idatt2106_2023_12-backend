@@ -63,6 +63,11 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
     @Query("update ShoppingListEntity s set s.foundInStore=?1 where s.accountEntity=?2 and s.groceryEntity=?3")
     void updateFoundInStore(boolean update, AccountEntity account, GroceryEntity grocery);
 
+    @Modifying
+    @Query("update ShoppingListEntity s set s.suggestion=?1 where s.accountEntity=?2 and s.groceryEntity=?3")
+    void updateSuggestion(boolean suggestion, AccountEntity account, GroceryEntity grocery);
+
+
 
 
     @Query (value = "SELECT s.count FROM ShoppingListEntity s " +
@@ -74,4 +79,8 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
     @Query (value = "SELECT s.foundInStore FROM ShoppingListEntity s " +
             "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
     boolean getOldFoundInStore (AccountEntity account, GroceryEntity grocery);
+
+    @Query (value = "SELECT s.suggestion FROM ShoppingListEntity s " +
+            "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
+    boolean getOldSuggestion (AccountEntity account, GroceryEntity grocery);
 }
