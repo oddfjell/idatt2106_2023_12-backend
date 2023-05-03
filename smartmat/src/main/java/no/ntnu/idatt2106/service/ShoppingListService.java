@@ -260,4 +260,22 @@ public class ShoppingListService {
 
         return ingredient;
     }
+
+    public void moveSuggestionsToFoundInStore(AccountEntity account){
+        List<ShoppingListEntity> shoppingListEntityList = shoppingListRepository.findAllBySuggestionTrueAndAccountEntity(account);
+        shoppingListEntityList.forEach(shoppingListEntity -> {
+            shoppingListRepository.updateSuggestion(false,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
+            shoppingListRepository.updateFoundInStore(true,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
+        });
+    }
+
+    public void moveSuggestionToFoundInStore(AccountEntity account, ShoppingListDTO shoppingListDTO){
+        Optional<ShoppingListEntity> shoppingListEntityOptional = shoppingListRepository.findByAccountEntityAndGroceryEntityName(account,shoppingListDTO.getName());
+
+        if(shoppingListEntityOptional.isPresent()){
+            ShoppingListEntity shoppingListEntity = shoppingListEntityOptional.get();
+            shoppingListRepository.updateSuggestion(false,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
+            shoppingListRepository.updateFoundInStore(true,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
+        }
+    }
 }

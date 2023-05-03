@@ -15,6 +15,8 @@ import java.util.Optional;
 public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity, Long> {
 
 
+    List<ShoppingListEntity> findAllBySuggestionTrueAndAccountEntity(AccountEntity account);
+    Optional<ShoppingListEntity> findByAccountEntityAndGroceryEntityName(AccountEntity account, String groceryName);
 
     // GET STORED SHOPPING LIST FOR AN ACCOUNT
     @Query(value = "SELECT new no.ntnu.idatt2106.dto.ShoppingListDTO (g.name, s.count, s.foundInStore) FROM ShoppingListEntity s " +
