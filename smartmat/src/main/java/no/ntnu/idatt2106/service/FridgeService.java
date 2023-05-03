@@ -151,12 +151,17 @@ public class FridgeService {
         }
 
         if(fridgeGroceryThrowBody.getNewMoneyValue() != 0){
+            double price = apiCall(fridgeEntity.get().getGroceryEntity().getName());
+
+            double moneyLost = price * (fridgeGroceryThrowBody.getNewMoneyValue() / 100);
+            //System.out.println(price + " | " + fridgeGroceryThrowBody.getNewMoneyValue() + " | " + moneyLost);
+
             if(wasteRepository.findWasteEntitiesByGroceryEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate()).isPresent()){
-                wasteRepository.updateMoneyLost(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate(), fridgeGroceryThrowBody.getNewMoneyValue());
+                wasteRepository.updateMoneyLost(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate(), moneyLost);
                 logger.info("Making a new WasteEntity for {}", fridgeGroceryThrowBody.getName());
             } else{
-                wasteRepository.save(new WasteEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getNewMoneyValue(), fridgeGroceryThrowBody.getThrowDate()));
-                logger.info("Adding {} to the WasteEntity {}", fridgeGroceryThrowBody.getNewMoneyValue(), fridgeGroceryThrowBody.getName());
+                wasteRepository.save(new WasteEntity(account, fridgeEntity.get().getGroceryEntity(), moneyLost, fridgeGroceryThrowBody.getThrowDate()));
+                logger.info("Adding {} to the WasteEntity {}", moneyLost);
             }
         }
         FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getName(), fridgeEntity.get().getGroceryEntity().getGrocery_id(), 1);
@@ -186,6 +191,7 @@ public class FridgeService {
             JSONObject object = new JSONObject(response.body());
             JSONArray data = (JSONArray) object.get("data");
             JSONObject firstObject = (JSONObject) data.get(0);
+            //System.out.println(firstObject.get("name"));
             return (double) firstObject.get("current_price");
         } catch (Exception e) {
             System.out.println(e.getMessage());
