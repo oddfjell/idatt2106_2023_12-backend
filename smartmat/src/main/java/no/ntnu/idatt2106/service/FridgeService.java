@@ -21,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -152,6 +157,24 @@ public class FridgeService {
         }
         FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getName(), fridgeEntity.get().getGroceryEntity().getGrocery_id(), 1);
         removeGroceryFromAccountByAmount(account, fridgeGroceryBody);
+        apiCall(fridgeGroceryBody.getName());
         logger.info("Successfully thrown {}", fridgeGroceryThrowBody.getName());
+    }
+
+    public void apiCall(String grocery) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://kassal.app/api/v1/products?size=1&search=" + grocery))
+                .header("Authorization", "Bearer jBpCRMx0JMUblSaXKG9syjISQK4aBk1dkE9DoPT5")
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(response.body());
     }
 }
