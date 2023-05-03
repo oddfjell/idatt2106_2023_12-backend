@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.service;
 
 import no.ntnu.idatt2106.dto.TotalWastePerDateDTO;
+import no.ntnu.idatt2106.dto.WastePerCategoryDTO;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.WasteRepository;
 import org.slf4j.Logger;
@@ -24,7 +25,7 @@ public class WasteService {
         return wasteRepository.getMoneyLost(id).orElse(0);
     }
 
-    public List<List> getMoneyLostPerCategory(long id) {
+    public List<WastePerCategoryDTO> getMoneyLostPerCategory(long id) {
         return wasteRepository.getMoneyLostPerCategory(id);
     }
 
