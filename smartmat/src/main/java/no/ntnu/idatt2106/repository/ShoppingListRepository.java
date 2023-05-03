@@ -19,7 +19,7 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
     Optional<ShoppingListEntity> findByAccountEntityAndGroceryEntityName(AccountEntity account, String groceryName);
 
     // GET STORED SHOPPING LIST FOR AN ACCOUNT
-    @Query(value = "SELECT new no.ntnu.idatt2106.dto.ShoppingListDTO (g.name, s.count, s.foundInStore) FROM ShoppingListEntity s " +
+    @Query(value = "SELECT new no.ntnu.idatt2106.dto.ShoppingListDTO (g.name, s.count, s.foundInStore, s.suggestion) FROM ShoppingListEntity s " +
             "INNER JOIN GroceryEntity  g " +
             "ON s.groceryEntity.id = g.id " +
             "WHERE s.accountEntity.id = :id")
