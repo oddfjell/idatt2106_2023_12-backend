@@ -25,21 +25,21 @@ public class RecipeController {
     @Autowired
     private RecipeSuggestionService recipeSuggestionService;
 
-    @GetMapping("/weekMenu")
-    public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity) {
-        List<RecipeEntity> weekMenu =  recipeSuggestionService.getNRecipes(7, accountEntity);
+    @GetMapping("/weekMenu/{servings}")
+    public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity, @PathVariable int servings) {
+        List<RecipeEntity> weekMenu =  recipeSuggestionService.getNRecipes(7, accountEntity, servings);
         return ResponseEntity.ok(weekMenu);
     }
 
-    @GetMapping("/recipe")
-    public ResponseEntity<RecipeEntity> getRecipe(@AuthenticationPrincipal AccountEntity accountEntity) {
-        RecipeEntity recipeEntitySuggest = recipeSuggestionService.getNRecipes(1, accountEntity).get(0);
+    @GetMapping("/recipe/{servings}")
+    public ResponseEntity<RecipeEntity> getRecipe(@AuthenticationPrincipal AccountEntity accountEntity, @PathVariable int servings) {
+        RecipeEntity recipeEntitySuggest = recipeSuggestionService.getNRecipes(1, accountEntity, servings).get(0);
         return ResponseEntity.ok(recipeEntitySuggest);
     }
 
-    @PostMapping("/newRecipe")
-    public ResponseEntity<RecipeEntity> getNewRecipe(@AuthenticationPrincipal AccountEntity accountEntity, @RequestBody List<RecipeEntity> recipeEntities) {
-        RecipeEntity recipeEntitySuggest = recipeSuggestionService.getNRecipes(30, accountEntity).stream().filter(r->!recipeEntities.contains(r)).findFirst().get();
+    @PostMapping("/newRecipe/{servings}")
+    public ResponseEntity<RecipeEntity> getNewRecipe(@AuthenticationPrincipal AccountEntity accountEntity, @RequestBody List<RecipeEntity> recipeEntities, @PathVariable int servings) {
+        RecipeEntity recipeEntitySuggest = recipeSuggestionService.getNRecipes(30, accountEntity, servings).stream().filter(r->!recipeEntities.contains(r)).findFirst().get();
         return ResponseEntity.ok(recipeEntitySuggest);
     }
 

@@ -26,6 +26,8 @@ public class RecipeEntity {
    @Transient
    private String image;
 
+   private final int SCRAPEDSERVING = 4;
+
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
@@ -44,14 +46,15 @@ public class RecipeEntity {
    public RecipeEntity() {
    }
 
-   public RecipeEntity(String url, String title, String[] ingredients, String image) {
+   public RecipeEntity(String url, String title, String[] ingredients, int servings, String image) {
       super();
       this.url = url;
       this.value = 0;
       this.ingredients = ingredients;
       this.title = title;
-      this.servings = 4;
+      this.servings = servings;
       this.image = image;
+      changeServings();
    }
 
    public Long getId() {
@@ -108,6 +111,25 @@ public class RecipeEntity {
 
    public void setImage(String image) {
       this.image = image;
+   }
+
+   private void changeServings() {
+      for (int f = 0; f < this.ingredients.length; f++) {
+         String i = this.ingredients[f];
+         for (String s: i.replaceAll("[^\\d.]", " ")
+                 .trim().replaceAll(" +", " ").split(" ")) {
+            System.err.println(s);
+            try {
+               float j = Float.parseFloat(s);
+
+               float k = j*this.servings/SCRAPEDSERVING;
+               this.ingredients[f] = i.replace(s, String.valueOf(k));
+               break;
+            }
+            catch (NumberFormatException e) {
+            }
+         }
+      }
    }
 
    @Override
