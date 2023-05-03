@@ -7,23 +7,23 @@ public class FridgeGroceryThrowBody {
 
     private String name;
     private double newMoneyValue;
-    private java.sql.Date throwDate;
+    private LocalDate throwDate;
 
     public FridgeGroceryThrowBody() {
     }
 
     //TODO antar at % er ganget i front end
-    public FridgeGroceryThrowBody(String name, double newMoneyValue, Date throwDate) {
+    public FridgeGroceryThrowBody(String name, double newMoneyValue, LocalDate throwDate) {
         this.name = name;
         this.newMoneyValue = newMoneyValue;
         this.throwDate = throwDate;
     }
 
-    public java.sql.Date getThrowDate() {
+    public LocalDate getThrowDate() {
         return throwDate;
     }
     public void setThrowDate() {
-        this.throwDate = Date.valueOf(LocalDate.now());
+        this.throwDate = LocalDate.now();
     }
 
     public String getName() {

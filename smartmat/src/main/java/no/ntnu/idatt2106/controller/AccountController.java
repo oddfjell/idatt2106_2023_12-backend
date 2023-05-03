@@ -104,4 +104,13 @@ public class AccountController {
         }
     }
 
+    @PostMapping("/deleteProfile")
+    public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
+        if(profileService.deleteProfileFromAccount(account,profileBody)){
+            return ResponseEntity.ok("Profile deleted");
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }

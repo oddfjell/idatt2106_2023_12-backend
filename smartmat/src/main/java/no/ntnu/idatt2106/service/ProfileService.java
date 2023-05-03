@@ -54,4 +54,15 @@ public class ProfileService {
             return null;
         }
     }
+
+    public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody){
+        ProfileEntity profile = this.loginProfile(account, newProfileBody);
+
+        if(profile != null){
+            profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

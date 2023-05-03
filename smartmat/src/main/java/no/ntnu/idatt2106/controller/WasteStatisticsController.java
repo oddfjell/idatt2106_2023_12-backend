@@ -35,7 +35,6 @@ public class WasteStatisticsController {
         return new ResponseEntity<>(wasteService.getMoneyLostByCategory(account.getAccount_id(), categoryId), HttpStatus.OK);
     }
 
-
     // GET WASTE FOR EACH MONTH
     @GetMapping("/month/{month}")
     public ResponseEntity<?> geyMoneyLostPerMonth(@AuthenticationPrincipal AccountEntity account,
