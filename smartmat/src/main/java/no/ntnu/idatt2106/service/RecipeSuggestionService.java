@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,19 +39,20 @@ public class RecipeSuggestionService {
     public RecipeSuggestionService() {
     }
 
-    public List<RecipeEntity> readRecipesFromScraper() {
+    public List<RecipeEntity> readRecipesFromScraper(int servings) {
         ArrayList<RecipeEntity> recipeEntities = new ArrayList<>();
         String csvLine;
         try {
             BufferedReader br = new BufferedReader(new FileReader(csvPath));
             while ((csvLine = br.readLine()) != null) {
-                String[] readRecipe = csvLine.split(",");
+                String[] readRecipe = csvLine.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 String url = readRecipe[0];
                 String title = readRecipe[1];
                 String image = readRecipe[2];
                 String[] ingredients = new String[readRecipe.length-3];
                 System.arraycopy(readRecipe, 3, ingredients, 0, readRecipe.length - 3);
-                recipeEntities.add(new RecipeEntity(url, title, ingredients, image));
+                ingredients = Arrays.stream(ingredients).map(s -> s.replace("\"", "")).map(s -> s.replace(",",".")).toArray(String[]::new);
+                recipeEntities.add(new RecipeEntity(url, title, ingredients, servings, image));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,11 +88,11 @@ public class RecipeSuggestionService {
          return recipeEntities;
     }
 
-    public List<RecipeEntity> getNRecipes(int n, AccountEntity accountEntity){
+    public List<RecipeEntity> getNRecipes(int n, AccountEntity accountEntity, int servings){
         List<String> groceries = fridgeRepository.findAllByAccountEntity(accountEntity).stream().map(FridgeEntity::getGroceryEntity).map(GroceryEntity::getName).toList();
         List<RecipeEntity> recipeEntities = this.sortRecipes(
                         this.rankRecipes(
-                                this.readRecipesFromScraper(), groceries));
+                                this.readRecipesFromScraper(servings), groceries));
         logger.info("Returning {} recipes", n);
         return recipeEntities.subList(0, n);
     }
