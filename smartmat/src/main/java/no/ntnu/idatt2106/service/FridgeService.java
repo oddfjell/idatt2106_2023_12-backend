@@ -16,6 +16,8 @@ import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.repository.CategoryRepository;
 import no.ntnu.idatt2106.repository.FridgeRepository;
 import no.ntnu.idatt2106.repository.GroceryRepository;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Transactional
@@ -157,24 +161,35 @@ public class FridgeService {
         }
         FridgeGroceryBody fridgeGroceryBody = new FridgeGroceryBody(fridgeGroceryThrowBody.getName(), fridgeEntity.get().getGroceryEntity().getGrocery_id(), 1);
         removeGroceryFromAccountByAmount(account, fridgeGroceryBody);
-        apiCall(fridgeGroceryBody.getName());
         logger.info("Successfully thrown {}", fridgeGroceryThrowBody.getName());
     }
 
-    public void apiCall(String grocery) {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://kassal.app/api/v1/products?size=1&search=" + grocery))
-                .header("Authorization", "Bearer jBpCRMx0JMUblSaXKG9syjISQK4aBk1dkE9DoPT5")
-                .method("GET", HttpRequest.BodyPublishers.noBody())
-                .build();
-        HttpResponse<String> response = null;
+    public double apiCall(String grocery) throws ExecutionException, InterruptedException {
         try {
-            response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            // Create a HttpClient instance
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            // Build the request
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://kassal.app/api/v1/products?size=1&search=" + grocery))
+                    .header("Authorization", "Bearer jBpCRMx0JMUblSaXKG9syjISQK4aBk1dkE9DoPT5")
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            // Send the request asynchronously
+            CompletableFuture<HttpResponse<String>> futureResponse = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+            // Retrieve the response when it's ready
+            HttpResponse<String> response = futureResponse.get();
+
+            // Get response body
+            JSONObject object = new JSONObject(response.body());
+            JSONArray data = (JSONArray) object.get("data");
+            JSONObject firstObject = (JSONObject) data.get(0);
+            return (double) firstObject.get("current_price");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return -1;
         }
-        System.out.println(response.body());
     }
 }
