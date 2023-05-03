@@ -13,4 +13,6 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
 
     Optional<ProfileEntity> findByUsernameIgnoreCaseAndAccount(String username, AccountEntity account);
 
+    void deleteByAccountAndUsername(AccountEntity account, String username);
+
 }
