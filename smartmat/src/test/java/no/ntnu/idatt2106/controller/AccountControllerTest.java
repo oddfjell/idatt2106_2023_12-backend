@@ -107,6 +107,29 @@ class AccountControllerTest {
     }
 
     @Test
+    void testDeleteAccount() throws Exception {
+
+        // ADDING ACCOUNT
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
+        URI uri = new URI(baseURL);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
+        ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
+        Assertions.assertEquals(200, result.getStatusCode().value());
+        Assertions.assertEquals("User added", result.getBody());;
+
+        // DELETING ACCOUNT
+        baseURL = "http://localhost:"+ randomServerPort +"/auth/account/remove";
+        uri = new URI(baseURL);
+        headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtService.generateJWT(account));
+        request = new HttpEntity<>(account,headers);
+        result = this.restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
+
+        Assertions.assertEquals(200, result.getStatusCode().value());
+    }
+
+    @Test
     void getProfiles() throws URISyntaxException {
         String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
         URI uri = new URI(baseURL);
@@ -133,5 +156,4 @@ class AccountControllerTest {
 
         Assertions.assertEquals(200, result.getStatusCode().value());
     }
-
 }
