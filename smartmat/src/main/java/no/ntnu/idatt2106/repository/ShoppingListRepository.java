@@ -85,4 +85,8 @@ public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity
     @Query (value = "SELECT s.suggestion FROM ShoppingListEntity s " +
             "WHERE s.accountEntity = :account AND s.groceryEntity = :grocery")
     boolean getOldSuggestion (AccountEntity account, GroceryEntity grocery);
+
+    @Modifying
+    @Query("DELETE FROM ShoppingListEntity s WHERE s.accountEntity = :account")
+    void deleteByAccount(AccountEntity account);
 }

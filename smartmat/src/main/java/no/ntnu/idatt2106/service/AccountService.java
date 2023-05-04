@@ -5,7 +5,7 @@ import no.ntnu.idatt2106.exceptions.AccountAlreadyExistsException;
 //import no.ntnu.idatt2106.logger.ColourLogger;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.api.LoginResponseBody;
-import no.ntnu.idatt2106.repository.AccountRepository;
+import no.ntnu.idatt2106.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,16 @@ public class AccountService {
     private JWTService jwtService;
     @Autowired
     private EncryptionService encryptionService;
+    @Autowired
+    private ProfileRepository profileRepository;
+    @Autowired
+    private ShoppingListRepository shoppingListRepository;
+    @Autowired
+    private FridgeRepository fridgeRepository;
+    @Autowired
+    private WasteRepository wasteRepository;
+    @Autowired
+    private AccountRecipeRepository accountRecipeRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(AccountService.class);
     //private static final ColourLogger log = new ColourLogger();
@@ -43,6 +53,14 @@ public class AccountService {
 
     public void removeAccount(AccountEntity account){
         logger.info("Removing {}s account by ACCOUNT", account.getUsername());
+
+        // Remove all children first
+        profileRepository.deleteByAccount(account);
+        shoppingListRepository.deleteByAccount(account);
+        fridgeRepository.deleteByAccount(account);
+        wasteRepository.deleteByAccount(account);
+        accountRecipeRepository.deleteByAccount(account);
+
         accountRepository.removeAccountEntityById(account.getAccount_id());
     }
 

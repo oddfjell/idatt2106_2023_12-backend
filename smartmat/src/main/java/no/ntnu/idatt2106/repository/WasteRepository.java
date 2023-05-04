@@ -79,5 +79,7 @@ public interface WasteRepository extends JpaRepository<WasteEntity, Long> {
             "AND w.date = :date")
     void updateMoneyLost(AccountEntity accountEntity, GroceryEntity groceryEntity, LocalDate date, Double newValue);
 
-
+    @Modifying
+    @Query("DELETE FROM WasteEntity w WHERE w.accountEntity = :account")
+    void deleteByAccount(AccountEntity account);
 }

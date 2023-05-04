@@ -15,4 +15,6 @@ public interface ProfileRepository extends JpaRepository<ProfileEntity, Long> {
 
     void deleteByAccountAndUsername(AccountEntity account, String username);
 
+    void deleteByAccount(AccountEntity account);
+
 }
