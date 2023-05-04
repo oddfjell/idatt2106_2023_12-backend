@@ -7,12 +7,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountRecipeRepository extends JpaRepository<AccountRecipeEntity, Long> {
 
 
     void removeAllByAccountEntity(AccountEntity account);
+
+    Optional<AccountRecipeEntity> findByAccountEntityAndRecipe(AccountEntity account, RecipeEntity recipe);
 
     List<AccountRecipeEntity> findAllByAccountEntity(AccountEntity account);
     @Modifying

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -79,6 +80,11 @@ public class RecipeService {
     }
 
     public void replaceRecipeWithRecipe(@AuthenticationPrincipal AccountEntity account, RecipeEntity fromRecipe, RecipeEntity toRecipe){
-        accountRecipeRepository.replaceRecipe(account,fromRecipe,toRecipe);
+        Optional<RecipeEntity> optionalFromRecipe = recipeRepository.findTopByUrl(fromRecipe.getUrl());
+        Optional<RecipeEntity> optionalToRecipe = recipeRepository.findTopByUrl(toRecipe.getUrl());
+
+        if(optionalFromRecipe.isPresent() && optionalToRecipe.isPresent()){
+            accountRecipeRepository.replaceRecipe(account, optionalFromRecipe.get(), optionalToRecipe.get());
+        }
     }
 }
