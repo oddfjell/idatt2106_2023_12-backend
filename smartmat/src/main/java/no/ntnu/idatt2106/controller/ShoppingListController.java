@@ -54,8 +54,10 @@ public class ShoppingListController {
                     shoppingListDTO.setFoundInStore(false);
                     dtos.add(shoppingListDTO);
                 });
-        boolean saved = shoppingListService.save(account, dtos);
-        return ResponseEntity.ok("save ok?: " + saved);
+        if (shoppingListService.save(account, dtos)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     // BUY MARKED GROCERIES
