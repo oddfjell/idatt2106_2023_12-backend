@@ -1,8 +1,6 @@
 package no.ntnu.idatt2106.controller;
 
 
-import lombok.Getter;
-import no.ntnu.idatt2106.exceptions.RecipeUrlAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.RecipeEntity;
 import no.ntnu.idatt2106.service.RecipeService;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173/","http://localhost:4173/"}, allowCredentials = "true")
@@ -40,7 +39,16 @@ public class RecipeController {
 
     @PostMapping("/newRecipe/{servings}")
     public ResponseEntity<RecipeEntity> getNewRecipe(@AuthenticationPrincipal AccountEntity accountEntity, @RequestBody List<RecipeEntity> recipeEntities, @PathVariable int servings) {
-        RecipeEntity recipeEntitySuggest = recipeSuggestionService.getNRecipes(30, accountEntity, servings).stream().filter(r->!recipeEntities.contains(r)).findFirst().get();
+        RecipeEntity recipeEntitySuggest = recipeSuggestionService.getNRecipes(30, accountEntity, servings).stream().filter(r->{
+            AtomicBoolean found = new AtomicBoolean(true);
+            recipeEntities.forEach(listR->{
+                if(r.getUrl().equals(listR.getUrl())){
+                    System.out.println(r);
+                    found.set(false);
+                }
+            });
+            return found.get();
+        }).findFirst().get();
         return ResponseEntity.ok(recipeEntitySuggest);
     }
 
