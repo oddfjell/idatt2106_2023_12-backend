@@ -81,6 +81,7 @@ public class ShoppingListService {
         try {
             GroceryEntity grocery = findGrocery(shoppingListDTO);
             shoppingListRepository.updateFoundInStore(shoppingListDTO.isFoundInStore(), account, grocery);
+            shoppingListRepository.updateSuggestion(shoppingListDTO.isSuggestion(), account, grocery);
             logger.info("{}s foundInSTore and suggestion value in {}s list is now {} and {}", grocery.getName(), account.getUsername(), shoppingListDTO.isFoundInStore(),shoppingListDTO.isSuggestion());
             return true;
         } catch (Exception e) {
@@ -261,21 +262,23 @@ public class ShoppingListService {
         return ingredient;
     }
 
-    public void moveSuggestionsToFoundInStore(AccountEntity account){
+    public void moveSuggestionsToList(AccountEntity account){
         List<ShoppingListEntity> shoppingListEntityList = shoppingListRepository.findAllBySuggestionTrueAndAccountEntity(account);
         shoppingListEntityList.forEach(shoppingListEntity -> {
             shoppingListRepository.updateSuggestion(false,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
-            shoppingListRepository.updateFoundInStore(true,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
         });
     }
 
-    public void moveSuggestionToFoundInStore(AccountEntity account, ShoppingListDTO shoppingListDTO){
+    public void moveSuggestionToList(AccountEntity account, ShoppingListDTO shoppingListDTO){
         Optional<ShoppingListEntity> shoppingListEntityOptional = shoppingListRepository.findByAccountEntityAndGroceryEntityName(account,shoppingListDTO.getName());
 
         if(shoppingListEntityOptional.isPresent()){
             ShoppingListEntity shoppingListEntity = shoppingListEntityOptional.get();
             shoppingListRepository.updateSuggestion(false,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
-            shoppingListRepository.updateFoundInStore(true,shoppingListEntity.getAccountEntity(),shoppingListEntity.getGroceryEntity());
         }
+    }
+
+    public List<ShoppingListEntity> getSuggestionsByAccount(AccountEntity account){
+        return shoppingListRepository.findAllBySuggestionTrueAndAccountEntity(account);
     }
 }
