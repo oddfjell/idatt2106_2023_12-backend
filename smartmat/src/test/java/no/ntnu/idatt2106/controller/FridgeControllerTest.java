@@ -63,49 +63,37 @@ class FridgeControllerTest {
   @Test
   void getGroceriesByAccount() throws URISyntaxException {
 
+    // ADDING ACCOUNT
     AccountEntity account = new AccountEntity();
     account.setUsername("TestUserFridgeOne");
     account.setPassword("TestPassword");
-
     String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
     URI uri = new URI(baseURL);
-
     HttpHeaders headers = new HttpHeaders();
-
     HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
-
     ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
-
     Assertions.assertEquals(200, result.getStatusCode().value());
     Assertions.assertEquals("User added", result.getBody());
 
+    // LOGIN ACCOUNT
     baseURL = "http://localhost:"+ randomServerPort +"/auth/account/loginAccount";
     uri = new URI(baseURL);
-
     headers = new HttpHeaders();
-
     request = new HttpEntity<>(account,headers);
-
     result = this.restTemplate.postForEntity(uri, request, String.class);
-
     String jwt = Objects.requireNonNull(result.getBody()).toString().substring(result.getBody().toString().indexOf("\"jwt\"") + 7, result.getBody().toString().length() - 2);
 
-
-
+    // GETS LIST OF GROCERIES
     baseURL = "http://localhost:"+ randomServerPort +"/fridge/groceries";
     uri = new URI(baseURL);
-
     MultiValueMap<String, String> headers2 = new LinkedMultiValueMap<>();
     headers2.add("Authorization", "Bearer " + jwt);
-
     result = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers2), List.class);
-
-    accountService.removeAccount(account.getUsername());
-
     Assertions.assertEquals(200,result.getStatusCode().value());
     Assertions.assertTrue(result.getBody().toString().contains("["));
 
-
+    // DELETES ACCOUNT
+    accountService.removeAccount(account.getUsername());
   }
 
   @Test
@@ -114,32 +102,20 @@ class FridgeControllerTest {
     AccountEntity account = new AccountEntity();
     account.setUsername("TestUserFridgeTwo");
     account.setPassword("TestPassword");
-
     String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
     URI uri = new URI(baseURL);
-
     HttpHeaders headers = new HttpHeaders();
-
     HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
-
     ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
-
     Assertions.assertEquals(200, result.getStatusCode().value());
     Assertions.assertEquals("User added", result.getBody());
 
     baseURL = "http://localhost:"+ randomServerPort +"/auth/account/loginAccount";
     uri = new URI(baseURL);
-
     headers = new HttpHeaders();
-
     request = new HttpEntity<>(account,headers);
-
     result = this.restTemplate.postForEntity(uri, request, String.class);
-
     String jwt = Objects.requireNonNull(result.getBody()).toString().substring(result.getBody().toString().indexOf("\"jwt\"") + 7, result.getBody().toString().length() - 2);
-
-
-
 
     CategoryEntity category = new CategoryEntity();
     category.setName("TestCategory");
@@ -239,16 +215,14 @@ class FridgeControllerTest {
     result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
     Assertions.assertEquals(200,result.getStatusCode().value());
 
-    baseURL = "http://localhost:"+ randomServerPort +"/fridge/throw";
+    baseURL = "http://localhost:"+ randomServerPort +"/fridge/remove";
     uri = new URI(baseURL);
+    groceryToAccountBody.setCount(1);
 
-    FridgeGroceryThrowBody throwBody = new FridgeGroceryThrowBody();
-    throwBody.setName("throw");
-
-    result = restTemplate.postForEntity(uri,new HttpEntity<>(throwBody,headers2), ResponseEntity.class);
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), String.class);
     Assertions.assertEquals(200,result.getStatusCode().value());
 
-    result = restTemplate.postForEntity(uri,new HttpEntity<>(throwBody,headers2), String.class);
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), String.class);
     Assertions.assertEquals(400,result.getStatusCode().value());
     Assertions.assertEquals("Something went wrong. May be invalid count number",result.getBody().toString());
 
