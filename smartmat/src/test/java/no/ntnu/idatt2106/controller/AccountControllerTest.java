@@ -4,6 +4,7 @@ import no.ntnu.idatt2106.SmartmatApplication;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.service.AccountService;
+import no.ntnu.idatt2106.service.JWTService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +15,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -28,6 +31,9 @@ class AccountControllerTest {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    JWTService jwtService;
 
     @LocalServerPort
     int randomServerPort;
@@ -97,8 +103,26 @@ class AccountControllerTest {
 
     }
 
+    @Test
+    void testDeleteAccount() throws Exception {
 
+        // ADDING ACCOUNT
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
+        URI uri = new URI(baseURL);
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
+        ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
+        Assertions.assertEquals(200, result.getStatusCode().value());
+        Assertions.assertEquals("User added", result.getBody());;
 
+        // DELETING ACCOUNT
+        baseURL = "http://localhost:"+ randomServerPort +"/auth/account/remove";
+        uri = new URI(baseURL);
+        headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtService.generateJWT(account));
+        request = new HttpEntity<>(account,headers);
+        result = this.restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
 
-
+        Assertions.assertEquals(200, result.getStatusCode().value());
+    }
 }
