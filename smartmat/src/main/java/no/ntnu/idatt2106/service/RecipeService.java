@@ -12,6 +12,7 @@ import no.ntnu.idatt2106.repository.RecipeRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,5 +76,9 @@ public class RecipeService {
             recipe.setIngredients(stringList.toArray(new String[0]));
         });
         return recipeEntityList;
+    }
+
+    public void replaceRecipeWithRecipe(@AuthenticationPrincipal AccountEntity account, RecipeEntity fromRecipe, RecipeEntity toRecipe){
+        accountRecipeRepository.replaceRecipe(account,fromRecipe,toRecipe);
     }
 }

@@ -74,4 +74,14 @@ public class RecipeController {
     public ResponseEntity<?> getSavedWeekMenu(@AuthenticationPrincipal AccountEntity account){
         return ResponseEntity.ok(recipeService.getRecipesByAccount(account));
     }
+
+    @PostMapping("/replaceRecipe")
+    public ResponseEntity<?> replaceRecipe(@AuthenticationPrincipal AccountEntity account, @RequestBody List<RecipeEntity> recipeEntities){
+        try{
+            recipeService.replaceRecipeWithRecipe(account,recipeEntities.get(0),recipeEntities.get(1));
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
