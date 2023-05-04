@@ -1,6 +1,7 @@
 package no.ntnu.idatt2106.controller;
 
 
+import lombok.Getter;
 import no.ntnu.idatt2106.exceptions.RecipeUrlAlreadyExistsException;
 import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.RecipeEntity;
@@ -25,9 +26,9 @@ public class RecipeController {
     @Autowired
     private RecipeSuggestionService recipeSuggestionService;
 
-    @GetMapping("/weekMenu/{servings}")
-    public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity, @PathVariable int servings) {
-        List<RecipeEntity> weekMenu =  recipeSuggestionService.getNRecipes(7, accountEntity, servings);
+    @GetMapping("/weekMenu/{servings}/{nDays}")
+    public ResponseEntity<?> getWeekMenu(@AuthenticationPrincipal AccountEntity accountEntity, @PathVariable int servings, @PathVariable int nDays) {
+        List<RecipeEntity> weekMenu =  recipeSuggestionService.getNRecipes(nDays, accountEntity, servings);
         return ResponseEntity.ok(weekMenu);
     }
 
@@ -61,5 +62,16 @@ public class RecipeController {
     public ResponseEntity<?> saveRecipe(@AuthenticationPrincipal AccountEntity account, @RequestBody RecipeEntity recipe){
         recipeService.addRecipeToAccount(recipe,account);
         return ResponseEntity.ok("Recipe added to account");
+    }
+
+    @PostMapping("/saveRecipes")
+    public ResponseEntity<?> saveRecipes(@AuthenticationPrincipal AccountEntity account, @RequestBody List<RecipeEntity> recipes){
+        recipeService.addRecipesToAccount(recipes,account);
+        return ResponseEntity.ok("Recipes added to account");
+    }
+
+    @GetMapping("/getSavedWeekMenu")
+    public ResponseEntity<?> getSavedWeekMenu(@AuthenticationPrincipal AccountEntity account){
+        return ResponseEntity.ok(recipeService.getRecipesByAccount(account));
     }
 }

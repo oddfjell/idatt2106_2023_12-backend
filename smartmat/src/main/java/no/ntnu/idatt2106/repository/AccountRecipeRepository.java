@@ -6,8 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface AccountRecipeRepository extends JpaRepository<AccountRecipeEntity, Long> {
 
+
+    void removeAllByAccountEntity(AccountEntity account);
+
+    List<AccountRecipeEntity> findAllByAccountEntity(AccountEntity account);
     @Modifying
     @Query("DELETE FROM AccountRecipeEntity a WHERE a.accountEntity = :account")
     void deleteByAccount(AccountEntity account);

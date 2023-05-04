@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class RecipeService {
@@ -43,5 +46,20 @@ public class RecipeService {
         accountRecipeEntity.setAccountEntity(account);
         logger.info("Saving {}", recipe.getTitle());
         accountRecipeRepository.save(accountRecipeEntity);
+    }
+
+    public void addRecipesToAccount(List<RecipeEntity> recipes, AccountEntity account){
+        accountRecipeRepository.removeAllByAccountEntity(account);
+        for (RecipeEntity recipeEntity:recipes) {
+            this.addRecipeToAccount(recipeEntity, account);
+        }
+    }
+
+    public List<RecipeEntity> getRecipesByAccount(AccountEntity account){
+        List<AccountRecipeEntity> accountRecipeEntityList = accountRecipeRepository.findAllByAccountEntity(account);
+        List<RecipeEntity> recipeEntityList = new ArrayList<>();
+
+        accountRecipeEntityList.forEach(accountRecipeEntity -> recipeEntityList.add(accountRecipeEntity.getRecipe()));
+        return recipeEntityList;
     }
 }
