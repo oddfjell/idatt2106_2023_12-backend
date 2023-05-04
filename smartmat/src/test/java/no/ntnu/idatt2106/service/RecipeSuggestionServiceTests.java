@@ -38,8 +38,6 @@ class RecipeSuggestionServiceTests {
     void testChangingServings() {
         ArrayList<RecipeEntity> recipes = (ArrayList<RecipeEntity>) recipeSuggestionService.readRecipesFromScraper(4);
         ArrayList<RecipeEntity> recipesDiffServing = (ArrayList<RecipeEntity>) recipeSuggestionService.readRecipesFromScraper(5);
-        System.out.println(Arrays.toString(recipes.get(0).getIngredients()));
-        System.err.println(Arrays.toString(recipesDiffServing.get(0).getIngredients()));
         assertNotEquals(recipes.get(0).getIngredients(), recipesDiffServing.get(0).getIngredients());
 
     }

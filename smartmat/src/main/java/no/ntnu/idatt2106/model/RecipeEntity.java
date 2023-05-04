@@ -118,7 +118,6 @@ public class RecipeEntity {
          String i = this.ingredients[f];
          for (String s: i.replaceAll("[^\\d.]", " ")
                  .trim().replaceAll(" +", " ").split(" ")) {
-            System.err.println(s);
             try {
                float j = Float.parseFloat(s);
 
