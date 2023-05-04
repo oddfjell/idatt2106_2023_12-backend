@@ -68,4 +68,23 @@ public class ShoppingListController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
+    @PostMapping("/suggest")
+    public ResponseEntity<?> suggest(@AuthenticationPrincipal AccountEntity account, @RequestBody ShoppingListDTO shoppingListDTO){
+        shoppingListService.moveSuggestionToList(account,shoppingListDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> delete(@AuthenticationPrincipal AccountEntity account, @RequestBody ShoppingListDTO shoppingListDTO){
+        shoppingListService.delete(account, shoppingListDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getSuggestions")
+    public ResponseEntity<?> getSuggestions(@AuthenticationPrincipal AccountEntity account){
+        return ResponseEntity.ok(shoppingListService.getSuggestionsByAccount(account));
+    }
+
+
 }
