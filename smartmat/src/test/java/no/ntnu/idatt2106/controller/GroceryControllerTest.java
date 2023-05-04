@@ -3,6 +3,8 @@ package no.ntnu.idatt2106.controller;
 import no.ntnu.idatt2106.SmartmatApplication;
 import no.ntnu.idatt2106.service.GroceryService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,9 +30,16 @@ class GroceryControllerTest {
     @LocalServerPort
     int randomServerPort;
 
+    String baseURL;
+
+    @BeforeEach
+    void setUp() {
+        baseURL = "http://localhost:"+ randomServerPort +"/grocery/";
+    }
+
     @Test
     void getAllProducts() throws URISyntaxException {
-        String baseURL = "http://localhost:"+ randomServerPort +"/grocery/";
+
         URI uri = new URI(baseURL);
 
         ResponseEntity<?> result = restTemplate.getForEntity(uri, List.class);
@@ -38,6 +47,12 @@ class GroceryControllerTest {
         Assertions.assertEquals(200,result.getStatusCode().value());
     }
 
+    @Test
+    void getGroceriesById() throws URISyntaxException {
+        URI uri = new URI(baseURL+"1");
 
+        ResponseEntity<?> result = restTemplate.getForEntity(uri, List.class);
 
+        Assertions.assertEquals(200,result.getStatusCode().value());
+    }
 }
