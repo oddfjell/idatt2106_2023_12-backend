@@ -6,6 +6,7 @@ import no.ntnu.idatt2106.model.AccountEntity;
 import no.ntnu.idatt2106.model.CategoryEntity;
 import no.ntnu.idatt2106.model.GroceryEntity;
 import no.ntnu.idatt2106.model.api.FridgeGroceryBody;
+import no.ntnu.idatt2106.model.api.FridgeGroceryThrowBody;
 import no.ntnu.idatt2106.service.AccountService;
 import no.ntnu.idatt2106.service.CategoryService;
 import no.ntnu.idatt2106.service.FridgeService;
@@ -184,7 +185,7 @@ class FridgeControllerTest {
   void removeGroceryFromAccountByAmount() throws GroceryAlreadyExistsException, URISyntaxException {
 
     AccountEntity account = new AccountEntity();
-    account.setUsername("TestUserFridgeThree");
+    account.setUsername("TestUserFridgeFour");
     account.setPassword("TestPassword");
 
     String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
@@ -226,7 +227,7 @@ class FridgeControllerTest {
 
     FridgeGroceryBody groceryToAccountBody = new FridgeGroceryBody();
     groceryToAccountBody.setName("TestGrocery2");
-    groceryToAccountBody.setCount(4);
+    groceryToAccountBody.setCount(1);
     groceryToAccountBody.setCategoryId(category.getCategory_id());
 
     baseURL = "http://localhost:"+ randomServerPort +"/fridge/add";
@@ -238,17 +239,16 @@ class FridgeControllerTest {
     result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
     Assertions.assertEquals(200,result.getStatusCode().value());
 
-    baseURL = "http://localhost:"+ randomServerPort +"/fridge/remove";
+    baseURL = "http://localhost:"+ randomServerPort +"/fridge/throw";
     uri = new URI(baseURL);
 
-    groceryToAccountBody.setCount(2);
+    FridgeGroceryThrowBody throwBody = new FridgeGroceryThrowBody();
+    throwBody.setName("throw");
 
-    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(throwBody,headers2), ResponseEntity.class);
     Assertions.assertEquals(200,result.getStatusCode().value());
 
-    groceryToAccountBody.setCount(3);
-
-    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), String.class);
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(throwBody,headers2), String.class);
     Assertions.assertEquals(400,result.getStatusCode().value());
     Assertions.assertEquals("Something went wrong. May be invalid count number",result.getBody().toString());
 
@@ -256,6 +256,78 @@ class FridgeControllerTest {
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
     accountService.removeAccount(account.getUsername());
+  }
+
+  @Test
+  void throwGroceryFromAccountByAmountTest() throws URISyntaxException, GroceryAlreadyExistsException {
+    AccountEntity account = new AccountEntity();
+    account.setUsername("TestUserFridgeTwo");
+    account.setPassword("TestPassword");
+
+    String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
+    URI uri = new URI(baseURL);
+
+    HttpHeaders headers = new HttpHeaders();
+
+    HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
+
+    ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
+
+    Assertions.assertEquals(200, result.getStatusCode().value());
+    Assertions.assertEquals("User added", result.getBody());
+
+    baseURL = "http://localhost:"+ randomServerPort +"/auth/account/loginAccount";
+    uri = new URI(baseURL);
+
+    headers = new HttpHeaders();
+
+    request = new HttpEntity<>(account,headers);
+
+    result = this.restTemplate.postForEntity(uri, request, String.class);
+
+    String jwt = Objects.requireNonNull(result.getBody()).toString().substring(result.getBody().toString().indexOf("\"jwt\"") + 7, result.getBody().toString().length() - 2);
+
+
+
+
+    CategoryEntity category = new CategoryEntity();
+    category.setName("TestCategory");
+    category.setImage(null);
+
+    categoryService.addCategory(category);
+
+    GroceryEntity grocery = new GroceryEntity();
+    grocery.setName("TestGrocery");
+    grocery.setCategory(category);
+    grocery.setExpiryDate(4);
+
+    groceryService.addGrocery(grocery);
+
+    FridgeGroceryBody groceryToAccountBody = new FridgeGroceryBody();
+    groceryToAccountBody.setName("TestGrocery");
+    groceryToAccountBody.setCount(4);
+    groceryToAccountBody.setCategoryId(category.getCategory_id());
+
+    baseURL = "http://localhost:"+ randomServerPort +"/fridge/add";
+    uri = new URI(baseURL);
+
+    MultiValueMap<String, String> headers2 = new LinkedMultiValueMap<>();
+    headers2.add("Authorization", "Bearer " + jwt);
+
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), ResponseEntity.class);
+
+    Assertions.assertEquals(200,result.getStatusCode().value());
+
+    result = restTemplate.postForEntity(uri,new HttpEntity<>(groceryToAccountBody,headers2), String.class);
+
+    Assertions.assertEquals(200,result.getStatusCode().value());
+    Assertions.assertEquals("Updated grocery count",result.getBody().toString());
+
+    fridgeService.removeGroceryFromAccount(account,grocery);
+    groceryService.removeGrocery(grocery);
+    categoryService.removeCategory(category);
+    accountService.removeAccount(account.getUsername());
+
   }
 
 }

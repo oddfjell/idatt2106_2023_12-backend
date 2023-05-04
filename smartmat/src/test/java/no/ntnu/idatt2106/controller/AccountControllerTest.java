@@ -2,6 +2,7 @@ package no.ntnu.idatt2106.controller;
 
 import no.ntnu.idatt2106.SmartmatApplication;
 import no.ntnu.idatt2106.model.AccountEntity;
+import no.ntnu.idatt2106.model.ProfileEntity;
 import no.ntnu.idatt2106.repository.AccountRepository;
 import no.ntnu.idatt2106.service.AccountService;
 import no.ntnu.idatt2106.service.JWTService;
@@ -17,10 +18,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Objects;
+import java.net.URISyntaxException;
+import java.util.*;
 
 
 @SpringBootTest(classes = {SmartmatApplication.class},webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -122,6 +125,34 @@ class AccountControllerTest {
         headers.add("Authorization", "Bearer " + jwtService.generateJWT(account));
         request = new HttpEntity<>(account,headers);
         result = this.restTemplate.exchange(uri, HttpMethod.DELETE, request, String.class);
+
+        Assertions.assertEquals(200, result.getStatusCode().value());
+    }
+
+    @Test
+    void getProfiles() throws URISyntaxException {
+        String baseURL = "http://localhost:"+ randomServerPort +"/auth/account/registerAccount";
+        URI uri = new URI(baseURL);
+
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpEntity<AccountEntity> request = new HttpEntity<>(account,headers);
+
+        ResponseEntity<?> result = this.restTemplate.postForEntity(uri, request, String.class);
+
+        Assertions.assertEquals(200, result.getStatusCode().value());
+        Assertions.assertEquals("User added", result.getBody());
+
+        baseURL = "http://localhost:"+ randomServerPort +"/auth/account/profiles";
+        uri = new URI(baseURL);
+
+
+        headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + jwtService.generateJWT(account));
+
+        request = new HttpEntity<>(headers);
+
+        result = this.restTemplate.exchange(uri, HttpMethod.GET, request, List.class);
 
         Assertions.assertEquals(200, result.getStatusCode().value());
     }
