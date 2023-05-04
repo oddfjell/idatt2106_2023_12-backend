@@ -86,7 +86,7 @@ public class WasteStatisticsControllerTest {
 
     @Test
     void getMoneyLostPerMonth() throws URISyntaxException {
-        String baseURL = "http://localhost:"+ randomServerPort +"/waste/category/1";
+        String baseURL = "http://localhost:"+ randomServerPort +"/waste/month/1";
         URI uri = new URI(baseURL);
         ResponseEntity<?> result = this.restTemplate.exchange(uri, HttpMethod.GET, request, List.class);
         Assertions.assertEquals(200, result.getStatusCode().value());
