@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+
 @Entity
 @Table(name = "recipe")
 public class RecipeEntity {
@@ -15,15 +16,15 @@ public class RecipeEntity {
 
    private String url;
 
-   @Transient
    private int value;
+
    @Transient
    private String[] ingredients;
-   @Transient
+
    private String title;
-   @Transient
+
    private int servings;
-   @Transient
+
    private String image;
 
    private final int SCRAPEDSERVING = 4;

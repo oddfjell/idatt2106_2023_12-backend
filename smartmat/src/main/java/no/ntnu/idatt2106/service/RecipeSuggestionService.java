@@ -1,10 +1,8 @@
 package no.ntnu.idatt2106.service;
 
-import no.ntnu.idatt2106.model.AccountEntity;
-import no.ntnu.idatt2106.model.FridgeEntity;
-import no.ntnu.idatt2106.model.GroceryEntity;
-import no.ntnu.idatt2106.model.RecipeEntity;
+import no.ntnu.idatt2106.model.*;
 import no.ntnu.idatt2106.repository.FridgeRepository;
+import no.ntnu.idatt2106.repository.IngredientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,9 @@ public class RecipeSuggestionService {
 
     @Autowired
     private FridgeRepository fridgeRepository;
+
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipeEntities.csv";
     private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
@@ -58,6 +59,17 @@ public class RecipeSuggestionService {
             e.printStackTrace();
         }
         logger.info("Returning recipes from scraper");
+
+        for (RecipeEntity recipe: recipeEntities) {
+            for (String i: recipe.getIngredients()) {
+                if(ingredientRepository.findByNameIgnoreCaseAndRecipeUrl(i,recipe.getUrl()).isEmpty()){
+                    IngredientEntity ingredient = new IngredientEntity();
+                    ingredient.setName(i);
+                    ingredient.setRecipe(recipe);
+                    ingredientRepository.save(ingredient);
+                }
+            }
+        }
 
         return recipeEntities;
     }
