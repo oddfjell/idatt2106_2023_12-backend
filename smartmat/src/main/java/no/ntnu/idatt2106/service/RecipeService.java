@@ -79,12 +79,14 @@ public class RecipeService {
         return recipeEntityList;
     }
 
-    public void replaceRecipeWithRecipe(@AuthenticationPrincipal AccountEntity account, RecipeEntity fromRecipe, RecipeEntity toRecipe){
+    public void replaceRecipeWithRecipe(@AuthenticationPrincipal AccountEntity account, RecipeEntity fromRecipe, RecipeEntity toRecipe) throws Exception {
         Optional<RecipeEntity> optionalFromRecipe = recipeRepository.findTopByUrl(fromRecipe.getUrl());
         Optional<RecipeEntity> optionalToRecipe = recipeRepository.findTopByUrl(toRecipe.getUrl());
 
         if(optionalFromRecipe.isPresent() && optionalToRecipe.isPresent()){
             accountRecipeRepository.replaceRecipe(account, optionalFromRecipe.get(), optionalToRecipe.get());
+        }else{
+            throw new Exception("FromRecipe:" + optionalFromRecipe.isPresent() + "|| ToRecipe:" + optionalToRecipe.isPresent());
         }
     }
 }

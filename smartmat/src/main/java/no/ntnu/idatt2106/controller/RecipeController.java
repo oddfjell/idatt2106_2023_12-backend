@@ -81,6 +81,7 @@ public class RecipeController {
             recipeService.replaceRecipeWithRecipe(account,recipeEntities.get(0),recipeEntities.get(1));
             return ResponseEntity.ok().build();
         }catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
