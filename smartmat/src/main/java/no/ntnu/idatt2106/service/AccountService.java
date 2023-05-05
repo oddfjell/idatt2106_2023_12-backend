@@ -113,6 +113,17 @@ public class AccountService {
     }
 
     /**
+     * Method for removing an account. Since the account_id is stored in the database in the children of the account, they
+     * have to be removed first. The profiles, shoppingList items, fridge items and waste items attached to the account
+     * are being removed before the account.
+     * @param username String
+     */
+    public void removeAccount(String username){
+        logger.info("Removing {} account", username);
+        accountRepository.removeAccountEntityByUsername(username);
+    }
+
+    /**
      * Method to register a new account
      * @param account AccountEntity
      * @throws AccountAlreadyExistsException AccountAlreadyExistsException
