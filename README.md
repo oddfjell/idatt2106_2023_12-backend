@@ -9,6 +9,7 @@ This serverside application provides stable and secure endpoints for a food redu
   - [Installation](#installation)
   - [Usage](#usage)
     - [Endpoints](#endpoints)
+    - [Test](#test)
   - [License](#license)
 
 ## Installation
@@ -29,6 +30,14 @@ mvn spring-boot:run
 ```
 
 This boots up spring-boot and connects the backend application to a remote database where the repositories are created automatically. The applications is already configured to connect to a remote NTNU database
+
+### Test
+Run the command below to run tests
+```bash
+cd idatt2106_2023_12-backend/smartmat
+mvn test
+```
+
 
 ### Endpoints
 
