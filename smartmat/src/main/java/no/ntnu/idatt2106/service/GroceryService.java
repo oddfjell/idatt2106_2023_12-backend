@@ -87,7 +87,7 @@ public class GroceryService {
                     if (!line.equals(" ") && !line.equals("")) {
                         GroceryEntity grocery = new GroceryEntity();
                         grocery.setName(read[0]);
-                        grocery.setCategory(categoryRepository.getCategoryEntityById(5L));
+                        grocery.setCategory(categoryRepository.getCategoryEntityById(5L).get());
                         grocery.setExpiryDate(1);
                         if (!groceries.contains(grocery)) {
                             groceries.add(grocery);
