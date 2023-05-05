@@ -7,15 +7,24 @@ import no.ntnu.idatt2106.dto.ShoppingListDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ShoppingListRepository
+ */
 public interface ShoppingListRepository extends JpaRepository<ShoppingListEntity, Long> {
 
-
+    /**
+     *
+     * @param account
+     * @return
+     */
     List<ShoppingListEntity> findAllBySuggestionTrueAndAccountEntity(AccountEntity account);
+
+    /**
+     *
+     */
     Optional<ShoppingListEntity> findByAccountEntityAndGroceryEntityName(AccountEntity account, String groceryName);
 
     // GET STORED SHOPPING LIST FOR AN ACCOUNT
