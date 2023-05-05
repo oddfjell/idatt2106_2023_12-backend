@@ -14,27 +14,41 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
+/**
+ * Rest controller for all auth/account endpoints
+ */
 @RequestMapping(value = "/auth/account")
 @CrossOrigin(origins = {"http://localhost:5173/","http://localhost:4173/"}, allowCredentials = "true")
 @RestController
 public class AccountController {
 
+    /**
+     * AccountService field injection
+     */
     @Autowired
     private AccountService accountService;
 
+    /**
+     * ProfileService field injection
+     */
     @Autowired
     private ProfileService profileService;
 
+    /**
+     * Method that returns all of the accounts from the database
+     * @param account
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/")
     public ResponseEntity<Iterable<AccountEntity>> getAllAccounts(@AuthenticationPrincipal AccountEntity account) {
-        if(account.getUsername().equals("daniel")){
-            return ResponseEntity.ok(accountService.getAllUsers());
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
+        Iterable<AccountEntity> accounts = accountService.getAllAccounts();
+        if (accounts != null) {
+            return ResponseEntity.ok(accounts);
+        } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @PutMapping("/editAccount")
@@ -60,7 +74,7 @@ public class AccountController {
     @PostMapping("/registerAccount")
     public ResponseEntity<?> registerAccount(@RequestBody AccountEntity account){
         try{
-            accountService.addUser(account);
+            accountService.addAccount(account);
             return ResponseEntity.ok().body("User added");
         }catch (AccountAlreadyExistsException userAlreadyExistsException){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -70,7 +84,7 @@ public class AccountController {
 
     @PostMapping("/loginAccount")
     public ResponseEntity<LoginResponseBody> loginAccount(@RequestBody AccountEntity account){
-        LoginResponseBody loginResponse = accountService.loginUser(account);
+        LoginResponseBody loginResponse = accountService.loginAccount(account);
         if(loginResponse == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }else {
