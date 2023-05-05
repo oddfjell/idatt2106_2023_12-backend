@@ -19,7 +19,7 @@ public class EncryptionService {
     @Value("${encryption.salt.rounds}")
     private int saltRounds;
     /**
-     * String
+     * String instance
      */
     private String salt;
     /**
