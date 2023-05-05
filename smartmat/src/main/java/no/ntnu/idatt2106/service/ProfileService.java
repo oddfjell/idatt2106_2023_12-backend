@@ -36,7 +36,11 @@ public class ProfileService {
         profile.setUsername(newProfileBody.getUsername());
         profile.setRestricted(newProfileBody.isRestricted());
         profile.setAccount(account);
-        profile.setPassword(encryptionService.encryptPassword(newProfileBody.getPassword()));
+        if(newProfileBody.getPassword().isEmpty()){
+            profile.setPassword("");
+        }else{
+            profile.setPassword(encryptionService.encryptPassword(newProfileBody.getPassword()));
+        }
         profileRepository.save(profile);
     }
 
