@@ -33,7 +33,7 @@ public class ShoppingListServiceTest {
         account = new AccountEntity();
         account.setUsername("testShopplistService");
         account.setPassword("TestPassword");
-        accountService.addUser(account);
+        accountService.addAccount(account);
         shoppingListService.add(account, new ShoppingListDTO("Løk", 1, false, false));
     }
 
