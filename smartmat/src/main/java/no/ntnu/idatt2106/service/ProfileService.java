@@ -61,9 +61,9 @@ public class ProfileService {
         profile.setUsername(newProfileBody.getUsername());
         profile.setRestricted(newProfileBody.isRestricted());
         profile.setAccount(account);
-        if(newProfileBody.getPassword().isEmpty()){
+        if (newProfileBody.getPassword().isEmpty()) {
             profile.setPassword("");
-        }else{
+        } else {
             profile.setPassword(encryptionService.encryptPassword(newProfileBody.getPassword()));
         }
         logger.info("Saving {}", newProfileBody.getUsername());
@@ -79,7 +79,7 @@ public class ProfileService {
     public ProfileEntity loginProfile(AccountEntity account, NewProfileBody newProfileBody){
         Optional<ProfileEntity> optionalProfileEntity = profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account);
 
-        if(optionalProfileEntity.isPresent()){
+        if (optionalProfileEntity.isPresent()) {
             ProfileEntity profile = optionalProfileEntity.get();
             if(encryptionService.verifyPassword( newProfileBody.getPassword(), profile.getPassword())){
                 logger.info("Login registered for {} in {}", newProfileBody.getUsername(), account.getUsername());
@@ -100,16 +100,26 @@ public class ProfileService {
      * @param newProfileBody NewProfileBody
      * @return boolean
      */
-    public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody){
-        ProfileEntity profile = this.loginProfile(account, newProfileBody);
+    public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody) {
+        Optional<ProfileEntity> profileEntity = profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account);
+        if (profileEntity.isPresent()) {
 
-        if(profile != null){
-            logger.info("Deleting {} from {}", newProfileBody.getUsername(), account.getUsername());
-            profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
-            return true;
-        }else{
-            logger.info("{} does not exist", newProfileBody.getUsername());
-            return false;
+            if (profileEntity.get().getPassword().isEmpty()) {
+                profileEntity.ifPresent(entity -> profileRepository.deleteByAccountAndUsername(account, entity.getUsername()));
+                return true;
+            }else {
+                ProfileEntity profile = this.loginProfile(account, newProfileBody);
+
+                if (profile != null) {
+                    logger.info("Deleting {} from {}", newProfileBody.getUsername(), account.getUsername());
+                    profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
+                    return true;
+                } else {
+                    logger.info("{} does not exist", newProfileBody.getUsername());
+                    return false;
+                }
+            }
         }
+        return false;
     }
 }

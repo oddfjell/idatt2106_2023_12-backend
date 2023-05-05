@@ -34,6 +34,10 @@ public class RecipeSuggestionService {
     @Autowired
     private IngredientRepository ingredientRepository;
     /**
+     * test declaration
+     */
+    private boolean test;
+    /**
      * csvPath declaration
      */
     private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipeEntities.csv";
@@ -52,6 +56,7 @@ public class RecipeSuggestionService {
      */
     public RecipeSuggestionService(boolean test) {
         if (test) {
+            this.test=test;
             csvPath = System.getProperty("user.dir")+"/src/test/resources/recipesTestData.csv";
             logger.info("Got file for recipes");
         }
@@ -88,6 +93,8 @@ public class RecipeSuggestionService {
             e.printStackTrace();
         }
         logger.info("Returning recipes from scraper");
+
+        if (test) { return recipeEntities; }
 
         for (RecipeEntity recipe: recipeEntities) {
             for (String i: recipe.getIngredients()) {
