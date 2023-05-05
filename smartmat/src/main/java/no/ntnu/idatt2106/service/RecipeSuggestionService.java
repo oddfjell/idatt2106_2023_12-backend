@@ -26,12 +26,15 @@ public class RecipeSuggestionService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
+    private boolean test;
+
     private String csvPath = System.getProperty("user.dir")+"/src/main/resources/recipeEntities.csv";
     private final String scriptPath = System.getProperty("user.dir")+"/smartmat/src/main/scripts/recipe_scraper.py";
     private static final Logger logger = LoggerFactory.getLogger(RecipeSuggestionService.class);
 
     public RecipeSuggestionService(boolean test) {
         if (test) {
+            this.test=test;
             csvPath = System.getProperty("user.dir")+"/src/test/resources/recipesTestData.csv";
             logger.info("Got file for recipes");
         }
@@ -59,6 +62,8 @@ public class RecipeSuggestionService {
             e.printStackTrace();
         }
         logger.info("Returning recipes from scraper");
+
+        if (test) { return recipeEntities; }
 
         for (RecipeEntity recipe: recipeEntities) {
             for (String i: recipe.getIngredients()) {
