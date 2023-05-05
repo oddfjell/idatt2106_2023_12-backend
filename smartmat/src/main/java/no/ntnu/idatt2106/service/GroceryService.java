@@ -4,21 +4,17 @@ import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.GroceryAlreadyExistsException;
 import no.ntnu.idatt2106.model.*;
 import no.ntnu.idatt2106.repository.CategoryRepository;
-import no.ntnu.idatt2106.repository.FridgeRepository;
 import no.ntnu.idatt2106.repository.GroceryRepository;
-import no.ntnu.idatt2106.repository.WasteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @Transactional

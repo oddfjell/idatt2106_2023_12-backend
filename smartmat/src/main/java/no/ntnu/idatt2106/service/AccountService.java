@@ -14,6 +14,7 @@ import java.util.Optional;
 
 /**
  * Service class for AccountController
+ * AccountService contains methods that gets, changes, adds or deletes accounts
  */
 @Service
 @Transactional
