@@ -23,58 +23,62 @@ public class ProfileService {
     @Autowired
     private EncryptionService encryptionService;
 
-    public List<ProfileEntity> getAllProfilesByAccount(AccountEntity account){
+    public List<ProfileEntity> getAllProfilesByAccount(AccountEntity account) {
         return profileRepository.findAllByAccount(account);
     }
 
     public void addProfileToAccount(NewProfileBody newProfileBody, AccountEntity account) throws ProfileAlreadyExistsInAccountException {
 
-        if(profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account).isPresent()){
+        if (profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account).isPresent()) {
             throw new ProfileAlreadyExistsInAccountException();
         }
         ProfileEntity profile = new ProfileEntity();
         profile.setUsername(newProfileBody.getUsername());
         profile.setRestricted(newProfileBody.isRestricted());
         profile.setAccount(account);
-        if(newProfileBody.getPassword().isEmpty()){
+        if (newProfileBody.getPassword().isEmpty()) {
             profile.setPassword("");
-        }else{
+        } else {
             profile.setPassword(encryptionService.encryptPassword(newProfileBody.getPassword()));
         }
         profileRepository.save(profile);
     }
 
-    public ProfileEntity loginProfile(AccountEntity account, NewProfileBody newProfileBody){
+    public ProfileEntity loginProfile(AccountEntity account, NewProfileBody newProfileBody) {
         Optional<ProfileEntity> optionalProfileEntity = profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account);
 
-        if(optionalProfileEntity.isPresent()){
+        if (optionalProfileEntity.isPresent()) {
             ProfileEntity profile = optionalProfileEntity.get();
-            if(encryptionService.verifyPassword( newProfileBody.getPassword(), profile.getPassword())){
+            if (encryptionService.verifyPassword(newProfileBody.getPassword(), profile.getPassword())) {
                 return profile;
-            }else{
+            } else {
                 return null;
             }
-        }else{
+        } else {
             return null;
         }
     }
 
-    public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody){
+    public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody) {
 
-        if(newProfileBody.getPassword().isEmpty()){
-            Optional<ProfileEntity> profileEntity = profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account);
+        Optional<ProfileEntity> profileEntity = profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account);
+        if (profileEntity.isPresent()) {
 
-            profileEntity.ifPresent(entity -> profileRepository.deleteByAccountAndUsername(account, entity.getUsername()));
-            return true;
-        }else{
-            ProfileEntity profile = this.loginProfile(account, newProfileBody);
-
-            if(profile != null){
-                profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
+            if (profileEntity.get().getPassword().isEmpty()) {
+                profileEntity.ifPresent(entity -> profileRepository.deleteByAccountAndUsername(account, entity.getUsername()));
                 return true;
-            }else{
-                return false;
+            }else {
+                ProfileEntity profile = this.loginProfile(account, newProfileBody);
+
+                if (profile != null) {
+                    profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
+
+        return false;
     }
 }
