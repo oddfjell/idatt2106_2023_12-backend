@@ -8,45 +8,27 @@ This serverside application provides stable and secure endpoints for a food redu
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
-    - [Configuration](#configuration)
     - [Endpoints](#endpoints)
   - [License](#license)
 
 ## Installation
-Make sure you have both maven and git installed on your local computer. After cloning the project, you should be able to run the command below to ensure everything is ready
+Make sure you have both maven and git installed on your local computer before running the commands below
 
 ```bash
+git clone https://gitlab.stud.idi.ntnu.no/idatt2106-v23-12/idatt2106_2023_12-backend.git
+cd idatt2106_2023_12-backend/smartmat
 mvn clean
 ```
 
 ## Usage
 
-To start the backend application run:
+To start the backend application run (make sure to run from inside the `/smartmat` directory):
 ```bash
+cd idatt2106_2023_12-backend/smartmat
 mvn spring-boot:run
 ```
 
-This boots up spring-boot and connects the backend application to a remote database where the repositories are created automatically.
-
-### Configuration
-
-The configuration of the application can be found in the 
-`src/main/resources/application.properties` file
-
-```properties
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.url=YOUR_DATABASE_URL
-spring.datasource.username=YOUR_DATABASE_USERNAME
-spring.datasource.password=YOUR_DATABASE_PASSWORD
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-encryption.salt.rounds=5
-
-jwt.algorithm.key=VerySecureAlgorithmKey
-jwt.issuer=YOUR_ISSUER
-jwt.expiryInSeconds=259200
-```
-The configuration may be configured to your own database. Replace the variables respectivley with your own information. The bottom half of the configuration is for configuring the encryption algorithm of the passwords stored in the database. Here you are able to control the number of salt rounds and when the token should expire.
+This boots up spring-boot and connects the backend application to a remote database where the repositories are created automatically. The applications is already configured to connect to a remote NTNU database
 
 ### Endpoints
 
