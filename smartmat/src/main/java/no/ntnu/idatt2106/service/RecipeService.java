@@ -35,7 +35,7 @@ public class RecipeService {
     private static final Logger logger = LoggerFactory.getLogger(RecipeService.class);
 
     public void addRecipeUrl(RecipeEntity recipe) throws RecipeUrlAlreadyExistsException {
-        if(recipeRepository.findTopByUrl(recipe.getUrl()).isPresent()){
+        if(recipeRepository.findByUrlAndServings(recipe.getUrl(),recipe.getServings()).isPresent()){
             logger.info("{} already exist", recipe.getTitle());
             throw new RecipeUrlAlreadyExistsException();
         }
@@ -44,13 +44,13 @@ public class RecipeService {
     }
 
     public void addRecipeToAccount(RecipeEntity recipe, AccountEntity account){
-        if(recipeRepository.findTopByUrl(recipe.getUrl()).isEmpty()){
+        if(recipeRepository.findByUrlAndServings(recipe.getUrl(),recipe.getServings()).isEmpty()){
             logger.info("Saving {} by url", recipe.getTitle());
             recipeRepository.save(recipe);
         }
 
         AccountRecipeEntity accountRecipeEntity = new AccountRecipeEntity();
-        accountRecipeEntity.setRecipe(recipeRepository.findTopByUrl(recipe.getUrl()).get());
+        accountRecipeEntity.setRecipe(recipeRepository.findByUrlAndServings(recipe.getUrl(),recipe.getServings()).get());
         accountRecipeEntity.setAccountEntity(account);
         logger.info("Saving {}", recipe.getTitle());
         accountRecipeRepository.save(accountRecipeEntity);
@@ -70,7 +70,7 @@ public class RecipeService {
 
         accountRecipeEntityList.forEach(accountRecipeEntity -> recipeEntityList.add(accountRecipeEntity.getRecipe()));
         recipeEntityList.forEach(recipe -> {
-            List<IngredientEntity> ingredientList = ingredientRepository.findAllByRecipeUrl(recipe.getUrl());
+            List<IngredientEntity> ingredientList = ingredientRepository.findAllByRecipeUrlAndRecipeServings(recipe.getUrl(), recipe.getServings());
             List<String> stringList = new ArrayList<>();
 
             ingredientList.forEach(ingredientEntity -> stringList.add(ingredientEntity.getName()));
@@ -80,8 +80,8 @@ public class RecipeService {
     }
 
     public void replaceRecipeWithRecipe(@AuthenticationPrincipal AccountEntity account, RecipeEntity fromRecipe, RecipeEntity toRecipe) throws Exception {
-        Optional<RecipeEntity> optionalFromRecipe = recipeRepository.findTopByUrl(fromRecipe.getUrl());
-        Optional<RecipeEntity> optionalToRecipe = recipeRepository.findTopByUrl(toRecipe.getUrl());
+        Optional<RecipeEntity> optionalFromRecipe = recipeRepository.findByUrlAndServings(fromRecipe.getUrl(), fromRecipe.getServings());
+        Optional<RecipeEntity> optionalToRecipe = recipeRepository.findByUrlAndServings(toRecipe.getUrl(), toRecipe.getServings());
 
         if(optionalFromRecipe.isPresent() && optionalToRecipe.isPresent()){
             accountRecipeRepository.replaceRecipe(account, optionalFromRecipe.get(), optionalToRecipe.get());

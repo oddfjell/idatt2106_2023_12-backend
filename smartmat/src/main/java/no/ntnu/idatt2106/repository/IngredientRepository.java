@@ -11,7 +11,7 @@ public interface IngredientRepository extends JpaRepository<IngredientEntity, Lo
 
     Optional<IngredientEntity> findByNameIgnoreCaseAndRecipeUrl(String name, String recipeUrl);
 
-    List<IngredientEntity> findAllByRecipeUrl(String recipeUrl);
+    List<IngredientEntity> findAllByRecipeUrlAndRecipeServings(String recipeUrl, int servings);
 
     void removeAllByRecipeUrl(String recipeUrl);
 

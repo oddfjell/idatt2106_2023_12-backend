@@ -86,6 +86,9 @@ public class RecipeController {
     @PostMapping("/replaceRecipe")
     public ResponseEntity<?> replaceRecipe(@AuthenticationPrincipal AccountEntity account, @RequestBody List<RecipeEntity> recipeEntities){
         try{
+            System.out.println("-------------------------------");
+            System.out.println(recipeEntities);
+            System.out.println("-------------------------------");
             recipeService.replaceRecipeWithRecipe(account,recipeEntities.get(0),recipeEntities.get(1));
             return ResponseEntity.ok().build();
         }catch (Exception e){

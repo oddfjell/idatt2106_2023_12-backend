@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface RecipeRepository extends JpaRepository<RecipeEntity, Long> {
 
-    Optional<RecipeEntity> findTopByUrl(String url);
+    Optional<RecipeEntity> findByUrlAndServings(String url, int servings);
     
     List<RecipeEntity> findAllByUrl(String url);
 
