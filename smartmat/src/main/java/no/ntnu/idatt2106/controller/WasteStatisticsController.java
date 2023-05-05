@@ -8,34 +8,58 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "/waste") //TODO AUTH??
+/**
+ * Rest controller for all /waste endpoints
+ */
+@RequestMapping(value = "/waste")
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173/","http://localhost:4173/"}, allowCredentials = "true")
 public class WasteStatisticsController {
 
+    /**
+     * WasteService field injection
+     */
     @Autowired
     private WasteService wasteService;
 
-    // GET TOTAL WASTE FOR AN ACCOUNT
+    /**
+     * Returns the total waste from an account
+     * @param account AccountEntity
+     * @return ResponseEntity<?>
+     */
     @GetMapping("/")
     public ResponseEntity<?> geMoneyLost(@AuthenticationPrincipal AccountEntity account) {
         return new ResponseEntity<>(wasteService.getMoneyLost(account.getAccount_id()), HttpStatus.OK);
     }
 
-    // GET WASTE SORTED BY CATEGORY
+    /**
+     * Returns the total waste from an account sorted in category's
+     * @param account AccountEntity
+     * @return ResponseEntity<?>
+     */
     @GetMapping("/category")
     public ResponseEntity<?> geyMoneyLostPerCategory(@AuthenticationPrincipal AccountEntity account) {
         return new ResponseEntity<>(wasteService.getMoneyLostPerCategory(account.getAccount_id()), HttpStatus.OK);
     }
 
-    // GET WASTE FOR A GIVEN CATEGORY
+    /**
+     * Returns the money lost by an account in a category
+     * @param account AccountEntity
+     * @param categoryId long
+     * @return ResponseEntity<?>
+     */
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> geyMoneyLostByCategory(@AuthenticationPrincipal AccountEntity account,
                                                     @PathVariable long categoryId) {
         return new ResponseEntity<>(wasteService.getMoneyLostByCategory(account.getAccount_id(), categoryId), HttpStatus.OK);
     }
 
-    // GET WASTE FOR EACH MONTH
+    /**
+     * Returns the money lost per month
+     * @param account AccountEntity
+     * @param month int
+     * @return ResponseEntity<?>
+     */
     @GetMapping("/month/{month}")
     public ResponseEntity<?> geyMoneyLostPerMonth(@AuthenticationPrincipal AccountEntity account,
                                                   @PathVariable int month) {
