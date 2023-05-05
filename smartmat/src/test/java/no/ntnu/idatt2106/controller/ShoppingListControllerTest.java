@@ -59,7 +59,7 @@ public class ShoppingListControllerTest {
 
     @AfterEach
     void tearDown() {
-        accountService.removeAccount(account.getUsername());
+        accountService.removeAccount(account);
     }
 
     @Test

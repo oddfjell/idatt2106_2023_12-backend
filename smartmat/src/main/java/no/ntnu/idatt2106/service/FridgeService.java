@@ -1,6 +1,5 @@
 package no.ntnu.idatt2106.service;
 
-
 import jakarta.transaction.Transactional;
 import no.ntnu.idatt2106.exceptions.AccountAlreadyHasGroceryException;
 import no.ntnu.idatt2106.exceptions.AccountDoesntExistException;
@@ -22,36 +21,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Service class for fridge related requests
+ * FridgeService contains methods that gets, changes, adds or deletes grocery's from the account
+ */
 @Service
 @Transactional
 public class FridgeService {
 
+    /**
+     * FridgeRepository field injection
+     */
     @Autowired
     FridgeRepository fridgeRepository;
+    /**
+     * GroceryRepository field injection
+     */
     @Autowired
     GroceryRepository groceryRepository;
+    /**
+     * AccountRepository field injection
+     */
     @Autowired
     AccountRepository accountRepository;
+    /**
+     * CategoryRepository field injection
+     */
     @Autowired
     CategoryRepository categoryRepository;
+    /**
+     * WasteRepository field injection
+     */
     @Autowired
     WasteRepository wasteRepository;
-
+    /**
+     * Logger
+     */
     private static final Logger logger = LoggerFactory.getLogger(FridgeService.class);
 
+    /**
+     * Method that returns all the grocery's owned by a certain account //TODO
+     * @param account AccountEntity
+     * @return List<FridgeResponseBody>
+     */
     public List<FridgeResponseBody> getAllGroceriesByAccount(AccountEntity account){
         List<FridgeResponseBody> fridgeResponseBodyList = new ArrayList<>();
 
@@ -75,8 +97,15 @@ public class FridgeService {
 
     }
 
+    /**
+     * Method to add a grocery to the fridge. It checks if the grocery does already exist in the fridge. It will make
+     * a new grocery object in the fridge if it does not already exist in the fridge or is empty
+     * @param account AccountEntity
+     * @param fridgeGroceryBody FridgeGroceryBody
+     * @throws AccountDoesntExistException AccountDoesntExistException
+     * @throws AccountAlreadyHasGroceryException AccountAlreadyHasGroceryException
+     */
     public void addGroceryToAccount(AccountEntity account, FridgeGroceryBody fridgeGroceryBody) throws AccountDoesntExistException, AccountAlreadyHasGroceryException {
-
         Optional<GroceryEntity> groceryEntityOptional = groceryRepository.findByNameIgnoreCase(fridgeGroceryBody.getName());
 
         if(groceryEntityOptional.isEmpty()){
@@ -94,7 +123,6 @@ public class FridgeService {
         Optional<FridgeEntity> optionalFridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),grocery.getName());
 
         if(optionalFridgeEntity.isPresent()){
-           // System.out.println("Exception thrown");
             logger.info("{} already exists in the fridge", optionalFridgeEntity.get().getGroceryEntity().getName());
             throw new AccountAlreadyHasGroceryException();
         }
@@ -109,8 +137,12 @@ public class FridgeService {
         fridgeRepository.save(fridgeEntity);
     }
 
+    /**
+     * Method to update the grocery count. It will increment the amount column in the database for the grocery
+     * @param account AccountEntity
+     * @param accountBody FridgeGroceryBody
+     */
     public void updateGroceryCount(AccountEntity account, FridgeGroceryBody accountBody){
-
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),accountBody.getName());
         if(fridgeEntity.isEmpty()){
             logger.info("{} is not in the fridge and thus cannot be updated", accountBody.getName());
@@ -121,11 +153,22 @@ public class FridgeService {
         fridgeRepository.updateCount(accountBody.getCount() + fridgeEntity.get().getCount(),fridgeEntity.get().getAccountEntity(), fridgeEntity.get().getGroceryEntity());
     }
 
+    /**
+     * Method to remove a grocery from the fridge when the amount reaches 0
+     * @param account AccountEntity
+     * @param grocery GroceryEntity
+     */
     public void removeGroceryFromAccount(AccountEntity account, GroceryEntity grocery){
         logger.info("Removing {} from {}", grocery.getName(), account.getUsername());
         fridgeRepository.removeByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),grocery.getName());
     }
 
+    /**
+     * Method to update the grocery count. It will decrement the amount column in the database for the grocery
+     * @param account AccountEntity
+     * @param fridgeGroceryBody FridgeGroceryBody
+     * @throws Exception Exception
+     */
     public void removeGroceryFromAccountByAmount(AccountEntity account, FridgeGroceryBody fridgeGroceryBody) throws Exception {
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryBody.getName());
         if(fridgeEntity.isEmpty() || fridgeEntity.get().getCount() < fridgeGroceryBody.getCount()){
@@ -142,6 +185,13 @@ public class FridgeService {
         }
     }
 
+    /**
+     * Method to remove the grocery from the fridge and to add the grocery to waste. It uses the percent thrown to give a
+     * money_lost_ sum.
+     * @param account AccountEntity
+     * @param fridgeGroceryThrowBody FridgeGroceryThrowBody
+     * @throws Exception Exception
+     */
     public void throwGroceryFromFridgeToWaste(AccountEntity account, FridgeGroceryThrowBody fridgeGroceryThrowBody) throws Exception {//FridgeEntity product
 
         Optional<FridgeEntity> fridgeEntity = fridgeRepository.findByAccountEntityUsernameIgnoreCaseAndGroceryEntityNameIgnoreCase(account.getUsername(),fridgeGroceryThrowBody.getName());
@@ -152,9 +202,7 @@ public class FridgeService {
 
         if(fridgeGroceryThrowBody.getNewMoneyValue() != 0){
             double price = apiCall(fridgeEntity.get().getGroceryEntity().getName());
-
             double moneyLost = price * (fridgeGroceryThrowBody.getNewMoneyValue() / 100);
-            //System.out.println(price + " | " + fridgeGroceryThrowBody.getNewMoneyValue() + " | " + moneyLost);
 
             if(wasteRepository.findWasteEntitiesByGroceryEntity(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate()).isPresent()){
                 wasteRepository.updateMoneyLost(account, fridgeEntity.get().getGroceryEntity(), fridgeGroceryThrowBody.getThrowDate(), moneyLost);
@@ -169,29 +217,32 @@ public class FridgeService {
         logger.info("Successfully thrown {}", fridgeGroceryThrowBody.getName());
     }
 
+    /**
+     * Method for the api call to kassalappAPI to get a money sum for the groceries.
+     * It is creating a HttpClient instance and then building the request. Then it sends the request asynchronously
+     * and retrieve the response when it's ready
+     * @param grocery String
+     * @return double
+     * @throws ExecutionException ExecutionException
+     * @throws InterruptedException InterruptedException
+     */
     public double apiCall(String grocery) throws ExecutionException, InterruptedException {
         try {
-            // Create a HttpClient instance
             HttpClient httpClient = HttpClient.newHttpClient();
 
-            // Build the request
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://kassal.app/api/v1/products?size=1&search=" + grocery))
                     .header("Authorization", "Bearer jBpCRMx0JMUblSaXKG9syjISQK4aBk1dkE9DoPT5")
                     .method("GET", HttpRequest.BodyPublishers.noBody())
                     .build();
 
-            // Send the request asynchronously
             CompletableFuture<HttpResponse<String>> futureResponse = httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 
-            // Retrieve the response when it's ready
             HttpResponse<String> response = futureResponse.get();
 
-            // Get response body
             JSONObject object = new JSONObject(response.body());
             JSONArray data = (JSONArray) object.get("data");
             JSONObject firstObject = (JSONObject) data.get(0);
-            //System.out.println(firstObject.get("name"));
             return (double) firstObject.get("current_price");
         } catch (Exception e) {
             System.out.println(e.getMessage());
