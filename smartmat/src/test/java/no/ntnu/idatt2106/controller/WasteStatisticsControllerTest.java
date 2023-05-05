@@ -57,7 +57,7 @@ public class WasteStatisticsControllerTest {
 
     @AfterEach
     void tearDown() {
-        accountService.removeAccount(account);
+        accountService.removeAccount(account.getUsername());
     }
 
     @Test
