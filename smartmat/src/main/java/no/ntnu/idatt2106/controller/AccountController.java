@@ -13,12 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 import java.util.List;
 
 /**
- * Rest controller for all auth/account endpoints
+ * Rest controller for all /auth/account endpoints
  */
 @RequestMapping(value = "/auth/account")
 @CrossOrigin(origins = {"http://localhost:5173/","http://localhost:4173/"}, allowCredentials = "true")
@@ -38,9 +36,9 @@ public class AccountController {
     private ProfileService profileService;
 
     /**
-     * Method that returns all of the accounts from the database
-     * @param account
-     * @return
+     * Endpoint that returns all the accounts from the database
+     * @param account AccountEntity
+     * @return ResponseEntity<Iterable<AccountEntity>>
      */
     @CrossOrigin
     @GetMapping("/")
@@ -51,6 +49,13 @@ public class AccountController {
         } else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+    /**
+     * Endpoint that can edit an account password or username in the database
+     * @param account AccountEntity
+     * @param username String
+     * @param password String
+     * @return ResponseEntity<?>
+     */
     @PutMapping("/editAccount")
     public ResponseEntity<?> editAccount(@AuthenticationPrincipal AccountEntity account, @RequestParam("username") String username,
         @RequestParam("password") String password){
@@ -65,12 +70,22 @@ public class AccountController {
         return ResponseEntity.ok("Account updated");
     }
 
+    /**
+     * Endpoint that removes an account from the database
+     * @param account AccountEntity
+     * @return ResponseEntity<?>
+     */
     @DeleteMapping("/remove")
     public ResponseEntity<?> removeAccount(@AuthenticationPrincipal AccountEntity account){
         accountService.removeAccount(account);
         return ResponseEntity.ok("Account removed");
     }
 
+    /**
+     * Endpoint that registers/saves an account to the database
+     * @param account AccountEntity
+     * @return ResponseEntity<?>
+     */
     @PostMapping("/registerAccount")
     public ResponseEntity<?> registerAccount(@RequestBody AccountEntity account){
         try{
@@ -82,6 +97,11 @@ public class AccountController {
 
     }
 
+    /**
+     * Endpoint that checks if an account is valid and returns a token to login
+     * @param account AccountEntity
+     * @return ResponseEntity<LoginResponseBody>
+     */
     @PostMapping("/loginAccount")
     public ResponseEntity<LoginResponseBody> loginAccount(@RequestBody AccountEntity account){
         LoginResponseBody loginResponse = accountService.loginAccount(account);
@@ -92,12 +112,22 @@ public class AccountController {
         }
     }
 
-
+    /**
+     * Endpoint that returns all the profiles from a certain account the database
+     * @param account AccountEntity
+     * @return ResponseEntity<List<ProfileEntity>>
+     */
     @GetMapping("/profiles")
     public ResponseEntity<List<ProfileEntity>> getProfilesInAccount(@AuthenticationPrincipal AccountEntity account){
         return ResponseEntity.ok(profileService.getAllProfilesByAccount(account));
     }
 
+    /**
+     * Endpoint that register/saves a profile to an account
+     * @param account AccountEntity
+     * @param profileBody NewProfileBody
+     * @return ResponseEntity<?>
+     */
     @PostMapping("/registerProfile")
     public ResponseEntity<?> registerUser(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
         try {
@@ -108,6 +138,12 @@ public class AccountController {
         }
     }
 
+    /**
+     * Endpoint that checks if the PIN is correct and then let the profile login
+     * @param account AccountEntity
+     * @param profileBody NewProfileBody
+     * @return ResponseEntity<ProfileEntity>
+     */
     @PostMapping("/profileLogin")
     public ResponseEntity<ProfileEntity> loginProfile(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
         ProfileEntity profile = profileService.loginProfile(account,profileBody);
@@ -118,6 +154,12 @@ public class AccountController {
         }
     }
 
+    /**
+     * Endpoint to delete a profile from an account
+     * @param account AccountEntity
+     * @param profileBody NewProfileBody
+     * @return ResponseEntity<?>
+     */
     @PostMapping("/deleteProfile")
     public ResponseEntity<?> deleteProfile(@AuthenticationPrincipal AccountEntity account, @RequestBody NewProfileBody profileBody){
         if(profileService.deleteProfileFromAccount(account,profileBody)){

@@ -1,12 +1,17 @@
 package no.ntnu.idatt2106.model;
 
-
 import jakarta.persistence.*;
 
+/**
+ * ProfileEntity
+ */
 @Entity
 @Table(name = "profile")
 public class ProfileEntity {
 
+    /**
+     * COLUMNS
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,6 +24,10 @@ public class ProfileEntity {
     @JoinColumn(name = "account_id")
     private AccountEntity account;
 
+
+    /**
+     * CONSTRUCTORS
+     */
     public ProfileEntity() {
     }
 
@@ -29,10 +38,9 @@ public class ProfileEntity {
         this.account = account;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    /**
+     * GETTERS
+     */
     public Long getId() {
         return id;
     }
@@ -41,28 +49,35 @@ public class ProfileEntity {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public boolean isRestricted() {
         return restricted;
-    }
-
-    public void setRestricted(boolean restricted) {
-        this.restricted = restricted;
     }
 
     public AccountEntity getAccount() {
         return account;
     }
 
-    public void setAccount(AccountEntity account) {
-        this.account = account;
-    }
-
     public String getPassword() {
         return password;
+    }
+
+    /**
+     * SETTERS
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setRestricted(boolean restricted) {
+        this.restricted = restricted;
+    }
+
+    public void setAccount(AccountEntity account) {
+        this.account = account;
     }
 
     public void setPassword(String password) {

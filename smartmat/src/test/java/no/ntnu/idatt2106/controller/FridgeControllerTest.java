@@ -93,7 +93,7 @@ class FridgeControllerTest {
     Assertions.assertTrue(result.getBody().toString().contains("["));
 
     // DELETES ACCOUNT
-    accountService.removeAccount(account);
+    accountService.removeAccount(account.getUsername());
   }
 
   @Test
@@ -153,7 +153,7 @@ class FridgeControllerTest {
     fridgeService.removeGroceryFromAccount(account,grocery);
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
-    accountService.removeAccount(account);
+    accountService.removeAccount(account.getUsername());
 
   }
 
@@ -229,7 +229,7 @@ class FridgeControllerTest {
     fridgeService.removeGroceryFromAccount(account,grocery);
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
-    accountService.removeAccount(account);
+    accountService.removeAccount(account.getUsername());
   }
 
   @Test
@@ -300,7 +300,7 @@ class FridgeControllerTest {
     fridgeService.removeGroceryFromAccount(account,grocery);
     groceryService.removeGrocery(grocery);
     categoryService.removeCategory(category);
-    accountService.removeAccount(account);
+    accountService.removeAccount(account.getUsername());
 
   }
 
