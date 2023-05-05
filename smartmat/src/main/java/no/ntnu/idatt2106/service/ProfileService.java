@@ -60,13 +60,21 @@ public class ProfileService {
     }
 
     public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody){
-        ProfileEntity profile = this.loginProfile(account, newProfileBody);
 
-        if(profile != null){
-            profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
+        if(newProfileBody.getPassword().isEmpty()){
+            Optional<ProfileEntity> profileEntity = profileRepository.findByUsernameIgnoreCaseAndAccount(newProfileBody.getUsername(), account);
+
+            profileEntity.ifPresent(entity -> profileRepository.deleteByAccountAndUsername(account, entity.getUsername()));
             return true;
         }else{
-            return false;
+            ProfileEntity profile = this.loginProfile(account, newProfileBody);
+
+            if(profile != null){
+                profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
+                return true;
+            }else{
+                return false;
+            }
         }
     }
 }
