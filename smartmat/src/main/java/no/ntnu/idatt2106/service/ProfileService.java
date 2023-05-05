@@ -95,18 +95,20 @@ public class ProfileService {
     }
 
     /**
-     * Method for deleting ....
-     * @param account
-     * @param newProfileBody
-     * @return
+     * Method for deleting a profile from an account
+     * @param account AccountEntity
+     * @param newProfileBody NewProfileBody
+     * @return boolean
      */
     public boolean deleteProfileFromAccount(AccountEntity account, NewProfileBody newProfileBody){
         ProfileEntity profile = this.loginProfile(account, newProfileBody);
 
         if(profile != null){
+            logger.info("Deleting {} from {}", newProfileBody.getUsername(), account.getUsername());
             profileRepository.deleteByAccountAndUsername(account, profile.getUsername());
             return true;
         }else{
+            logger.info("{} does not exist", newProfileBody.getUsername());
             return false;
         }
     }
