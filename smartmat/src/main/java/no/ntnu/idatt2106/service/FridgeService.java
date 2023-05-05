@@ -32,8 +32,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Service class for FridgeController
- * FridgeService contains methods that gets, changes, adds or deletes ......
+ * Service class for fridge related requests
+ * FridgeService contains methods that gets, changes, adds or deletes grocery's from the account
  */
 @Service
 @Transactional
@@ -70,7 +70,7 @@ public class FridgeService {
     private static final Logger logger = LoggerFactory.getLogger(FridgeService.class);
 
     /**
-     * Method that returns all the grocery's owned by a certain account
+     * Method that returns all the grocery's owned by a certain account //TODO
      * @param account AccountEntity
      * @return List<FridgeResponseBody>
      */

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Service class for FridgeController
+ * Service class for category related requests
  * CategoryService contains methods that adds and deletes category's
  */
 @Service

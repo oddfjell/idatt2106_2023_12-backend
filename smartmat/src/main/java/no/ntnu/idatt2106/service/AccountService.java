@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Service class for AccountController
+ * Service class for account related requests
  * AccountService contains methods that gets, changes, adds or deletes accounts
  */
 @Service

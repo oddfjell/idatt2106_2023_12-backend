@@ -15,30 +15,53 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Service class for grocery related requests
+ * GroceryService contains methods that gets, changes, adds or deletes grocery's
+ */
 @Service
 @Transactional
 public class GroceryService {
 
+    /**
+     * GroceryRepository field injection
+     */
     @Autowired
     private GroceryRepository groceryRepository;
-
+    /**
+     * CategoryRepository field injection
+     */
     @Autowired
     private CategoryRepository categoryRepository;
-
+    /**
+     * Logger
+     */
     private static final Logger logger = LoggerFactory.getLogger(GroceryService.class);
 
-
+    /**
+     * Method that returns all the grocery's
+     * @return List<GroceryEntity>
+     */
     public List<GroceryEntity> getAllGroceries(){
         logger.info("Returning all the groceries");
         return groceryRepository.findAll();
     }
 
+    /**
+     * Method that returns all the grocery's from a certain category
+     * @param id Long
+     * @return List<GroceryEntity>
+     */
     public List<GroceryEntity> getAllGroceriesByCategoryId(Long id){
         logger.info("Returning all the groceries by category id {}", id);
         return groceryRepository.findAllByCategoryId(id);
     }
 
+    /**
+     * Method that adds a new grocery to the database
+     * @param grocery GroceryEntity
+     * @throws GroceryAlreadyExistsException GroceryAlreadyExistsException
+     */
     public void addGrocery(GroceryEntity grocery) throws GroceryAlreadyExistsException {
         if(groceryRepository.findByNameIgnoreCase(grocery.getName()).isPresent()){
             logger.info("{} already exists", grocery.getName());
@@ -48,7 +71,10 @@ public class GroceryService {
         groceryRepository.save(grocery);
     }
 
-    //TODO logg ja
+    /**
+     * Method that populates the database with grocery's retrieved from "matvaretabellen". A BufferedReader
+     * reads a txt-file and sets the name, category and expire date. Then they are added to the database
+     */
     public void populateDbGroceries() {
         ArrayList<GroceryEntity> groceries = new ArrayList<>();
         String path = "/Users/josteinlind/Skole/test/varer.txt";
@@ -79,9 +105,12 @@ public class GroceryService {
             }
         });
         logger.info("Grocery size is {}", groceries.size());
-        //System.err.println("HALLLOOOOO "+groceries.size());
     }
 
+    /**
+     * Method to remove a grocery from the database
+     * @param grocery GroceryEntity
+     */
     public void removeGrocery(GroceryEntity grocery){
         logger.info("Removing {} from groceries", grocery.getName());
         groceryRepository.removeById(grocery.getGrocery_id());
