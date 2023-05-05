@@ -18,9 +18,6 @@ public class ShoppingListServiceTest {
     AccountService accountService;
 
     @Autowired
-    JWTService jwtService;
-
-    @Autowired
     ShoppingListRepository shoppingListRepository;
 
     private AccountEntity account;
