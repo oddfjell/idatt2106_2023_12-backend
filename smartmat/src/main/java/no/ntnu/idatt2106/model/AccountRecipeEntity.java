@@ -2,10 +2,16 @@ package no.ntnu.idatt2106.model;
 
 import jakarta.persistence.*;
 
+/**
+ * AccountRecipeEntity
+ */
 @Entity
 @Table(name = "account_recipe")
 public class AccountRecipeEntity {
 
+    /**
+     * COLUMNS
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,6 +24,9 @@ public class AccountRecipeEntity {
     @JoinColumn(name = "recipe_id")
     private RecipeEntity recipe;
 
+    /**
+     * CONSTRUCTORS
+     */
     public AccountRecipeEntity() {
     }
 
@@ -26,24 +35,31 @@ public class AccountRecipeEntity {
         this.recipe = recipe;
     }
 
+    /**
+     * GETTERS
+     */
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public AccountEntity getAccountEntity() {
         return accountEntity;
     }
 
-    public void setAccountEntity(AccountEntity accountEntity) {
-        this.accountEntity = accountEntity;
-    }
-
     public RecipeEntity getRecipe() {
         return recipe;
+    }
+
+    /**
+     * SETTERS
+     */
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setAccountEntity(AccountEntity accountEntity) {
+        this.accountEntity = accountEntity;
     }
 
     public void setRecipe(RecipeEntity recipe) {

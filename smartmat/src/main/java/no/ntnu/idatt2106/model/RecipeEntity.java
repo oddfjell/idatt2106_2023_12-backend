@@ -1,15 +1,19 @@
 package no.ntnu.idatt2106.model;
 
 import jakarta.persistence.*;
-
 import java.util.Arrays;
 import java.util.Objects;
 
-
+/**
+ * RecipeEntity
+ */
 @Entity
 @Table(name = "recipe")
 public class RecipeEntity {
 
+   /**
+    * COLUMNS
+    */
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
@@ -29,6 +33,9 @@ public class RecipeEntity {
 
    private final int SCRAPEDSERVING = 4;
 
+   /**
+    * equals method
+    */
    @Override
    public boolean equals(Object o) {
       if (this == o) return true;
@@ -37,6 +44,10 @@ public class RecipeEntity {
       return Objects.equals(url, recipeEntity.url) && Arrays.equals(ingredients, recipeEntity.ingredients) && Objects.equals(title, recipeEntity.title);
    }
 
+   /**
+    * hashCode method
+    * @return int
+    */
    @Override
    public int hashCode() {
       int result = Objects.hash(url, title);
@@ -44,6 +55,9 @@ public class RecipeEntity {
       return result;
    }
 
+   /**
+    * CONSTRUCTORS
+    */
    public RecipeEntity() {
    }
 
@@ -58,62 +72,71 @@ public class RecipeEntity {
       changeServings();
    }
 
+   /**
+    * GETTERS
+    */
    public Long getId() {
       return id;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
    }
 
    public int getServings() {
       return servings;
    }
 
-   public void setServings(int servings) {
-      this.servings = servings;
-   }
-
    public String getUrl() {
       return url;
-   }
-
-   public void setUrl(String url) {
-      this.url = url;
    }
 
    public int getValue() {
       return value;
    }
 
-   public void setValue() {
-      this.value++;
-   }
-
    public String[] getIngredients() {
       return ingredients;
-   }
-
-   public void setIngredients(String[] ingredients) {
-      this.ingredients = ingredients;
    }
 
    public String getTitle() {
       return title;
    }
 
-   public void setTitle(String title) {
-      this.title = title;
-   }
-
    public String getImage() {
       return image;
+   }
+
+   /**
+    * SETTERS
+    */
+   public void setId(Long id) {
+      this.id = id;
+   }
+
+   public void setServings(int servings) {
+      this.servings = servings;
+   }
+
+   public void setUrl(String url) {
+      this.url = url;
+   }
+
+   public void setValue() {
+      this.value++;
+   }
+
+   public void setIngredients(String[] ingredients) {
+      this.ingredients = ingredients;
+   }
+
+   public void setTitle(String title) {
+      this.title = title;
    }
 
    public void setImage(String image) {
       this.image = image;
    }
 
+   /**
+    * Method to change number of servings
+    */
    private void changeServings() {
       for (int f = 0; f < this.ingredients.length; f++) {
          String i = this.ingredients[f];
@@ -132,6 +155,10 @@ public class RecipeEntity {
       }
    }
 
+   /**
+    * toString method
+    * @return String
+    */
    @Override
    public String toString() {
       return "RecipeEntity{" +

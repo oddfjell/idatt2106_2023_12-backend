@@ -4,10 +4,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * GroceryEntity
+ */
 @Entity
 @Table(name = "grocery")
 public class GroceryEntity {
 
+    /**
+     * COLUMNS
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,8 +28,9 @@ public class GroceryEntity {
 
     private int expiryDate;
 
-
-
+    /**
+     * CONSTRUCTORS
+     */
     public GroceryEntity() {
     }
 
@@ -34,32 +41,38 @@ public class GroceryEntity {
         this.expiryDate = expiryDate;
     }
 
+    /**
+     * GETTERS
+     */
     public Long getGrocery_id() {
         return id;
-    }
-
-    public void setGrocery_id(Long grocery_id) {
-        this.id = grocery_id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public CategoryEntity getCategory() {
         return category;
     }
 
-    public void setCategory(CategoryEntity category) {
-        this.category = category;
-    }
-
     public int getExpiryDate() {
         return expiryDate;
+    }
+
+    /**
+     * SETTERS
+     */
+    public void setGrocery_id(Long grocery_id) {
+        this.id = grocery_id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
     }
 
     public void setExpiryDate(int expiryDate) {

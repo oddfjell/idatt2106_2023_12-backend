@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * AccountEntity
+ */
 @Entity
 @Table(name = "account")
 public class AccountEntity {
@@ -28,6 +31,7 @@ public class AccountEntity {
      */
     public AccountEntity() {
     }
+
     public AccountEntity(String username, String password) {
         super();
         this.username = username;
